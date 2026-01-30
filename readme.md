@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- HERO ANIMATION -->
-<img src="docs/assets/video/cartomix-hero.gif" alt="CartoMix - AI-Powered DJ Set Prep" width="100%" style="border-radius: 12px; margin-bottom: 20px;">
+<img src="docs/assets/video/cartomix-hero.webp" alt="CartoMix - AI-Powered DJ Set Prep" width="100%" style="border-radius: 12px; margin-bottom: 20px;">
 
 <br/>
 
