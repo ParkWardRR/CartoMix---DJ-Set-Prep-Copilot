@@ -115,6 +115,98 @@ The following tracks from `/Volumes/navidrome-music/Staging` provide excellent v
 
 ---
 
+## v0.3 Feature Demos
+
+### Demo 6: Waveform Label Painting
+
+**Duration:** 3-4 minutes
+
+1. **Select an analyzed track** with clear sections
+2. **Open Track Detail View** - waveform appears
+3. **Enable Paint Mode** - click paint brush icon
+4. **Select section type** from dropdown (Intro, Verse, Drop, etc.)
+5. **Click and drag on waveform** to paint section
+6. **Show section colors** appearing on waveform
+7. **Paint multiple sections:** Intro → Verse → Build → Drop → Outro
+8. **Highlight:** Interactive painting, color-coded sections, zoom controls
+
+### Demo 7: Real-Time Audio Playback
+
+**Duration:** 2-3 minutes
+
+1. **With waveform visible**, click play button
+2. **Show playhead moving** in sync with audio
+3. **Click on waveform** to seek to position
+4. **Click on a cue point** - audio jumps to cue
+5. **Use keyboard shortcuts:**
+   - Space = play/pause
+   - Left/Right = skip 5 seconds
+6. **Highlight:** Low-latency playback, waveform sync, keyboard control
+
+### Demo 8: User Override Layer
+
+**Duration:** 2-3 minutes
+
+1. **Select a track** with analysis
+2. **Click "Edit Analysis"** button
+3. **Override BPM:**
+   - Click BPM field
+   - Enter correct value
+   - Toggle "Lock" to prevent re-analysis
+4. **Override Key:**
+   - Select from key picker
+   - Show Camelot wheel updates
+5. **Add custom cue point:**
+   - Right-click on waveform
+   - Select cue type and color
+   - Enter label
+6. **Highlight:** User edits persist, locked values, custom cues
+
+### Demo 9: Transition Window Detection
+
+**Duration:** 3-4 minutes
+
+1. **Open two analyzed tracks** side by side
+2. **Click "Find Transition Points"** button
+3. **Show detected mix-in points** (green markers)
+4. **Show detected mix-out points** (red markers)
+5. **Hover over a point** - show recommendation tooltip:
+   - "Phrase boundary before drop"
+   - "Breakdown section - good for long blend"
+6. **Show optimal transition suggestion** between two tracks
+7. **Highlight:** Phrase-aware, energy-based, explainable
+
+### Demo 10: Energy Curve Matching
+
+**Duration:** 3-4 minutes
+
+1. **Select a track** with varied energy
+2. **Click "Match Energy Curves"**
+3. **Show energy curve visualization** (line graph)
+4. **Show match results:**
+   - Parallel matches (similar curve)
+   - Complementary matches (opposite curve)
+   - Continuation matches (seamless flow)
+5. **Click a match** to see overlay comparison
+6. **Show "Best Transition Point"** indicator
+7. **Highlight:** Visual curve comparison, match types, transition points
+
+### Demo 11: Section-Level Embeddings
+
+**Duration:** 2-3 minutes
+
+1. **Select a track** with multiple sections
+2. **Expand "Section Analysis"** panel
+3. **Show embedding for each section:**
+   - Intro embedding
+   - Drop embedding
+   - Breakdown embedding
+4. **Click "Find Similar Drops"** - searches for tracks with similar drop sections
+5. **Show results** with section-specific matches
+6. **Highlight:** Granular matching, section-aware similarity
+
+---
+
 ## Video Recording Guidelines
 
 ### Setup
@@ -164,6 +256,7 @@ ffmpeg -i demo.mov -t 10 -vf "fps=15,scale=800:-1" -loop 0 preview.webp
 
 ### Required Screenshots
 
+**Core Views:**
 1. **Library View** - Full window, populated with tracks
 2. **Track Detail** - Analysis results, cue points visible
 3. **Set Builder** - Set in progress with multiple tracks
@@ -171,6 +264,14 @@ ffmpeg -i demo.mov -t 10 -vf "fps=15,scale=800:-1" -loop 0 preview.webp
 5. **Similarity Results** - Search results with explanations
 6. **Export Dialog** - Format options visible
 7. **Settings** - ML settings tab (shows Neural Engine)
+
+**v0.3 Features (NEW):**
+8. **Waveform Painting** - Active paint mode with colored sections
+9. **Audio Playback** - Playhead visible, transport controls
+10. **User Overrides** - Edit panel with locked BPM/key
+11. **Transition Detection** - Mix-in/out points on waveform
+12. **Energy Matching** - Energy curve comparison overlay
+13. **Section Embeddings** - Section list with similarity scores
 
 ### Capture Settings
 - **Format:** PNG (lossless) → convert to WebP for web
