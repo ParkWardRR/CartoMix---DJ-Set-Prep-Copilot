@@ -1,7 +1,7 @@
-// Dardania - XPC Analyzer Service Entry Point
+// CartoMix - XPC Analyzer Service Entry Point
 
 import Foundation
-import AnalyzerSwift
+import DardaniaCore
 import Logging
 
 /// XPC Service for audio analysis
@@ -180,7 +180,7 @@ struct AnalysisResultWrapper: Codable {
     let bpmConfidence: Double
     let keyValue: String
     let keyConfidence: Double
-    let energyGlobal: Int
+    let energyGlobal: Double
     let integratedLUFS: Double
     let truePeakDB: Double
     let loudnessRange: Double
@@ -195,15 +195,15 @@ struct AnalysisResultWrapper: Codable {
     init(result: TrackAnalysisResult) {
         self.durationSeconds = result.duration
         self.bpm = result.bpm
-        self.bpmConfidence = result.beatgridConfidence
+        self.bpmConfidence = Double(result.beatgridConfidence)
         self.keyValue = result.key.camelot
-        self.keyConfidence = result.key.confidence
-        self.energyGlobal = result.globalEnergy
+        self.keyConfidence = Double(result.key.confidence)
+        self.energyGlobal = Double(result.globalEnergy)
         self.integratedLUFS = Double(result.loudness.integratedLoudness)
         self.truePeakDB = Double(result.loudness.truePeak)
         self.loudnessRange = Double(result.loudness.loudnessRange)
         self.soundContext = result.soundClassification?.primaryContext
-        self.soundContextConfidence = result.soundClassification?.confidence
+        self.soundContextConfidence = result.soundClassification.map { Double($0.confidence) }
         self.hasOpenL3Embedding = result.openL3Embedding != nil
         self.waveformPreview = result.waveformSummary
         self.sections = result.sections.map { SectionWrapper(from: $0) }
@@ -218,11 +218,11 @@ struct SectionWrapper: Codable {
     let endTime: Double
     let confidence: Double
 
-    init(from section: Section) {
+    init(from section: SectionResult) {
         self.type = section.type.rawValue
         self.startTime = section.startTime
         self.endTime = section.endTime
-        self.confidence = section.confidence
+        self.confidence = Double(section.confidence)
     }
 }
 
@@ -232,7 +232,7 @@ struct CueWrapper: Codable {
     let timeSeconds: Double
     let beatIndex: Int?
 
-    init(from cue: CuePoint) {
+    init(from cue: CueResult) {
         self.label = cue.label
         self.type = cue.type.rawValue
         self.timeSeconds = cue.time

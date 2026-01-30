@@ -1,8 +1,7 @@
-// Dardania - Analyzer Service
+// CartoMix - Analyzer Service
 
 import Foundation
 import Logging
-import AnalyzerSwift
 
 /// Service for audio analysis using the Swift analyzer
 public actor AnalyzerService {
@@ -205,7 +204,7 @@ public actor AnalyzerService {
                 type: mapSectionType(section.type),
                 startTime: section.startTime,
                 endTime: section.endTime,
-                confidence: section.confidence
+                confidence: Double(section.confidence)
             )
         }
 
@@ -236,11 +235,11 @@ public actor AnalyzerService {
             status: .complete,
             durationSeconds: result.duration,
             bpm: result.bpm,
-            bpmConfidence: result.beatgridConfidence,
+            bpmConfidence: Double(result.beatgridConfidence),
             keyValue: result.key.camelot,
             keyFormat: "camelot",
-            keyConfidence: result.key.confidence,
-            energyGlobal: result.globalEnergy,
+            keyConfidence: Double(result.key.confidence),
+            energyGlobal: Int(result.globalEnergy * 100),
             integratedLUFS: Double(result.loudness.integratedLoudness),
             truePeakDB: Double(result.loudness.truePeak),
             loudnessRange: Double(result.loudness.loudnessRange),
@@ -248,7 +247,7 @@ public actor AnalyzerService {
             sections: sections,
             cuePoints: cuePoints,
             soundContext: result.soundClassification?.primaryContext,
-            soundContextConfidence: result.soundClassification?.confidence,
+            soundContextConfidence: result.soundClassification.map { Double($0.confidence) },
             qaFlags: [],
             hasOpenL3Embedding: result.openL3Embedding != nil,
             trainingLabels: [],
@@ -258,7 +257,7 @@ public actor AnalyzerService {
     }
 
     /// Map analyzer SectionType to our SectionType
-    private func mapSectionType(_ type: AnalyzerSwift.SectionType) -> TrackSection.SectionType {
+    private func mapSectionType(_ type: SectionType) -> TrackSection.SectionType {
         switch type {
         case .intro: return .intro
         case .verse: return .verse
@@ -270,7 +269,7 @@ public actor AnalyzerService {
     }
 
     /// Map analyzer CueType to our CueType
-    private func mapCueType(_ type: AnalyzerSwift.CueType) -> CuePoint.CueType {
+    private func mapCueType(_ type: CueType) -> CuePoint.CueType {
         switch type {
         case .drop: return .drop
         case .build: return .build

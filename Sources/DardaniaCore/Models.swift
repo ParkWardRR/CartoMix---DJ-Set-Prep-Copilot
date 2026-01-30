@@ -216,13 +216,28 @@ public enum AnalysisStatus: String, Codable, Sendable {
 
 // MARK: - Track Section
 
-public struct TrackSection: Codable, Equatable, Sendable {
+public struct TrackSection: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
     public var type: SectionType
     public var startTime: Double
     public var endTime: Double
     public var confidence: Double
 
-    public enum SectionType: String, Codable, Sendable {
+    public init(
+        id: UUID = UUID(),
+        type: SectionType,
+        startTime: Double,
+        endTime: Double,
+        confidence: Double = 1.0
+    ) {
+        self.id = id
+        self.type = type
+        self.startTime = startTime
+        self.endTime = endTime
+        self.confidence = confidence
+    }
+
+    public enum SectionType: String, Codable, Sendable, CaseIterable, Hashable {
         case intro, verse, build, drop, breakdown, chorus, outro
 
         public var color: Color {
@@ -236,9 +251,17 @@ public struct TrackSection: Codable, Equatable, Sendable {
             case .outro: return .blue
             }
         }
+
+        public var displayName: String {
+            rawValue.capitalized
+        }
     }
 
     public var color: Color { type.color }
+
+    public var duration: Double {
+        endTime - startTime
+    }
 }
 
 // MARK: - Cue Point

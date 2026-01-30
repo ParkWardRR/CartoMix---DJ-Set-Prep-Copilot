@@ -27,8 +27,6 @@ let package = Package(
         .package(url: "https://github.com/groue/GRDB.swift.git", from: "7.0.0"),
         // Logging
         .package(url: "https://github.com/apple/swift-log.git", from: "1.6.0"),
-        // Local analyzer package
-        .package(path: "../analyzer-swift"),
     ],
     targets: [
         // Main App
@@ -46,7 +44,6 @@ let package = Package(
             dependencies: [
                 .product(name: "GRDB", package: "GRDB.swift"),
                 .product(name: "Logging", package: "swift-log"),
-                .product(name: "AnalyzerSwift", package: "analyzer-swift"),
             ],
             path: "Sources/DardaniaCore"),
 
@@ -55,7 +52,6 @@ let package = Package(
             name: "AnalyzerXPC",
             dependencies: [
                 "DardaniaCore",
-                .product(name: "AnalyzerSwift", package: "analyzer-swift"),
                 .product(name: "Logging", package: "swift-log"),
             ],
             path: "Sources/AnalyzerXPC"),
