@@ -15,8 +15,9 @@
 
 [![macOS 15+](https://img.shields.io/badge/macOS_15+-000000?style=for-the-badge&logo=apple&logoColor=white)](#requirements)
 [![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#performance)
+[![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#architecture)
 [![Swift 6](https://img.shields.io/badge/Swift_6-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![v0.3.2](https://img.shields.io/badge/v0.3.2--alpha-0A84FF?style=for-the-badge)](#changelog)
+[![v0.4.0](https://img.shields.io/badge/v0.4.0--alpha-0A84FF?style=for-the-badge)](#changelog)
 
 <br/>
 
@@ -30,6 +31,21 @@
 
 <br/>
 
+## What's New in v0.4.0
+
+**Hybrid Flutter + Native Swift Architecture**
+
+- **Flutter UI** — Beautiful, responsive interface inspired by the web version
+- **Native Swift Backend** — All audio analysis stays on Apple Silicon with Neural Engine acceleration
+- **Platform Channels** — Seamless communication between Flutter and native code
+- **Zero Performance Compromise** — Flutter for UI, Swift for computation
+
+<br/>
+
+---
+
+<br/>
+
 ## Why CartoMix?
 
 <table>
@@ -38,13 +54,13 @@
 <h3>Native</h3>
 <code>&lt;1s</code> startup<br/>
 <code>~150MB</code> RAM<br/>
-Zero Electron
+Neural Engine
 </td>
 <td width="25%" align="center">
 <h3>Smart</h3>
 OpenL3 embeddings<br/>
 Section similarity<br/>
-Neural Engine
+Energy matching
 </td>
 <td width="25%" align="center">
 <h3>Private</h3>
@@ -71,11 +87,15 @@ Traktor export
 
 <div align="center">
 
-### Waveform Label Painting
+### Modern Dark UI
 
-<img src="docs/assets/screens/waveform-painting.webp" alt="Waveform Painting" width="90%">
+**Professional dark theme matching industry-standard DJ software.** Clean waveforms, color-coded energy levels, smooth animations.
 
-**Paint section labels directly on the waveform.** Drag to mark intros, drops, breakdowns, and outros. Your labels train the AI for better auto-detection.
+<br/>
+
+<img src="docs/assets/screens/cartomix-library-view.png" alt="CartoMix Library View" width="90%" style="border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+
+<sub>Library view with track list, waveform previews, BPM/key/energy columns, and filtering options</sub>
 
 </div>
 
@@ -84,14 +104,12 @@ Traktor export
 <table>
 <tr>
 <td width="50%">
-<img src="docs/assets/screens/transition-detection.webp" alt="Transition Detection" width="100%">
-<h4 align="center">Transition Detection</h4>
-<p align="center">AI finds optimal mix-in/out points with phrase boundary awareness and energy-based scoring.</p>
+<h4 align="center">Library View</h4>
+<p align="center">Browse & search your collection with list/grid view toggle. Filter by analyzed status, energy level, BPM range.</p>
 </td>
 <td width="50%">
-<img src="docs/assets/screens/energy-matching.webp" alt="Energy Matching" width="100%">
-<h4 align="center">Energy Curve Matching</h4>
-<p align="center">Find tracks with compatible energy progressions: parallel, complementary, or continuation.</p>
+<h4 align="center">Waveform View</h4>
+<p align="center">Full waveform display with section overlays, cue markers, beat grid, and playhead with glow effect.</p>
 </td>
 </tr>
 </table>
@@ -101,34 +119,38 @@ Traktor export
 <table>
 <tr>
 <td width="50%">
-<img src="docs/assets/screens/audio-playback.webp" alt="Audio Playback" width="100%">
-<h4 align="center">Real-Time Playback</h4>
-<p align="center">Preview tracks with synchronized waveform. Jump to cues, scrub sections, keyboard shortcuts.</p>
+<h4 align="center">Set Builder</h4>
+<p align="center">Build sets with drag & drop. Energy arc visualization shows your set's energy journey.</p>
 </td>
 <td width="50%">
-<img src="docs/assets/screens/section-embeddings.webp" alt="Section Embeddings" width="100%">
-<h4 align="center">Section-Level Embeddings</h4>
-<p align="center">512-dim vectors for each section. Find tracks with similar intros, drops, or breakdowns.</p>
+<h4 align="center">Graph View</h4>
+<p align="center">Visualize track connections. See BPM/key compatibility at a glance.</p>
 </td>
 </tr>
 </table>
 
 <br/>
 
-<table>
-<tr>
-<td width="50%">
-<img src="docs/assets/screens/track-analysis.webp" alt="Track Analysis" width="100%">
-<h4 align="center">Deep Track Analysis</h4>
-<p align="center">BPM, key, energy, loudness (LUFS), cue points, sections—all computed locally on your Mac.</p>
-</td>
-<td width="50%">
-<img src="docs/assets/screens/user-overrides.webp" alt="User Overrides" width="100%">
-<h4 align="center">User Overrides</h4>
-<p align="center">Edit BPM, key, cue points. Lock values to prevent re-analysis. Your edits are preserved.</p>
-</td>
-</tr>
-</table>
+### Color-Coded Energy System
+
+| Energy | Color | Description |
+|:------:|:-----:|-------------|
+| 1-3 | 🟢 Green | Low energy / Warm-up |
+| 4-5 | 🔵 Blue | Medium energy / Building |
+| 6-7 | 🟡 Yellow | High energy / Peak time |
+| 8-10 | 🔴 Red | Peak energy / Main room |
+
+<br/>
+
+### Section Detection
+
+| Section | Color | Typical Use |
+|---------|-------|-------------|
+| Intro | Green | Mix-in point |
+| Build | Yellow | Energy increase |
+| Drop | Red | Peak moment |
+| Breakdown | Purple | Mix-out opportunity |
+| Outro | Blue | Transition zone |
 
 <br/>
 
@@ -136,16 +158,46 @@ Traktor export
 
 <br/>
 
-## Screenshots
+## Architecture
 
-<div align="center">
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                       CartoMix (Flutter UI)                          │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │  Library View  │  Set Builder  │  Graph View  │  Settings     │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│                              │                                      │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │              Platform Channels (Method + Event)                │  │
+│  │  database • analyzer • player • similarity • planner • exporter│  │
+│  └───────────────────────────────────────────────────────────────┘  │
+└──────────────────────────────┼──────────────────────────────────────┘
+                               │
+┌──────────────────────────────▼──────────────────────────────────────┐
+│                     Native Swift Backend                             │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │  DardaniaCore: GRDB/SQLite • Similarity • Export • Planning   │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│                              │ XPC                                   │
+│  ┌───────────────────────────▼───────────────────────────────────┐  │
+│  │              AnalyzerXPC (Isolated Process)                    │  │
+│  │  Audio Decode → Beatgrid → Key → Energy → Sections → OpenL3   │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
-| Library | Set Builder | Graph View |
-|:---:|:---:|:---:|
-| <img src="docs/assets/screens/library-view.webp" width="100%"> | <img src="docs/assets/screens/set-builder.webp" width="100%"> | <img src="docs/assets/screens/graph-view.webp" width="100%"> |
-| Browse & search your collection | Build sets with drag & drop | Visualize track connections |
+### Platform Channels
 
-</div>
+| Channel | Type | Purpose |
+|---------|------|---------|
+| `cartomix/database` | Method | Track CRUD, search, filtering |
+| `cartomix/analyzer` | Method | Trigger analysis, get status |
+| `cartomix/analyzer.progress` | Event | Live progress updates |
+| `cartomix/player` | Method | Play, pause, seek, scrub |
+| `cartomix/player.state` | Event | Playback state changes |
+| `cartomix/similarity` | Method | Find similar tracks |
+| `cartomix/planner` | Method | Set optimization |
+| `cartomix/exporter` | Method | Export to DJ software |
 
 <br/>
 
@@ -162,69 +214,36 @@ Traktor export
 open https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/releases/latest
 ```
 
-### Build from Source
+### Build from Source (Flutter)
 
 ```bash
+# Clone repository
 git clone https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot.git
+cd CartoMix---DJ-Set-Prep-Copilot/cartomix_flutter
+
+# Install dependencies
+flutter pub get
+
+# Build for macOS
+flutter build macos
+
+# Run
+open build/macos/Build/Products/Release/cartomix_flutter.app
+```
+
+### Build from Source (Native Swift)
+
+```bash
 cd CartoMix---DJ-Set-Prep-Copilot
 make build-release
 make run
 ```
 
-**Requirements:** macOS 15+, Apple Silicon (M1+), Xcode 16+ (for building)
-
-<br/>
-
----
-
-<br/>
-
-## How It Works
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                        CartoMix.app (SwiftUI)                       │
-│  ┌───────────────────────────────────────────────────────────────┐  │
-│  │  Library View  │  Set Builder  │  Graph View  │  Training     │  │
-│  └───────────────────────────────────────────────────────────────┘  │
-│                              │                                      │
-│  ┌───────────────────────────────────────────────────────────────┐  │
-│  │  DardaniaCore: GRDB/SQLite • Similarity • Export • Planning   │  │
-│  └───────────────────────────────────────────────────────────────┘  │
-└──────────────────────────────┼──────────────────────────────────────┘
-                               │ XPC
-┌──────────────────────────────▼──────────────────────────────────────┐
-│                    AnalyzerXPC.xpc (Isolated Process)               │
-│  Audio Decode → Beatgrid → Key → Energy → Sections → OpenL3 → Cues │
-└─────────────────────────────────────────────────────────────────────┘
-```
-
-### 1. Import Your Library
-Add music folders. CartoMix remembers access with security-scoped bookmarks.
-
-### 2. Analyze Tracks
-The XPC service runs isolated—a crash never freezes the UI. Analysis uses:
-- **Neural Engine** for OpenL3 embeddings (512-dim vibe vectors)
-- **Accelerate/vDSP** for beat detection and key analysis
-- **Core ML** for section classification
-
-### 3. Find Similar Tracks
-
-```
-Score = 0.50 × Vibe (OpenL3)
-      + 0.20 × Tempo (BPM)
-      + 0.20 × Key (Harmonic)
-      + 0.10 × Energy
-```
-
-Every match includes an explanation:
-> *"similar vibe (82%); Δ+2 BPM; key: 8A→9A (compatible); energy +1"*
-
-### 4. Build Your Set
-Drag tracks, reorder, visualize in Graph View.
-
-### 5. Export
-One click to Rekordbox, Serato, or Traktor—cue points, tempo, key intact.
+**Requirements:**
+- macOS 15+ (Sequoia)
+- Apple Silicon (M1+)
+- Flutter 3.6+ (for Flutter build)
+- Xcode 16+ (for native build)
 
 <br/>
 
@@ -296,6 +315,7 @@ All exports include **SHA-256 checksums** for verification.
 | Chip | Apple Silicon (M1) | M2+ |
 | RAM | 8 GB | 16 GB |
 | Storage | 500 MB | 1 GB+ |
+| Flutter | 3.6+ | Latest stable |
 
 <br/>
 
@@ -303,18 +323,66 @@ All exports include **SHA-256 checksums** for verification.
 
 <br/>
 
-## Documentation
+## Project Structure
 
-- [Demo Procedures](docs/demo/DEMO_PROCEDURES.md) — Recording guidelines
-- [Test Suite](docs/demo/TEST_SUITE.md) — Reproducible test procedures
+```
+cartomix/
+├── Sources/
+│   ├── DardaniaCore/       # Native Swift business logic
+│   │   ├── Models.swift    # Core data models
+│   │   ├── Database.swift  # GRDB/SQLite
+│   │   ├── Similarity.swift
+│   │   └── Export.swift
+│   ├── Dardania/           # SwiftUI app (legacy)
+│   └── AnalyzerXPC/        # Audio analysis service
+│
+├── cartomix_flutter/       # Flutter UI
+│   ├── lib/
+│   │   ├── core/
+│   │   │   ├── theme/      # Colors, typography, spacing
+│   │   │   └── platform/   # Native bridge
+│   │   ├── models/         # Dart data models
+│   │   └── ui/
+│   │       ├── screens/    # Main screens
+│   │       └── widgets/    # Reusable components
+│   ├── macos/              # macOS platform code
+│   └── assets/             # Icons, fonts
+│
+└── docs/                   # Documentation
+```
 
-### Development
+<br/>
+
+---
+
+<br/>
+
+## Development
+
+### Flutter Commands
+
+```bash
+cd cartomix_flutter
+
+# Run in debug mode
+flutter run -d macos
+
+# Build release
+flutter build macos
+
+# Run tests
+flutter test
+
+# Analyze code
+flutter analyze
+```
+
+### Native Swift Commands
 
 ```bash
 make build          # Debug build
 make build-release  # Release build
 make test           # Run all tests
-make screenshots    # Generate documentation screenshots
 make help           # Show all targets
 ```
 
@@ -326,23 +394,25 @@ make help           # Show all targets
 
 ## Roadmap
 
-**v0.3.x (Current)**
-- [x] SwiftUI-first UI with XPC isolation
-- [x] OpenL3 similarity + section embeddings
-- [x] Waveform painting & real-time playback
-- [x] Transition detection & energy matching
-- [x] User override layer
-- [x] Rekordbox/Serato/Traktor export
+**v0.4.x (Current)**
+- [x] Flutter UI with native Swift backend
+- [x] Hybrid architecture via Platform Channels
+- [x] Dark theme matching web UI
+- [x] Waveform with sections, cues, beat grid
+- [x] Energy arc visualization
+- [x] List/grid view toggle
+- [ ] Full Platform Channel integration
 
-**v0.4.0 (Next)**
+**v0.5.0 (Next)**
+- [ ] Real-time audio playback
+- [ ] Drag-and-drop set building
 - [ ] Beatgrid editing
 - [ ] Loop region markers
-- [ ] Harmonic mixing wheel
-- [ ] Set flow visualization
 
 **v1.0.0 (Stable)**
 - [ ] Sparkle auto-updates
 - [ ] Homebrew distribution
+- [ ] Full feature parity
 
 <br/>
 
@@ -354,8 +424,9 @@ make help           # Show all targets
 
 ```bash
 git clone https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot.git
-cd CartoMix---DJ-Set-Prep-Copilot
-make build && make test
+cd CartoMix---DJ-Set-Prep-Copilot/cartomix_flutter
+flutter pub get
+flutter run -d macos
 ```
 
 <br/>
@@ -378,7 +449,7 @@ make build && make test
 
 **Built for DJs who want native performance and total privacy.**
 
-*Powered by SwiftUI, Core ML, Neural Engine, and Apple Silicon.*
+*Powered by Flutter, Swift, Core ML, Neural Engine, and Apple Silicon.*
 
 <br/>
 
@@ -387,6 +458,6 @@ make build && make test
 
 <br/>
 
-*Codename: Dardania*
+*Codename: Shanghai*
 
 </div>
