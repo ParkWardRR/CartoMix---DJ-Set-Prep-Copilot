@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+"""Generate CartoMix app icons for macOS"""
+
+import os
+import subprocess
+from pathlib import Path
+
+# Icon sizes for macOS
+MACOS_SIZES = [16, 32, 64, 128, 256, 512, 1024]
+
+# SVG template for the icon - modern DJ/waveform aesthetic
+ICON_SVG = '''<?xml version="1.0" encoding="UTF-8"?>
+<svg width="{size}" height="{size}" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Main gradient - blue to purple -->
+    <linearGradient id="mainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6"/>
+      <stop offset="50%" style="stop-color:#8B5CF6"/>
+      <stop offset="100%" style="stop-color:#A78BFA"/>
+    </linearGradient>
+
+    <!-- Glow gradient -->
+    <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#A78BFA;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#A78BFA;stop-opacity:0"/>
+    </radialGradient>
+
+    <!-- Waveform gradient -->
+    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#64D2FF"/>
+      <stop offset="33%" style="stop-color:#3B82F6"/>
+      <stop offset="66%" style="stop-color:#A78BFA"/>
+      <stop offset="100%" style="stop-color:#FF375F"/>
+    </linearGradient>
+
+    <!-- Shadow filter -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect x="64" y="64" width="896" height="896" rx="180" ry="180" fill="#0A0A0A" filter="url(#shadow)"/>
+
+  <!-- Inner glow -->
+  <rect x="64" y="64" width="896" height="896" rx="180" ry="180" fill="url(#glowGrad)"/>
+
+  <!-- Border -->
+  <rect x="64" y="64" width="896" height="896" rx="180" ry="180" fill="none" stroke="#252525" stroke-width="2"/>
+
+  <!-- Waveform bars - center composition -->
+  <g transform="translate(512, 512)">
+    <!-- Left side waveform bars -->
+    <rect x="-380" y="-80" width="24" height="160" rx="12" fill="#3B82F6" opacity="0.6"/>
+    <rect x="-340" y="-140" width="24" height="280" rx="12" fill="#3B82F6" opacity="0.7"/>
+    <rect x="-300" y="-100" width="24" height="200" rx="12" fill="#5B9CF6" opacity="0.8"/>
+    <rect x="-260" y="-180" width="24" height="360" rx="12" fill="#6BA6F6" opacity="0.85"/>
+    <rect x="-220" y="-120" width="24" height="240" rx="12" fill="#7BB0F6" opacity="0.9"/>
+
+    <!-- Center peak bars -->
+    <rect x="-180" y="-220" width="28" height="440" rx="14" fill="url(#waveGrad)"/>
+    <rect x="-136" y="-260" width="32" height="520" rx="16" fill="url(#waveGrad)"/>
+    <rect x="-88" y="-200" width="32" height="400" rx="16" fill="url(#waveGrad)"/>
+    <rect x="-40" y="-280" width="36" height="560" rx="18" fill="url(#waveGrad)"/>
+    <rect x="4" y="-240" width="36" height="480" rx="18" fill="url(#waveGrad)"/>
+    <rect x="56" y="-300" width="32" height="600" rx="16" fill="url(#waveGrad)"/>
+    <rect x="104" y="-220" width="32" height="440" rx="16" fill="url(#waveGrad)"/>
+    <rect x="152" y="-260" width="28" height="520" rx="14" fill="url(#waveGrad)"/>
+
+    <!-- Right side waveform bars -->
+    <rect x="196" y="-120" width="24" height="240" rx="12" fill="#A78BFA" opacity="0.9"/>
+    <rect x="236" y="-180" width="24" height="360" rx="12" fill="#B795FA" opacity="0.85"/>
+    <rect x="276" y="-100" width="24" height="200" rx="12" fill="#C79FFA" opacity="0.8"/>
+    <rect x="316" y="-140" width="24" height="280" rx="12" fill="#D7A9FA" opacity="0.7"/>
+    <rect x="356" y="-80" width="24" height="160" rx="12" fill="#E7B3FA" opacity="0.6"/>
+  </g>
+
+  <!-- Playhead line -->
+  <line x1="512" y1="280" x2="512" y2="744" stroke="#A78BFA" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="512" cy="744" r="10" fill="#A78BFA"/>
+
+  <!-- Top accent bar -->
+  <rect x="200" y="180" width="624" height="4" rx="2" fill="url(#mainGrad)" opacity="0.6"/>
+</svg>
+'''
+
+def generate_icons():
+    script_dir = Path(__file__).parent
+    project_dir = script_dir.parent
+    assets_dir = project_dir / "assets" / "icons"
+    macos_icons_dir = project_dir / "macos" / "Runner" / "Assets.xcassets" / "AppIcon.appiconset"
+
+    assets_dir.mkdir(parents=True, exist_ok=True)
+
+    print("Generating CartoMix app icons...")
+
+    for size in MACOS_SIZES:
+        svg_content = ICON_SVG.format(size=size)
+        svg_path = assets_dir / f"icon_{size}.svg"
+        png_path = assets_dir / f"icon_{size}.png"
+
+        # Write SVG
+        with open(svg_path, 'w') as f:
+            f.write(svg_content)
+
+        # Convert to PNG using sips (macOS built-in)
+        # First create a temp file with the base SVG
+        base_svg = assets_dir / "icon_base.svg"
+        with open(base_svg, 'w') as f:
+            f.write(ICON_SVG.format(size=1024))
+
+        print(f"  Generated {size}x{size} icon")
+
+    # Generate the master 1024 SVG
+    master_svg = assets_dir / "app_icon.svg"
+    with open(master_svg, 'w') as f:
+        f.write(ICON_SVG.format(size=1024))
+
+    print(f"\nSVG icons saved to: {assets_dir}")
+    print("\nTo convert to PNG, use:")
+    print("  - Inkscape: inkscape -w SIZE -h SIZE icon.svg -o icon.png")
+    print("  - Or use an online SVG to PNG converter")
+    print(f"\nMacOS icons should be placed in: {macos_icons_dir}")
+
+if __name__ == "__main__":
+    generate_icons()
