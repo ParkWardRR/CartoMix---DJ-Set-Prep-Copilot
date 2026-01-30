@@ -7,7 +7,7 @@ import Logging
 public actor DatabaseManager {
     public static let shared = try! DatabaseManager()
 
-    private let dbQueue: DatabaseQueue
+    internal let dbQueue: DatabaseQueue
     private let logger = Logger(label: "com.dardania.database")
 
     public init() throws {

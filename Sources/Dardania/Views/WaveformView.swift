@@ -12,17 +12,16 @@ struct WaveformView: View {
 
     @State private var isLabeling = false
     @State private var labelStart: Double?
-    @State private var selectedLabelType: SectionType = .verse
+    @State private var selectedLabelType: TrackSection.SectionType = .verse
     @State private var hoveredPosition: Double?
     @State private var zoomLevel: Double = 1.0
     @State private var scrollOffset: Double = 0.0
 
     private let waveformHeight: CGFloat = 120
-    private let sectionColors: [SectionType: Color] = [
+    private let sectionColors: [TrackSection.SectionType: Color] = [
         .intro: .green.opacity(0.6),
         .verse: .blue.opacity(0.6),
         .chorus: .purple.opacity(0.6),
-        .bridge: .orange.opacity(0.6),
         .drop: .red.opacity(0.6),
         .breakdown: .cyan.opacity(0.6),
         .build: .yellow.opacity(0.6),
@@ -149,7 +148,7 @@ struct WaveformView: View {
 
             if isLabeling {
                 Picker("Label Type", selection: $selectedLabelType) {
-                    ForEach(SectionType.allCases, id: \.self) { type in
+                    ForEach(TrackSection.SectionType.allCases, id: \.self) { type in
                         Text(type.displayName)
                             .tag(type)
                     }
@@ -311,7 +310,7 @@ struct WaveformView: View {
     private var sectionLegend: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
-                ForEach(SectionType.allCases, id: \.self) { type in
+                ForEach(TrackSection.SectionType.allCases, id: \.self) { type in
                     HStack(spacing: 4) {
                         Circle()
                             .fill(sectionColors[type] ?? .gray)
@@ -373,36 +372,7 @@ struct WaveformView: View {
     }
 }
 
-// MARK: - Section Type
-
-enum SectionType: String, CaseIterable, Codable {
-    case intro
-    case verse
-    case chorus
-    case bridge
-    case drop
-    case breakdown
-    case build
-    case outro
-
-    var displayName: String {
-        rawValue.capitalized
-    }
-}
-
-// MARK: - Track Section
-
-struct TrackSection: Identifiable, Codable {
-    let id: UUID
-    var type: SectionType
-    var startTime: Double
-    var endTime: Double
-    var confidence: Double
-
-    var duration: Double {
-        endTime - startTime
-    }
-}
+// Note: Using TrackSection and SectionType from DardaniaCore
 
 // MARK: - Preview
 

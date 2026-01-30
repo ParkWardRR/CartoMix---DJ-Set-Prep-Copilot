@@ -408,8 +408,8 @@ public actor EnergyCurveMatcher {
         // Trend similarity
         if shape1.trend == shape2.trend {
             score += 0.3
-        } else if (shape1.trend == .rising && shape2.trend == .building) ||
-                  (shape1.trend == .falling && shape2.trend == .dropping) {
+        } else if (shape1.trend == .rising && shape2.trend == .peaked) ||
+                  (shape1.trend == .falling && shape2.trend == .valley) {
             score += 0.2
         }
 

@@ -213,7 +213,7 @@ struct TrackCard: View {
             // Waveform preview
             ZStack {
                 if let waveform = track.analysis?.waveformPreview {
-                    WaveformView(samples: waveform)
+                    WaveformPreviewView(samples: waveform)
                 } else {
                     Rectangle()
                         .fill(.quaternary)
@@ -369,9 +369,9 @@ struct TrackContextMenu: View {
     }
 }
 
-// MARK: - Waveform View
+// MARK: - Waveform Preview (Simple inline version for library)
 
-struct WaveformView: View {
+struct WaveformPreviewView: View {
     let samples: [Float]
 
     var body: some View {

@@ -199,7 +199,7 @@ struct WaveformDetailView: View {
                 }
 
                 // Waveform
-                WaveformView(samples: waveform)
+                SimpleWaveformPath(samples: waveform)
 
                 // Cue markers
                 ForEach(cues.indices, id: \.self) { index in
@@ -375,9 +375,10 @@ struct SectionsPanel: View {
 
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))], spacing: 8) {
                 ForEach(sections, id: \.startTime) { section in
+                    let sectionColor = section.color
                     HStack {
                         Circle()
-                            .fill(section.color)
+                            .fill(sectionColor)
                             .frame(width: 12, height: 12)
 
                         VStack(alignment: .leading, spacing: 2) {
@@ -391,7 +392,7 @@ struct SectionsPanel: View {
                         Spacer()
                     }
                     .padding(8)
-                    .background(section.color.opacity(0.1), in: RoundedRectangle(cornerRadius: 8))
+                    .background(sectionColor.opacity(0.1), in: RoundedRectangle(cornerRadius: 8))
                 }
             }
         }
@@ -550,6 +551,57 @@ struct SimilarTrack {
     let track: Track
     let score: Double
     let explanation: String
+}
+
+// MARK: - Simple Waveform Path
+
+struct SimpleWaveformPath: View {
+    let samples: [Float]
+
+    var body: some View {
+        GeometryReader { geometry in
+            Canvas { context, size in
+                let width = size.width
+                let height = size.height
+                let midY = height / 2
+                let step = max(1, samples.count / Int(width))
+
+                var path = Path()
+                path.move(to: CGPoint(x: 0, y: midY))
+
+                for x in stride(from: 0, to: Int(width), by: 1) {
+                    let sampleIndex = min(x * step, samples.count - 1)
+                    let sample = CGFloat(samples[sampleIndex])
+                    let y = midY - (sample * midY * 0.9)
+                    path.addLine(to: CGPoint(x: CGFloat(x), y: y))
+                }
+
+                for x in stride(from: Int(width) - 1, through: 0, by: -1) {
+                    let sampleIndex = min(x * step, samples.count - 1)
+                    let sample = CGFloat(samples[sampleIndex])
+                    let y = midY + (sample * midY * 0.9)
+                    path.addLine(to: CGPoint(x: CGFloat(x), y: y))
+                }
+
+                path.closeSubpath()
+
+                let gradient = Gradient(colors: [
+                    .cyan.opacity(0.8),
+                    .blue.opacity(0.6),
+                    .purple.opacity(0.4)
+                ])
+
+                context.fill(
+                    path,
+                    with: .linearGradient(
+                        gradient,
+                        startPoint: CGPoint(x: 0, y: 0),
+                        endPoint: CGPoint(x: width, y: 0)
+                    )
+                )
+            }
+        }
+    }
 }
 
 // Preview commented out for SPM compatibility

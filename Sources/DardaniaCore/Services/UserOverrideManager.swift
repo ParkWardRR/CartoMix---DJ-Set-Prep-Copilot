@@ -302,10 +302,11 @@ public actor UserOverrideManager {
 
                 // Add user cue
                 allCues.append(CuePoint(
-                    beatIndex: userCue.beatIndex ?? 0,
-                    timeSeconds: userCue.timeSeconds,
+                    index: allCues.count,
+                    label: userCue.label,
                     type: CuePoint.CueType(rawValue: userCue.type) ?? .custom,
-                    label: userCue.label
+                    timeSeconds: userCue.timeSeconds,
+                    beatIndex: userCue.beatIndex
                 ))
             }
 
@@ -363,13 +364,3 @@ public actor UserOverrideManager {
     }
 }
 
-// MARK: - DatabaseManager Extension
-
-extension DatabaseManager {
-    /// Access to database queue for override operations
-    public var dbQueue: DatabaseQueue {
-        // This would need to be exposed from DatabaseManager
-        // For now, we'll use a migration approach
-        fatalError("dbQueue needs to be exposed from DatabaseManager")
-    }
-}

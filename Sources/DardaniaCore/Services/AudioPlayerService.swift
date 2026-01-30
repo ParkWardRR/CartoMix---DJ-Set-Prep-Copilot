@@ -328,8 +328,14 @@ public final class AudioPlayerService: ObservableObject {
 
 // MARK: - Keyboard Shortcuts Support
 
+public enum PlayerKeyAction: String, Sendable {
+    case space = " "
+    case leftArrow = "left"
+    case rightArrow = "right"
+}
+
 extension AudioPlayerService {
-    public func handleKeyPress(_ key: KeyEquivalent) {
+    public func handleKeyPress(_ key: PlayerKeyAction) {
         switch key {
         case .space:
             togglePlayPause()
@@ -337,8 +343,6 @@ extension AudioPlayerService {
             skip(by: -5)
         case .rightArrow:
             skip(by: 5)
-        default:
-            break
         }
     }
 }

@@ -212,7 +212,7 @@ public actor SectionEmbeddingAnalyzer {
         var windowedSamples = [Float](repeating: 0, count: fftSize)
         var window = [Float](repeating: 0, count: fftSize)
         vDSP_hann_window(&window, vDSP_Length(fftSize), Int32(vDSP_HANN_NORM))
-        vDSP_vmul(samples, 1, window, 1, &windowedSamples, vDSP_Length(fftSize))
+        vDSP_vmul(samples, 1, window, 1, &windowedSamples, 1, vDSP_Length(fftSize))
 
         // Compute magnitude spectrum (simplified)
         var magnitudes = [Float](repeating: 0, count: fftSize / 2)
@@ -440,12 +440,10 @@ public enum SectionAnalysisError: Error {
 
 extension TrackSection {
     init(from sectionEmbedding: SectionEmbedding) {
-        self.init(
-            id: sectionEmbedding.sectionId,
-            type: SectionType(rawValue: sectionEmbedding.sectionType) ?? .verse,
-            startTime: sectionEmbedding.startTime,
-            endTime: sectionEmbedding.endTime,
-            confidence: 1.0
-        )
+        self.id = sectionEmbedding.sectionId
+        self.type = SectionType(rawValue: sectionEmbedding.sectionType) ?? .verse
+        self.startTime = sectionEmbedding.startTime
+        self.endTime = sectionEmbedding.endTime
+        self.confidence = 1.0
     }
 }
