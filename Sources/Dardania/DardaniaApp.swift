@@ -15,6 +15,20 @@ struct DardaniaApp: App {
             handler.logLevel = .info
             return handler
         }
+
+        // Check for --screenshots flag
+        if CommandLine.arguments.contains("--screenshots") {
+            Task { @MainActor in
+                let generator = ScreenshotGenerator()
+                do {
+                    try await generator.generateAll()
+                    exit(0)
+                } catch {
+                    print("Screenshot generation failed: \(error)")
+                    exit(1)
+                }
+            }
+        }
     }
 
     var body: some Scene {

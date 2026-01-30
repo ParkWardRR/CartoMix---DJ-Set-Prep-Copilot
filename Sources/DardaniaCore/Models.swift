@@ -273,6 +273,20 @@ public struct CuePoint: Codable, Equatable, Sendable {
     public var timeSeconds: Double
     public var beatIndex: Int?
 
+    public init(
+        index: Int,
+        label: String,
+        type: CueType,
+        timeSeconds: Double,
+        beatIndex: Int? = nil
+    ) {
+        self.index = index
+        self.label = label
+        self.type = type
+        self.timeSeconds = timeSeconds
+        self.beatIndex = beatIndex
+    }
+
     public enum CueType: String, Codable, Sendable {
         case intro, drop, build, breakdown, outro, custom
 
