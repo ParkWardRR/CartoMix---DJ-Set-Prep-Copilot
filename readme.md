@@ -23,7 +23,7 @@
 [![macOS 15+](https://img.shields.io/badge/macOS%2015+-000000?style=for-the-badge&logo=apple&logoColor=white)](#requirements)
 [![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon%20Native-000000?style=for-the-badge&logo=apple&logoColor=white)](#apple-silicon)
 [![Swift 6](https://img.shields.io/badge/Swift%206-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![Version](https://img.shields.io/badge/v0.2.0--alpha-blue?style=for-the-badge)](#changelog)
+[![Version](https://img.shields.io/badge/v0.3.0--alpha-blue?style=for-the-badge)](#changelog)
 
 <!-- Architecture Badges -->
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-0A84FF?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
@@ -72,8 +72,8 @@
 
 ### AI-Powered Analysis
 - **OpenL3** deep audio embeddings
-- **Vibe matching** beyond BPM/key
-- **Explainable** transition suggestions
+- **Section-level** similarity matching
+- **Transition detection** for optimal mix points
 - Neural Engine acceleration
 
 </td>
@@ -81,11 +81,11 @@
 <tr>
 <td>
 
-### DJ Software Integration
-- **Rekordbox** XML with cues
-- **Serato** crate + cues CSV
-- **Traktor** NML with markers
-- SHA-256 verified exports
+### Interactive Waveform
+- **Paint sections** directly on waveform
+- **Real-time playback** with cue preview
+- **User overrides** for BPM, key, cues
+- **Energy curves** for transition planning
 
 </td>
 <td>
@@ -102,9 +102,69 @@
 
 ---
 
+## New in v0.3.0
+
+<table>
+<tr>
+<td width="33%">
+
+### Waveform Label Painting
+Paint section labels directly on the interactive waveform. Drag to create intros, drops, breakdowns, and more.
+
+</td>
+<td width="33%">
+
+### Real-Time Playback
+Preview tracks with synchronized waveform. Jump to cue points, scrub through sections, keyboard shortcuts.
+
+</td>
+<td width="33%">
+
+### Transition Detection
+AI-powered detection of optimal mix-in/out points. Phrase boundary awareness, energy-based recommendations.
+
+</td>
+</tr>
+<tr>
+<td>
+
+### Section Embeddings
+512-dim OpenL3 embeddings for each section, not just the full track. Find tracks with similar intros or drops.
+
+</td>
+<td>
+
+### Energy Curve Matching
+Find tracks with compatible energy progressions. Parallel, complementary, or continuation matches.
+
+</td>
+<td>
+
+### User Overrides
+Edit BPM, key, cue points. Lock values to prevent re-analysis. Your edits are preserved forever.
+
+</td>
+</tr>
+</table>
+
+---
+
 ## Screenshots
 
 <div align="center">
+
+| Waveform Label Painting | Real-Time Playback |
+|:---:|:---:|
+| ![Waveform](docs/assets/screens/waveform-painting.webp) | ![Playback](docs/assets/screens/audio-playback.webp) |
+
+| Transition Detection | Energy Curve Matching |
+|:---:|:---:|
+| ![Transitions](docs/assets/screens/transition-detection.webp) | ![Energy](docs/assets/screens/energy-matching.webp) |
+
+</div>
+
+<details>
+<summary><strong>More Screenshots</strong></summary>
 
 | Library View | Set Builder |
 |:---:|:---:|
@@ -114,18 +174,9 @@
 |:---:|:---:|
 | ![Graph](docs/assets/screens/graph-view.webp) | ![Analysis](docs/assets/screens/track-analysis.webp) |
 
-</div>
-
-<details>
-<summary><strong>More Screenshots</strong></summary>
-
-| Similarity Search | Export Options |
+| User Overrides | Section Embeddings |
 |:---:|:---:|
-| ![Similarity](docs/assets/screens/similarity-search.webp) | ![Export](docs/assets/screens/export-dialog.webp) |
-
-| Settings - ML | Dark/Light Mode |
-|:---:|:---:|
-| ![ML Settings](docs/assets/screens/settings-ml.webp) | ![Themes](docs/assets/screens/themes.webp) |
+| ![Overrides](docs/assets/screens/user-overrides.webp) | ![Sections](docs/assets/screens/section-embeddings.webp) |
 
 </details>
 
@@ -316,19 +367,25 @@ See [docs/demo/TEST_SUITE.md](docs/demo/TEST_SUITE.md) for reproducible test pro
 
 ## Roadmap
 
-### v0.2.0-alpha (Current)
+### v0.3.0-alpha (Current)
 - [x] SwiftUI-first UI
 - [x] XPC analyzer service
 - [x] GRDB with WAL mode
 - [x] Security-scoped bookmarks
 - [x] Rekordbox/Serato/Traktor export
 - [x] OpenL3 similarity search
-- [x] Demo & test documentation
+- [x] **Waveform label painting**
+- [x] **Real-time audio playback**
+- [x] **User override layer**
+- [x] **Section-level embeddings**
+- [x] **Transition window detection**
+- [x] **Energy curve matching**
 
-### v0.3.0 (Next)
-- [ ] Waveform visualization
-- [ ] User cue point editing
-- [ ] Audio preview playback
+### v0.4.0 (Next)
+- [ ] Beatgrid editing
+- [ ] Loop region markers
+- [ ] Harmonic mixing wheel
+- [ ] Set flow visualization
 
 ### v1.0.0 (Stable)
 - [ ] Sparkle auto-updates
