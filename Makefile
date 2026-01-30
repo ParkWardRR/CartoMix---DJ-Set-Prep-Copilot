@@ -1,7 +1,7 @@
 # CartoMix - 100% macOS Native DJ Set Prep Copilot (Codename: Dardania)
 # Build and test commands
 
-.PHONY: all build build-release test test-core test-golden test-xpc clean lint format run help
+.PHONY: all build build-release test test-core test-golden test-xpc clean lint format run help screenshots
 
 # Default target
 all: build
@@ -64,6 +64,19 @@ test-coverage:
 	xcrun llvm-cov report .build/debug/DardaniaPackageTests.xctest/Contents/MacOS/DardaniaPackageTests \
 		-instr-profile=.build/debug/codecov/default.profdata
 
+# Generate screenshots for documentation (programmatic)
+screenshots:
+	@echo "Generating screenshots programmatically..."
+	@mkdir -p docs/assets/screens
+	swift run Dardania -- --screenshots
+
+# Generate screenshots using window capture (requires display)
+screenshots-capture:
+	@echo "Generating screenshots via window capture..."
+	@mkdir -p docs/assets/screens
+	@chmod +x scripts/capture-screenshots.sh
+	@./scripts/capture-screenshots.sh
+
 # Print help
 help:
 	@echo "CartoMix - 100% macOS Native DJ Set Prep Copilot (Codename: Dardania)"
@@ -82,6 +95,7 @@ help:
 	@echo "  xcode          Generate Xcode project"
 	@echo "  archive        Build release archive"
 	@echo "  test-coverage  Run tests with coverage report"
+	@echo "  screenshots    Generate screenshots for docs"
 	@echo ""
 	@echo "Requirements:"
 	@echo "  - macOS 15+ (Sequoia)"
