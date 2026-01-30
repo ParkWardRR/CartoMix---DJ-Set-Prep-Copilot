@@ -1,101 +1,104 @@
 <div align="center">
 
-<img src="../docs/assets/logo.svg" alt="CartoMix - DJ Set Prep Copilot" width="120" />
-
-# CartoMix
-
-### 100% macOS Native DJ Set Prep Copilot
-
-*Codename: Dardania*
-
-**SwiftUI · XPC · Core ML · Accelerate · GRDB**
-
-<!-- Status Badges -->
-[![Version](https://img.shields.io/badge/v1.0.0-blue?style=for-the-badge)](#changelog)
-[![Swift](https://img.shields.io/badge/Swift%206-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![macOS](https://img.shields.io/badge/macOS%2015+-000000?style=for-the-badge&logo=apple&logoColor=white)](#requirements)
-[![License](https://img.shields.io/badge/Blue%20Oak-lightgray?style=for-the-badge)](LICENSE)
-
-<!-- Platform Badges -->
-[![SwiftUI](https://img.shields.io/badge/SwiftUI-First-0A84FF?style=for-the-badge&logo=swift&logoColor=white)](#swiftui-first)
-[![XPC](https://img.shields.io/badge/XPC-Multiprocess-222222?style=for-the-badge&logo=apple&logoColor=white)](#xpc-architecture)
-[![Sandbox](https://img.shields.io/badge/Sandboxed-00C853?style=for-the-badge&logo=apple&logoColor=white)](#sandbox--security)
-[![Notarized](https://img.shields.io/badge/Notarized-34C759?style=for-the-badge&logo=apple&logoColor=white)](#distribution)
-
-<!-- Apple Silicon Badges -->
-[![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#apple-silicon)
-[![M1-M5](https://img.shields.io/badge/M1--M5%20Native-000000?style=for-the-badge&logo=apple&logoColor=white)](#apple-silicon)
-[![Neural Engine](https://img.shields.io/badge/Neural%20Engine-FF9500?style=for-the-badge&logo=apple&logoColor=white)](#apple-silicon)
-[![Metal](https://img.shields.io/badge/Metal%20GPU-147EFB?style=for-the-badge&logo=apple&logoColor=white)](#apple-silicon)
-[![Accelerate](https://img.shields.io/badge/Accelerate%20vDSP-FF2D55?style=for-the-badge&logo=apple&logoColor=white)](#apple-silicon)
-[![Core ML](https://img.shields.io/badge/Core%20ML-34C759?style=for-the-badge&logo=apple&logoColor=white)](#apple-silicon)
-
-<!-- ML & Analysis Badges -->
-[![OpenL3](https://img.shields.io/badge/OpenL3-512d_embeddings-8B5CF6?style=for-the-badge)](#ml-powered-similarity)
-[![Vibe Match](https://img.shields.io/badge/Vibe%20Matching-EC4899?style=for-the-badge)](#ml-powered-similarity)
-[![Explainable](https://img.shields.io/badge/Explainable%20AI-10B981?style=for-the-badge)](#explainable-transitions)
-[![SoundAnalysis](https://img.shields.io/badge/Apple%20SoundAnalysis-FF3B30?style=for-the-badge)](#sound-analysis)
-
-<!-- Data & Export Badges -->
-[![GRDB](https://img.shields.io/badge/GRDB-SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](#storage)
-[![WAL](https://img.shields.io/badge/WAL%20Mode-003B57?style=for-the-badge)](#storage)
-[![Rekordbox](https://img.shields.io/badge/Rekordbox-Export-8E43E7?style=for-the-badge)](#export-formats)
-[![Serato](https://img.shields.io/badge/Serato-Export-00D4AA?style=for-the-badge)](#export-formats)
-[![Traktor](https://img.shields.io/badge/Traktor-Export-FF6B00?style=for-the-badge)](#export-formats)
-
-<!-- Audio Formats -->
-[![WAV](https://img.shields.io/badge/WAV-8B5CF6?style=for-the-badge)](#supported-formats)
-[![AIFF](https://img.shields.io/badge/AIFF-8B5CF6?style=for-the-badge)](#supported-formats)
-[![MP3](https://img.shields.io/badge/MP3-8B5CF6?style=for-the-badge)](#supported-formats)
-[![AAC](https://img.shields.io/badge/AAC-8B5CF6?style=for-the-badge)](#supported-formats)
-[![ALAC](https://img.shields.io/badge/ALAC-8B5CF6?style=for-the-badge)](#supported-formats)
-[![FLAC](https://img.shields.io/badge/FLAC-8B5CF6?style=for-the-badge)](#supported-formats)
-
-<!-- Privacy & Quality Badges -->
-[![Local-First](https://img.shields.io/badge/Local--First-success?style=for-the-badge)](#privacy)
-[![Privacy](https://img.shields.io/badge/100%25%20Local-222222?style=for-the-badge&logo=lock&logoColor=white)](#privacy)
-[![Offline](https://img.shields.io/badge/Offline%20Ready-00C853?style=for-the-badge)](#privacy)
-[![No Cloud](https://img.shields.io/badge/No%20Cloud-FF3B30?style=for-the-badge&logo=icloud&logoColor=white)](#privacy)
-
-<!-- Test Badges -->
-[![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen?style=for-the-badge)](#testing)
-[![Coverage](https://img.shields.io/badge/Coverage-87%25-brightgreen?style=for-the-badge)](#testing)
-[![Golden Tests](https://img.shields.io/badge/Golden%20Tests-Passing-brightgreen?style=for-the-badge)](#testing)
+<!-- HERO VIDEO - Maximum Wow Factor -->
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/video/cartomix-hero-dark.webp">
+  <source media="(prefers-color-scheme: light)" srcset="docs/assets/video/cartomix-hero-light.webp">
+  <img src="docs/assets/video/cartomix-hero.webp" alt="CartoMix in action - DJ Set Prep Copilot" width="100%">
+</picture>
 
 <br/>
 
-### See CartoMix in Action
+# CartoMix
 
-![CartoMix Demo](../docs/assets/screens/algiers-demo.webp)
+### Your AI-Powered DJ Set Prep Copilot
 
-*100% native macOS experience. Zero cloud. Maximum privacy.*
+**Build perfect sets with ML-powered track analysis, vibe matching, and seamless export to Rekordbox, Serato, and Traktor.**
 
-</div>
+*100% Native. 100% Local. 100% Private.*
+
+<br/>
+
+<!-- Core Identity Badges -->
+[![macOS 15+](https://img.shields.io/badge/macOS%2015+-000000?style=for-the-badge&logo=apple&logoColor=white)](#requirements)
+[![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon%20Native-000000?style=for-the-badge&logo=apple&logoColor=white)](#apple-silicon)
+[![Swift 6](https://img.shields.io/badge/Swift%206-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
+[![Version](https://img.shields.io/badge/v0.2.0--alpha-blue?style=for-the-badge)](#changelog)
+
+<!-- Architecture Badges -->
+[![SwiftUI](https://img.shields.io/badge/SwiftUI-0A84FF?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
+[![XPC](https://img.shields.io/badge/XPC%20Isolated-222222?style=for-the-badge&logo=apple&logoColor=white)](#xpc-architecture)
+[![Core ML](https://img.shields.io/badge/Core%20ML-34C759?style=for-the-badge&logo=apple&logoColor=white)](#ml-powered-similarity)
+[![Neural Engine](https://img.shields.io/badge/Neural%20Engine-FF9500?style=for-the-badge&logo=apple&logoColor=white)](#apple-silicon)
+
+<!-- ML & Features Badges -->
+[![OpenL3](https://img.shields.io/badge/OpenL3%20Embeddings-8B5CF6?style=for-the-badge)](#ml-powered-similarity)
+[![Vibe Match](https://img.shields.io/badge/Vibe%20Matching-EC4899?style=for-the-badge)](#ml-powered-similarity)
+[![Explainable AI](https://img.shields.io/badge/Explainable%20AI-10B981?style=for-the-badge)](#ml-powered-similarity)
+
+<!-- Export Badges -->
+[![Rekordbox](https://img.shields.io/badge/Rekordbox-8E43E7?style=for-the-badge)](#export-formats)
+[![Serato](https://img.shields.io/badge/Serato-00D4AA?style=for-the-badge)](#export-formats)
+[![Traktor](https://img.shields.io/badge/Traktor-FF6B00?style=for-the-badge)](#export-formats)
+
+<!-- Privacy & Security Badges -->
+[![100% Local](https://img.shields.io/badge/100%25%20Local-222222?style=for-the-badge&logo=lock&logoColor=white)](#privacy)
+[![No Cloud](https://img.shields.io/badge/No%20Cloud-FF3B30?style=for-the-badge)](#privacy)
+[![Sandboxed](https://img.shields.io/badge/Sandboxed-00C853?style=for-the-badge)](#privacy)
+[![Notarized](https://img.shields.io/badge/Notarized-34C759?style=for-the-badge)](#distribution)
+
+<br/>
+
+*Codename: Dardania*
 
 ---
 
-## What is CartoMix?
+</div>
 
-CartoMix is the **100% macOS native** evolution of the Algiers DJ Set Prep Copilot. Built from the ground up with SwiftUI, XPC services, and Apple Silicon optimization, CartoMix delivers a truly native experience:
+## What Makes CartoMix Different?
 
-- **SwiftUI-first UI** — Native macOS look and feel, proper keyboard focus, menu integration
-- **XPC crash isolation** — Heavy analysis runs in a separate process; UI never freezes
-- **Structured concurrency** — Predictable cancellation, no thread explosions
-- **GRDB database** — SQLite WAL mode with proper multi-process coordination
-- **Security-scoped bookmarks** — Access NAS/USB libraries across launches
-- **Notarized distribution** — Install on any Mac without Gatekeeper warnings
+<table>
+<tr>
+<td width="50%">
 
-## Why Native?
+### Native Performance
+- **<1 second** startup time
+- **~150 MB** memory footprint
+- **Zero Electron bloat**
+- Native ARM optimization
 
-| Feature | CartoMix (Native) | Electron/Web Apps |
-|---------|-------------------|-------------------|
-| **Startup Time** | <1 second | 3-5 seconds |
-| **Memory Usage** | ~150 MB | 500+ MB |
-| **CPU Efficiency** | Native ARM | JS JIT overhead |
-| **File Access** | Security-scoped bookmarks | Limited sandbox |
-| **Crash Isolation** | XPC process boundary | App-wide crashes |
-| **Keyboard/Menu** | Native macOS behavior | Emulated |
-| **Updates** | Sparkle + notarization | Manual downloads |
+</td>
+<td width="50%">
+
+### AI-Powered Analysis
+- **OpenL3** deep audio embeddings
+- **Vibe matching** beyond BPM/key
+- **Explainable** transition suggestions
+- Neural Engine acceleration
+
+</td>
+</tr>
+<tr>
+<td>
+
+### DJ Software Integration
+- **Rekordbox** XML with cues
+- **Serato** crate + cues CSV
+- **Traktor** NML with markers
+- SHA-256 verified exports
+
+</td>
+<td>
+
+### Privacy First
+- **100% offline** capable
+- **No cloud** upload ever
+- **No telemetry**
+- Sandboxed with minimal entitlements
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -105,105 +108,68 @@ CartoMix is the **100% macOS native** evolution of the Algiers DJ Set Prep Copil
 
 | Library View | Set Builder |
 |:---:|:---:|
-| ![Library](../docs/assets/screens/algiers-library-view.png) | ![Set Builder](../docs/assets/screens/algiers-set-builder.png) |
+| ![Library](docs/assets/screens/library-view.webp) | ![Set Builder](docs/assets/screens/set-builder.webp) |
 
-| Graph View | Track Detail |
+| Graph View | Track Analysis |
 |:---:|:---:|
-| ![Graph](../docs/assets/screens/algiers-graph-view.png) | ![Detail](../docs/assets/screens/algiers-hero.png) |
+| ![Graph](docs/assets/screens/graph-view.webp) | ![Analysis](docs/assets/screens/track-analysis.webp) |
 
 </div>
 
 <details>
-<summary>More Screenshots</summary>
+<summary><strong>More Screenshots</strong></summary>
 
-| Light Mode | Training View |
+| Similarity Search | Export Options |
 |:---:|:---:|
-| ![Light](../docs/assets/screens/algiers-light-mode.png) | ![Training](../docs/assets/screens/algiers-hero.png) |
+| ![Similarity](docs/assets/screens/similarity-search.webp) | ![Export](docs/assets/screens/export-dialog.webp) |
+
+| Settings - ML | Dark/Light Mode |
+|:---:|:---:|
+| ![ML Settings](docs/assets/screens/settings-ml.webp) | ![Themes](docs/assets/screens/themes.webp) |
 
 </details>
 
 ---
 
-## Architecture
+## Quick Start
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           CartoMix.app (SwiftUI)                              │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  ┌──────────────────────────────────────────────────────────────────────┐   │
-│  │                         UI Layer (SwiftUI)                            │   │
-│  │  • LibraryView • SetBuilderView • TransitionGraphView • TrainingView │   │
-│  │  • @Observable state management • Native menus & shortcuts           │   │
-│  └──────────────────────────────────────────────────────────────────────┘   │
-│                                    │                                         │
-│                                    ▼                                         │
-│  ┌──────────────────────────────────────────────────────────────────────┐   │
-│  │                       DardaniaCore (Swift)                            │   │
-│  │  • Database (GRDB/SQLite WAL) • Similarity (vDSP) • Planner          │   │
-│  │  • Exporters (Rekordbox/Serato/Traktor) • LocationManager            │   │
-│  └──────────────────────────────────────────────────────────────────────┘   │
-│                                    │                                         │
-│                                   XPC                                        │
-│                                    │                                         │
-└────────────────────────────────────┼────────────────────────────────────────┘
-                                     │
-                                     ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        AnalyzerXPC.xpc (Isolated)                            │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  • Audio decode (AVFoundation)     • Beatgrid (Accelerate/vDSP)             │
-│  • Key detection (Krumhansl)       • Energy analysis                        │
-│  • Loudness (EBU R128)             • Section detection                      │
-│  • OpenL3 embeddings (Core ML/ANE) • Cue generation                         │
-│  • SoundAnalysis (300+ labels)     • Custom DJ section classifier           │
-└─────────────────────────────────────────────────────────────────────────────┘
+### Install from Release
+
+```bash
+# Download latest release
+open https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/releases
+
+# Or via Homebrew (coming soon)
+# brew install --cask cartomix
 ```
 
-### Process Isolation
+### Build from Source
 
-The XPC architecture provides critical benefits:
+```bash
+git clone https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot.git
+cd CartoMix---DJ-Set-Prep-Copilot
+swift build -c release
+make run
+```
 
-1. **Crash containment** — If analysis crashes, only the XPC service restarts; UI stays responsive
-2. **Memory isolation** — Analysis memory pressure doesn't affect UI smoothness
-3. **Launchd integration** — Automatic restart with exponential backoff
-4. **Clean file delegation** — Security-scoped URLs passed explicitly
+> Requires macOS 15+, Swift 6+, and Xcode 16+ for tests.
 
 ---
 
-## Apple Silicon
+## How It Works
 
-CartoMix is built specifically for Apple Silicon, utilizing every compute engine:
+### 1. Import Your Library
 
-| Engine | Framework | Use Case | Benefit |
-|--------|-----------|----------|---------|
-| **Neural Engine** | Core ML | OpenL3 embeddings, section classification | 15x faster than CPU |
-| **GPU** | Metal | Spectrogram rendering, onset detection | 10x faster than CPU |
-| **CPU** | Accelerate/vDSP | FFT, K-weighting, beatgrid, key detection | 4x faster than naive |
-| **Media Engine** | AVFoundation | Audio decode (FLAC/AAC/MP3) | Hardware-accelerated |
+Add folders from your local drives, NAS, or USB. CartoMix uses security-scoped bookmarks to remember access across launches.
 
-### Unified Memory Advantage
+### 2. Analyze Tracks
 
-Apple's UMA eliminates data copies between CPU, GPU, and Neural Engine:
+The XPC analyzer service runs in isolation, using:
+- **Neural Engine** for OpenL3 embeddings (512-dim vibe vectors)
+- **Accelerate/vDSP** for beat and key detection
+- **Core ML** for section classification
 
-```
-Audio File → Media Engine (decode) → Float32 PCM in UMA
-                                        │ (no copy)
-                                        ▼
-                                   Accelerate (FFT)
-                                        │ (no copy)
-                                        ▼
-                                   Core ML/ANE (OpenL3)
-                                        │
-                                        ▼
-                              512-dim embedding in UMA
-```
-
----
-
-## ML-Powered Similarity
-
-CartoMix uses **OpenL3**, a deep neural network trained on millions of audio-video pairs, to find tracks with similar "vibe":
+### 3. Find Similar Tracks
 
 ```
 Combined Score = 0.50 × OpenL3 Similarity    (vibe match)
@@ -212,22 +178,92 @@ Combined Score = 0.50 × OpenL3 Similarity    (vibe match)
               + 0.10 × Energy Similarity     (energy level match)
 ```
 
-Every similarity result includes a human-readable explanation:
+Every suggestion includes a human-readable explanation:
+> *"similar vibe (82%); Δ+2 BPM; key: 8A→9A (compatible); energy +1"*
+
+### 4. Build Your Set
+
+Drag tracks into your set, reorder with drag-and-drop, and visualize connections in Graph View.
+
+### 5. Export
+
+One click to Rekordbox, Serato, or Traktor format—with cue points, tempo, and key data intact.
+
+---
+
+## Architecture
 
 ```
-"similar vibe (82%); Δ+2 BPM; key: 8A→9A (compatible); energy +1"
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           CartoMix.app (SwiftUI)                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │                         UI Layer (SwiftUI)                             │ │
+│  │  • LibraryView • SetBuilderView • GraphView • TrainingView             │ │
+│  │  • @Observable state • Native menus & shortcuts                        │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│                                    │                                        │
+│                                    ▼                                        │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │                       DardaniaCore (Swift)                             │ │
+│  │  • GRDB/SQLite WAL • Similarity (vDSP) • Planner • Exporters           │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│                                   XPC                                       │
+└───────────────────────────────────┼─────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        AnalyzerXPC.xpc (Isolated)                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  • Audio decode (AVFoundation)     • Beatgrid (Accelerate/vDSP)            │
+│  • Key detection (Krumhansl)       • Energy analysis (EBU R128)            │
+│  • OpenL3 embeddings (Core ML)     • Section detection                     │
+│  • SoundAnalysis (300+ labels)     • Cue point generation                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Why XPC?
+
+| Benefit | Description |
+|---------|-------------|
+| **Crash isolation** | Analyzer crash? Auto-restart. UI never freezes. |
+| **Memory isolation** | Heavy analysis doesn't affect UI smoothness |
+| **Security** | Minimal attack surface, sandboxed processes |
+| **Launchd** | System manages lifecycle, exponential backoff |
+
+---
+
+## Apple Silicon Optimization
+
+| Engine | Framework | Use Case | Speedup |
+|--------|-----------|----------|---------|
+| **Neural Engine** | Core ML | OpenL3 embeddings | 15x vs CPU |
+| **GPU** | Metal | Spectrogram, onset detection | 10x vs CPU |
+| **CPU** | Accelerate | FFT, beatgrid, key detection | 4x vs naive |
+| **Media Engine** | AVFoundation | FLAC/AAC/MP3 decode | Hardware |
+
+### Zero-Copy Unified Memory
+
+```
+Audio → Media Engine → Float32 PCM ─┬─► Accelerate (FFT)
+                                    │
+                                    ├─► Core ML/ANE (OpenL3)
+                                    │
+                                    └─► 512-dim embedding
+
+        (No copies between CPU ↔ GPU ↔ Neural Engine)
 ```
 
 ---
 
 ## Export Formats
 
-| Format | Description | Features |
-|--------|-------------|----------|
-| **Rekordbox** | DJ_PLAYLISTS XML | Cues, tempo markers, key, metadata |
-| **Serato** | Binary .crate | Path references, supplementary cues CSV |
-| **Traktor** | NML v19 | CUE_V2 markers, key mapping (0-23) |
-| **JSON** | Structured data | Full analysis with embeddings |
+| Format | File Type | Features |
+|--------|-----------|----------|
+| **Rekordbox** | DJ_PLAYLISTS XML | Cues, tempo, key, metadata |
+| **Serato** | .crate + cues.csv | Path refs, supplementary cues |
+| **Traktor** | NML v19 | CUE_V2, key (0-23 mapping) |
+| **JSON** | Structured | Full analysis + embeddings |
 | **M3U8** | Playlist | Duration, artist, title |
 | **CSV** | Spreadsheet | All metadata columns |
 
@@ -235,141 +271,95 @@ All exports include **SHA-256 checksums** for verification.
 
 ---
 
-## Privacy
+## Privacy & Security
 
-CartoMix is **100% local, 100% private**:
+| Feature | Status |
+|---------|--------|
+| Cloud upload | **Never** |
+| Telemetry | **None** |
+| Account required | **No** |
+| Works offline | **Yes** |
+| App Sandbox | **Enabled** |
+| Notarized | **Yes** |
+| Hardened Runtime | **Yes** |
 
-- ✅ No cloud upload — ever
-- ✅ No telemetry
-- ✅ No account required
-- ✅ Works completely offline
-- ✅ Sandboxed with minimal entitlements
-- ✅ Security-scoped bookmarks for file access
+Your music. Your data. Your Mac. Nothing leaves.
 
 ---
 
 ## Requirements
 
-- **macOS 15+** (Sequoia)
-- **Apple Silicon** (M1/M2/M3/M4/M5)
-- **8GB RAM** minimum (16GB recommended)
-- **Swift 6+** (for development)
-
----
-
-## Quick Start
-
-### Install from Release
-
-1. Download `CartoMix.dmg` from [Releases](https://github.com/cartomix/cartomix/releases)
-2. Open the DMG and drag CartoMix to Applications
-3. Launch CartoMix
-
-The app is **notarized and stapled** — no Gatekeeper warnings.
-
-### Build from Source
-
-```bash
-# Clone the repository
-git clone https://github.com/cartomix/cartomix.git
-cd cartomix
-
-# Build with Swift Package Manager
-swift build
-
-# Or using make
-make build
-
-# Run the app
-make run
-```
-
-> **Note**: Building requires Swift 6+ and macOS 15+ SDK. Tests require Xcode for XCTest framework access.
+| Requirement | Minimum | Recommended |
+|-------------|---------|-------------|
+| macOS | 15 (Sequoia) | 15+ |
+| Chip | Apple Silicon (M1) | M2+ |
+| RAM | 8 GB | 16 GB |
+| Storage | 500 MB | 1 GB+ |
 
 ---
 
 ## Testing
 
-| Test Suite | Description |
-|------------|-------------|
-| **Core Unit Tests** | Similarity scoring, set planner, database operations |
-| **Golden Export Tests** | Rekordbox, Serato, Traktor format verification |
-| **XPC Tests** | Crash isolation, timeout handling, cancellation |
-
-Run tests with Xcode:
-
 ```bash
-# Tests require Xcode (not just Command Line Tools) for XCTest framework
-xcodebuild test -scheme Dardania-Package -destination 'platform=macOS'
-
-# Or via make (with Xcode installed)
+# Run all tests
 make test
+
+# Individual test suites
+make test-core      # Similarity, planner, database
+make test-golden    # Export format verification
+make test-xpc       # Crash isolation, timeouts
 ```
 
-> **Note**: Tests use Swift Testing framework and require Xcode to be installed. Command Line Tools alone do not include the testing frameworks.
-
----
-
-## Storage
-
-CartoMix uses **GRDB** (SQLite with WAL mode) for reliable, multi-process storage:
-
-- **Location**: `~/Library/Application Support/CartoMix/`
-- **WAL mode**: Enables concurrent reads during writes
-- **Single-writer rule**: XPC writes, UI reads (no contention)
-- **Security-scoped bookmarks**: NAS/USB access persists across launches
-
----
-
-## Distribution
-
-CartoMix follows Apple's recommended distribution workflow:
-
-1. **Developer ID signing** — Code-signed for Gatekeeper
-2. **Notarization** — Apple-verified for security
-3. **Stapling** — Offline installation support
-4. **DMG packaging** — Standard macOS experience
+See [docs/demo/TEST_SUITE.md](docs/demo/TEST_SUITE.md) for reproducible test procedures.
 
 ---
 
 ## Roadmap
 
-### v1.0 (Current)
+### v0.2.0-alpha (Current)
 - [x] SwiftUI-first UI
 - [x] XPC analyzer service
-- [x] GRDB database with WAL
+- [x] GRDB with WAL mode
 - [x] Security-scoped bookmarks
 - [x] Rekordbox/Serato/Traktor export
 - [x] OpenL3 similarity search
-- [x] Comprehensive test suite
+- [x] Demo & test documentation
 
-### v1.1 (Planned)
-- [ ] Waveform-based label painting
-- [ ] User override layer (editable analysis)
-- [ ] Real-time audio playback
+### v0.3.0 (Next)
+- [ ] Waveform visualization
+- [ ] User cue point editing
+- [ ] Audio preview playback
+
+### v1.0.0 (Stable)
 - [ ] Sparkle auto-updates
-
-### v1.2 (Future)
-- [ ] Section-level embeddings
-- [ ] Transition window detection
-- [ ] Energy curve matching
-- [ ] Hardware control surface (MIDI)
+- [ ] Complete test coverage
+- [ ] Performance optimization
+- [ ] Homebrew distribution
 
 ---
 
 ## Contributing
 
-PRs welcome! Please ensure:
+```bash
+# Setup
+git clone https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot.git
+cd CartoMix---DJ-Set-Prep-Copilot
 
-- All tests pass (`make test`)
-- Code is formatted (`make format`)
-- Commits are scoped and descriptive
+# Build & test
+make build
+make test
+
+# Format code
+make format
+```
+
+See [docs/demo/DEMO_PROCEDURES.md](docs/demo/DEMO_PROCEDURES.md) for demo recording guidelines.
 
 ---
 
 ## License
 
-Blue Oak Model License 1.0.0. See [LICENSE](../LICENSE).
+[Blue Oak Model License 1.0.0](LICENSE)
 
 ---
 
@@ -377,9 +367,11 @@ Blue Oak Model License 1.0.0. See [LICENSE](../LICENSE).
 
 **Built for DJs who want native performance and total privacy.**
 
-*Powered by SwiftUI, XPC, Core ML, and Apple Silicon.*
+*Powered by SwiftUI, Core ML, Neural Engine, and Apple Silicon.*
 
-[![Made for macOS](https://img.shields.io/badge/Made%20for-macOS-000000?style=for-the-badge&logo=apple&logoColor=white)](#)
-[![Built with Swift](https://img.shields.io/badge/Built%20with-Swift-F05138?style=for-the-badge&logo=swift&logoColor=white)](#)
+<br/>
+
+[![GitHub stars](https://img.shields.io/github/stars/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot?style=social)](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot)
+[![GitHub forks](https://img.shields.io/github/forks/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot?style=social)](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/fork)
 
 </div>
