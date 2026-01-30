@@ -1,7 +1,7 @@
 # CartoMix - 100% macOS Native DJ Set Prep Copilot (Codename: Dardania)
 # Build and test commands
 
-.PHONY: all build build-release test test-core test-golden test-xpc clean lint format run help screenshots
+.PHONY: all build build-release test test-core test-golden test-xpc clean lint format run help screenshots hero-video
 
 # Default target
 all: build
@@ -77,6 +77,12 @@ screenshots-capture:
 	@chmod +x scripts/capture-screenshots.sh
 	@./scripts/capture-screenshots.sh
 
+# Generate hero animation from screenshots
+hero-video:
+	@echo "Generating hero animation..."
+	@chmod +x scripts/generate-hero-video.sh
+	@./scripts/generate-hero-video.sh
+
 # Print help
 help:
 	@echo "CartoMix - 100% macOS Native DJ Set Prep Copilot (Codename: Dardania)"
@@ -96,6 +102,7 @@ help:
 	@echo "  archive        Build release archive"
 	@echo "  test-coverage  Run tests with coverage report"
 	@echo "  screenshots    Generate screenshots for docs"
+	@echo "  hero-video     Generate hero animation from screenshots"
 	@echo ""
 	@echo "Requirements:"
 	@echo "  - macOS 15+ (Sequoia)"
