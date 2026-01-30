@@ -1,10 +1,12 @@
 <div align="center">
 
-<img src="../docs/assets/logo.svg" alt="Dardania - 100% macOS Native DJ Set Prep Copilot" width="120" />
+<img src="../docs/assets/logo.svg" alt="CartoMix - DJ Set Prep Copilot" width="120" />
 
-# Dardania
+# CartoMix
 
 ### 100% macOS Native DJ Set Prep Copilot
+
+*Codename: Dardania*
 
 **SwiftUI · XPC · Core ML · Accelerate · GRDB**
 
@@ -62,9 +64,9 @@
 
 <br/>
 
-### See Dardania in Action
+### See CartoMix in Action
 
-![Dardania Demo](../docs/assets/screens/algiers-demo.webp)
+![CartoMix Demo](../docs/assets/screens/algiers-demo.webp)
 
 *100% native macOS experience. Zero cloud. Maximum privacy.*
 
@@ -72,9 +74,9 @@
 
 ---
 
-## What is Dardania?
+## What is CartoMix?
 
-Dardania is the **100% macOS native** evolution of the Algiers DJ Set Prep Copilot. Built from the ground up with SwiftUI, XPC services, and Apple Silicon optimization, Dardania delivers a truly native experience:
+CartoMix is the **100% macOS native** evolution of the Algiers DJ Set Prep Copilot. Built from the ground up with SwiftUI, XPC services, and Apple Silicon optimization, CartoMix delivers a truly native experience:
 
 - **SwiftUI-first UI** — Native macOS look and feel, proper keyboard focus, menu integration
 - **XPC crash isolation** — Heavy analysis runs in a separate process; UI never freezes
@@ -85,7 +87,7 @@ Dardania is the **100% macOS native** evolution of the Algiers DJ Set Prep Copil
 
 ## Why Native?
 
-| Feature | Dardania (Native) | Electron/Web Apps |
+| Feature | CartoMix (Native) | Electron/Web Apps |
 |---------|-------------------|-------------------|
 | **Startup Time** | <1 second | 3-5 seconds |
 | **Memory Usage** | ~150 MB | 500+ MB |
@@ -126,7 +128,7 @@ Dardania is the **100% macOS native** evolution of the Algiers DJ Set Prep Copil
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           Dardania.app (SwiftUI)                              │
+│                           CartoMix.app (SwiftUI)                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ┌──────────────────────────────────────────────────────────────────────┐   │
@@ -171,7 +173,7 @@ The XPC architecture provides critical benefits:
 
 ## Apple Silicon
 
-Dardania is built specifically for Apple Silicon, utilizing every compute engine:
+CartoMix is built specifically for Apple Silicon, utilizing every compute engine:
 
 | Engine | Framework | Use Case | Benefit |
 |--------|-----------|----------|---------|
@@ -201,7 +203,7 @@ Audio File → Media Engine (decode) → Float32 PCM in UMA
 
 ## ML-Powered Similarity
 
-Dardania uses **OpenL3**, a deep neural network trained on millions of audio-video pairs, to find tracks with similar "vibe":
+CartoMix uses **OpenL3**, a deep neural network trained on millions of audio-video pairs, to find tracks with similar "vibe":
 
 ```
 Combined Score = 0.50 × OpenL3 Similarity    (vibe match)
@@ -235,7 +237,7 @@ All exports include **SHA-256 checksums** for verification.
 
 ## Privacy
 
-Dardania is **100% local, 100% private**:
+CartoMix is **100% local, 100% private**:
 
 - ✅ No cloud upload — ever
 - ✅ No telemetry
@@ -259,9 +261,9 @@ Dardania is **100% local, 100% private**:
 
 ### Install from Release
 
-1. Download `Dardania.dmg` from [Releases](https://github.com/cartomix/dardania/releases)
-2. Open the DMG and drag Dardania to Applications
-3. Launch Dardania
+1. Download `CartoMix.dmg` from [Releases](https://github.com/cartomix/cartomix/releases)
+2. Open the DMG and drag CartoMix to Applications
+3. Launch CartoMix
 
 The app is **notarized and stapled** — no Gatekeeper warnings.
 
@@ -269,8 +271,8 @@ The app is **notarized and stapled** — no Gatekeeper warnings.
 
 ```bash
 # Clone the repository
-git clone https://github.com/cartomix/dardania.git
-cd dardania/Dardania
+git clone https://github.com/cartomix/cartomix.git
+cd cartomix
 
 # Build with Swift Package Manager
 swift build
@@ -279,7 +281,7 @@ swift build
 make build
 
 # Run the app
-swift run Dardania
+make run
 ```
 
 > **Note**: Building requires Swift 6+ and macOS 15+ SDK. Tests require Xcode for XCTest framework access.
@@ -310,9 +312,9 @@ make test
 
 ## Storage
 
-Dardania uses **GRDB** (SQLite with WAL mode) for reliable, multi-process storage:
+CartoMix uses **GRDB** (SQLite with WAL mode) for reliable, multi-process storage:
 
-- **Location**: `~/Library/Application Support/Dardania/`
+- **Location**: `~/Library/Application Support/CartoMix/`
 - **WAL mode**: Enables concurrent reads during writes
 - **Single-writer rule**: XPC writes, UI reads (no contention)
 - **Security-scoped bookmarks**: NAS/USB access persists across launches
@@ -321,7 +323,7 @@ Dardania uses **GRDB** (SQLite with WAL mode) for reliable, multi-process storag
 
 ## Distribution
 
-Dardania follows Apple's recommended distribution workflow:
+CartoMix follows Apple's recommended distribution workflow:
 
 1. **Developer ID signing** — Code-signed for Gatekeeper
 2. **Notarization** — Apple-verified for security
