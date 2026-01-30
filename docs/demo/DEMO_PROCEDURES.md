@@ -4,6 +4,8 @@
 
 This document outlines reproducible demo procedures for testing and showcasing CartoMix.
 
+> ⚠️ **Note:** CartoMix (native macOS) is a complete rewrite and is **NOT compatible** with the [web-based prototype](https://github.com/ParkWardRR/cartomix-Web-Based-DJ-Copilot). Data, libraries, and configurations cannot be migrated between versions.
+
 ## Prerequisites
 
 - macOS 15+ (Sequoia)

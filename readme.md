@@ -55,6 +55,10 @@
 
 </div>
 
+> ⚠️ **Important:** This is a **native macOS application** built from the ground up in Swift/SwiftUI. It is **NOT compatible** with the web-based prototype at [cartomix-Web-Based-DJ-Copilot](https://github.com/ParkWardRR/cartomix-Web-Based-DJ-Copilot). Libraries, playlists, analysis data, and settings **cannot be migrated** between the two versions. This native app offers superior performance and privacy but requires starting fresh.
+
+---
+
 ## What Makes CartoMix Different?
 
 <table>
@@ -346,6 +350,26 @@ Your music. Your data. Your Mac. Nothing leaves.
 | Chip | Apple Silicon (M1) | M2+ |
 | RAM | 8 GB | 16 GB |
 | Storage | 500 MB | 1 GB+ |
+
+---
+
+## Migration from Web Prototype
+
+This native macOS application is a **complete rewrite** and shares no code or data formats with the [web-based prototype](https://github.com/ParkWardRR/cartomix-Web-Based-DJ-Copilot).
+
+| Feature | Web Prototype | Native App (This Repo) |
+|---------|---------------|------------------------|
+| Platform | Browser-based | macOS native |
+| Performance | JavaScript | Swift/Apple Silicon |
+| Privacy | Cloud-dependent | 100% local |
+| ML Engine | Limited | Neural Engine |
+| Data format | Web storage | SQLite + Core Data |
+
+**What this means:**
+- ❌ Libraries cannot be imported from the web prototype
+- ❌ Playlists and sets are not transferable
+- ❌ Analysis data must be regenerated
+- ✅ Start fresh with better performance and privacy
 
 ---
 
