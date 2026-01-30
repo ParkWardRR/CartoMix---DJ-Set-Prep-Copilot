@@ -1,5 +1,6 @@
 // CartoMix - Programmatic Screenshot Generator
 // Renders SwiftUI views to images for documentation
+// Uses new visual components for professional appearance
 
 import SwiftUI
 import AppKit
@@ -17,7 +18,6 @@ struct ScreenshotGenerator {
         width: CGFloat = 1280,
         height: CGFloat = 800
     ) {
-        // Default to docs/assets/screens in the current working directory
         if let outputDirectory = outputDirectory {
             self.outputDirectory = outputDirectory
         } else {
@@ -30,26 +30,24 @@ struct ScreenshotGenerator {
 
     /// Generate all screenshots
     func generateAll() async throws {
-        // Create output directory
         try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
 
         print("Generating screenshots to: \(outputDirectory.path)")
 
-        // Generate mock data for screenshots
         let mockTracks = createMockTracks()
         let mockAnalysis = createMockAnalysis()
 
         // 1. Library View
         print("  Generating: library-view")
         try await renderView(
-            LibraryViewPreview(tracks: mockTracks),
+            LibraryViewPreview(tracks: mockTracks, analysis: mockAnalysis),
             filename: "library-view"
         )
 
         // 2. Set Builder View
         print("  Generating: set-builder")
         try await renderView(
-            SetBuilderPreview(tracks: Array(mockTracks.prefix(5))),
+            SetBuilderPreview(tracks: Array(mockTracks.prefix(8))),
             filename: "set-builder"
         )
 
@@ -98,7 +96,7 @@ struct ScreenshotGenerator {
         // 9. Energy Matching
         print("  Generating: energy-matching")
         try await renderView(
-            EnergyMatchingPreview(analysis: mockAnalysis),
+            EnergyMatchingPreview(tracks: mockTracks),
             filename: "energy-matching"
         )
 
@@ -112,7 +110,6 @@ struct ScreenshotGenerator {
         print("\nScreenshot generation complete!")
     }
 
-    /// Render a SwiftUI view to an image file
     private func renderView<V: View>(_ view: V, filename: String) async throws {
         let hostingView = NSHostingView(rootView: view.frame(width: width, height: height))
         hostingView.frame = CGRect(x: 0, y: 0, width: width, height: height)
@@ -129,11 +126,9 @@ struct ScreenshotGenerator {
             return
         }
 
-        // Save as PNG
         let pngURL = outputDirectory.appendingPathComponent("\(filename).png")
         try pngData.write(to: pngURL)
 
-        // Convert to WebP if cwebp is available
         let webpURL = outputDirectory.appendingPathComponent("\(filename).webp")
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/opt/homebrew/bin/cwebp")
@@ -157,66 +152,14 @@ struct ScreenshotGenerator {
 
     private func createMockTracks() -> [Track] {
         [
-            Track(
-                id: 1,
-                contentHash: "abc123",
-                path: "/Music/Daft Punk/Random Access Memories/Get Lucky.mp3",
-                title: "Get Lucky",
-                artist: "Daft Punk",
-                album: "Random Access Memories",
-                fileSize: 12_500_000,
-                fileModifiedAt: Date(),
-                createdAt: Date(),
-                updatedAt: Date()
-            ),
-            Track(
-                id: 2,
-                contentHash: "def456",
-                path: "/Music/Daft Punk/Random Access Memories/Instant Crush.mp3",
-                title: "Instant Crush",
-                artist: "Daft Punk",
-                album: "Random Access Memories",
-                fileSize: 11_200_000,
-                fileModifiedAt: Date(),
-                createdAt: Date(),
-                updatedAt: Date()
-            ),
-            Track(
-                id: 3,
-                contentHash: "ghi789",
-                path: "/Music/ZHU/ERUM/In The Morning.mp3",
-                title: "In The Morning",
-                artist: "ZHU",
-                album: "ERUM",
-                fileSize: 9_800_000,
-                fileModifiedAt: Date(),
-                createdAt: Date(),
-                updatedAt: Date()
-            ),
-            Track(
-                id: 4,
-                contentHash: "jkl012",
-                path: "/Music/Disclosure/Settle/Latch.mp3",
-                title: "Latch",
-                artist: "Disclosure",
-                album: "Settle",
-                fileSize: 10_500_000,
-                fileModifiedAt: Date(),
-                createdAt: Date(),
-                updatedAt: Date()
-            ),
-            Track(
-                id: 5,
-                contentHash: "mno345",
-                path: "/Music/ODESZA/A Moment Apart/Line of Sight.mp3",
-                title: "Line of Sight",
-                artist: "ODESZA",
-                album: "A Moment Apart",
-                fileSize: 11_800_000,
-                fileModifiedAt: Date(),
-                createdAt: Date(),
-                updatedAt: Date()
-            ),
+            Track(id: 1, contentHash: "abc123", path: "/Music/Get Lucky.mp3", title: "Get Lucky", artist: "Daft Punk", album: "RAM", fileSize: 12_500_000, fileModifiedAt: Date(), createdAt: Date(), updatedAt: Date()),
+            Track(id: 2, contentHash: "def456", path: "/Music/Instant Crush.mp3", title: "Instant Crush", artist: "Daft Punk", album: "RAM", fileSize: 11_200_000, fileModifiedAt: Date(), createdAt: Date(), updatedAt: Date()),
+            Track(id: 3, contentHash: "ghi789", path: "/Music/In The Morning.mp3", title: "In The Morning", artist: "ZHU", album: "ERUM", fileSize: 9_800_000, fileModifiedAt: Date(), createdAt: Date(), updatedAt: Date()),
+            Track(id: 4, contentHash: "jkl012", path: "/Music/Latch.mp3", title: "Latch", artist: "Disclosure", album: "Settle", fileSize: 10_500_000, fileModifiedAt: Date(), createdAt: Date(), updatedAt: Date()),
+            Track(id: 5, contentHash: "mno345", path: "/Music/Line of Sight.mp3", title: "Line of Sight", artist: "ODESZA", album: "A Moment Apart", fileSize: 11_800_000, fileModifiedAt: Date(), createdAt: Date(), updatedAt: Date()),
+            Track(id: 6, contentHash: "pqr678", path: "/Music/Midnight City.mp3", title: "Midnight City", artist: "M83", album: "Hurry Up", fileSize: 10_200_000, fileModifiedAt: Date(), createdAt: Date(), updatedAt: Date()),
+            Track(id: 7, contentHash: "stu901", path: "/Music/Opus.mp3", title: "Opus", artist: "Eric Prydz", album: "Opus", fileSize: 15_500_000, fileModifiedAt: Date(), createdAt: Date(), updatedAt: Date()),
+            Track(id: 8, contentHash: "vwx234", path: "/Music/Strobe.mp3", title: "Strobe", artist: "deadmau5", album: "For Lack", fileSize: 18_200_000, fileModifiedAt: Date(), createdAt: Date(), updatedAt: Date()),
         ]
     }
 
@@ -242,7 +185,6 @@ struct ScreenshotGenerator {
             CuePoint(index: 6, label: "Outro", type: .outro, timeSeconds: 255, beatIndex: 490),
         ]
 
-        // Generate mock waveform data
         let waveform = (0..<1000).map { i -> Float in
             let position = Float(i) / 1000
             let base = sin(position * Float.pi * 20) * 0.3
@@ -258,192 +200,395 @@ struct ScreenshotGenerator {
         }
 
         return TrackAnalysis(
-            id: 1,
-            trackId: 1,
-            version: 1,
-            status: .complete,
-            durationSeconds: 285,
-            bpm: 116,
-            bpmConfidence: 0.95,
-            keyValue: "4A",
-            keyFormat: "camelot",
-            keyConfidence: 0.88,
-            energyGlobal: 75,
-            integratedLUFS: -8.5,
-            truePeakDB: -0.3,
-            loudnessRange: 6.2,
-            waveformPreview: waveform,
-            sections: sections,
-            cuePoints: cuePoints,
-            soundContext: "Electronic / Dance",
-            soundContextConfidence: 0.92,
-            qaFlags: [],
-            hasOpenL3Embedding: true,
-            trainingLabels: [],
-            createdAt: Date(),
-            updatedAt: Date()
+            id: 1, trackId: 1, version: 1, status: .complete,
+            durationSeconds: 285, bpm: 116, bpmConfidence: 0.95,
+            keyValue: "8A", keyFormat: "camelot", keyConfidence: 0.88,
+            energyGlobal: 75, integratedLUFS: -8.5, truePeakDB: -0.3, loudnessRange: 6.2,
+            waveformPreview: waveform, sections: sections, cuePoints: cuePoints,
+            soundContext: "Electronic / Dance", soundContextConfidence: 0.92,
+            qaFlags: [], hasOpenL3Embedding: true, trainingLabels: [],
+            createdAt: Date(), updatedAt: Date()
         )
     }
 }
 
-// MARK: - Preview Views for Screenshots
+// MARK: - Preview Views Using New Components
 
 struct LibraryViewPreview: View {
     let tracks: [Track]
+    let analysis: TrackAnalysis
+
+    var mockWaveform: [Float] {
+        (0..<500).map { i in
+            let t = Float(i) / 500
+            return sin(t * 20) * (0.3 + 0.7 * sin(t * 3)) * Float.random(in: 0.8...1.0)
+        }
+    }
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Mock toolbar
-            HStack {
-                Text("CartoMix")
-                    .font(.title2.bold())
-                Spacer()
-                HStack(spacing: 16) {
-                    Label("Library", systemImage: "music.note.list")
-                    Label("Set Builder", systemImage: "list.bullet.rectangle")
-                    Label("Graph", systemImage: "point.3.connected.trianglepath.dotted")
+        HSplitView {
+            // Left: Track list
+            VStack(spacing: 0) {
+                HStack {
+                    Text("Library")
+                        .font(CartoMixTypography.title)
+                    Spacer()
+                    Text("\(tracks.count) tracks")
+                        .font(CartoMixTypography.caption)
+                        .foregroundStyle(CartoMixColors.textSecondary)
                 }
-                Spacer()
-                TextField("Search...", text: .constant(""))
-                    .textFieldStyle(.roundedBorder)
-                    .frame(width: 200)
-            }
-            .padding()
-            .background(.bar)
+                .padding()
 
-            // Track list
-            List {
-                ForEach(tracks, id: \.id) { track in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(track.title)
-                                .font(.headline)
-                            Text(track.artist)
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing) {
-                            Text("116 BPM")
-                                .font(.caption)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 2)
-                                .background(.blue.opacity(0.2), in: Capsule())
-                            Text("4A")
-                                .font(.caption)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 2)
-                                .background(.green.opacity(0.2), in: Capsule())
+                ScrollView {
+                    LazyVStack(spacing: 2) {
+                        ForEach(tracks, id: \.id) { track in
+                            HStack(spacing: CartoMixSpacing.sm) {
+                                RoundedRectangle(cornerRadius: 2)
+                                    .fill(CartoMixColors.colorForSection("drop"))
+                                    .frame(width: 4)
+
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(track.title)
+                                        .font(.system(size: 13, weight: .medium))
+                                    Text(track.artist)
+                                        .font(.system(size: 11))
+                                        .foregroundStyle(CartoMixColors.textSecondary)
+                                }
+
+                                Spacer()
+
+                                BadgeRow(bpm: 126, key: "8A", energy: 7, size: .small, spacing: 4)
+                            }
+                            .padding(.horizontal, CartoMixSpacing.md)
+                            .padding(.vertical, CartoMixSpacing.sm)
+                            .background(track.id == 1 ? CartoMixColors.accentBlue.opacity(0.15) : .clear)
                         }
                     }
-                    .padding(.vertical, 8)
                 }
             }
+            .frame(minWidth: 300, maxWidth: 350)
+            .background(CartoMixColors.backgroundSecondary)
+
+            // Center: Waveform
+            VStack(spacing: CartoMixSpacing.md) {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(tracks[0].title)
+                            .font(CartoMixTypography.headline)
+                        Text(tracks[0].artist)
+                            .font(CartoMixTypography.body)
+                            .foregroundStyle(CartoMixColors.textSecondary)
+                    }
+                    Spacer()
+                    BadgeRow(bpm: 126, key: "8A", energy: 7)
+                }
+
+                GradientWaveformView(
+                    samples: mockWaveform,
+                    sections: [
+                        WaveformSection(type: "intro", startTime: 0, endTime: 30),
+                        WaveformSection(type: "build", startTime: 30, endTime: 60),
+                        WaveformSection(type: "drop", startTime: 60, endTime: 120),
+                        WaveformSection(type: "breakdown", startTime: 120, endTime: 150),
+                        WaveformSection(type: "drop", startTime: 150, endTime: 210),
+                        WaveformSection(type: "outro", startTime: 210, endTime: 240)
+                    ],
+                    cuePoints: [
+                        WaveformCuePoint(label: "CUE 1", time: 30, type: "hotcue"),
+                        WaveformCuePoint(label: "DROP", time: 60, type: "hotcue"),
+                        WaveformCuePoint(label: "MIX OUT", time: 210, type: "fade_out")
+                    ],
+                    duration: 240,
+                    playheadPosition: 90
+                )
+                .frame(height: 150)
+
+                CuePointsTable(cuePoints: [
+                    CuePointData(label: "Intro", type: .hotcue, timeSeconds: 0, beatIndex: 1),
+                    CuePointData(label: "Build", type: .hotcue, timeSeconds: 30, beatIndex: 65),
+                    CuePointData(label: "Drop 1", type: .hotcue, timeSeconds: 60, beatIndex: 129),
+                    CuePointData(label: "Breakdown", type: .hotcue, timeSeconds: 120, beatIndex: 257),
+                    CuePointData(label: "Drop 2", type: .hotcue, timeSeconds: 150, beatIndex: 321),
+                    CuePointData(label: "Outro", type: .fadeOut, timeSeconds: 210, beatIndex: 449)
+                ])
+            }
+            .padding()
+            .background(CartoMixColors.backgroundPrimary)
+
+            // Right: Info panel
+            VStack(alignment: .leading, spacing: CartoMixSpacing.md) {
+                Text("Key Distribution")
+                    .font(CartoMixTypography.headline)
+
+                CompactKeyDistribution(distribution: [
+                    "8A": 12, "9A": 8, "7A": 6, "8B": 5, "10A": 4
+                ])
+
+                Divider()
+
+                Text("Similar Tracks")
+                    .font(CartoMixTypography.headline)
+
+                VStack(spacing: CartoMixSpacing.sm) {
+                    ForEach(tracks.prefix(3), id: \.id) { track in
+                        HStack {
+                            Text(track.title)
+                                .font(.system(size: 12))
+                            Spacer()
+                            Text("92%")
+                                .font(.system(size: 11, weight: .semibold))
+                                .foregroundStyle(CartoMixColors.accentGreen)
+                        }
+                        .padding(CartoMixSpacing.sm)
+                        .background(CartoMixColors.backgroundTertiary)
+                        .clipShape(RoundedRectangle(cornerRadius: CartoMixRadius.sm))
+                    }
+                }
+            }
+            .padding()
+            .frame(minWidth: 200, maxWidth: 250)
+            .background(CartoMixColors.backgroundSecondary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.background)
+        .preferredColorScheme(.dark)
     }
 }
 
 struct SetBuilderPreview: View {
     let tracks: [Track]
 
+    var energyData: [EnergyTrackData] {
+        tracks.enumerated().map { index, track in
+            let energies = [3, 5, 6, 7, 9, 8, 6, 4]
+            return EnergyTrackData(
+                title: track.title,
+                energy: energies[index % energies.count],
+                bpm: 120 + Double(index) * 2,
+                key: "\(6 + index)A"
+            )
+        }
+    }
+
+    var mockWaveform: [Float] {
+        (0..<200).map { i in
+            let t = Float(i) / 200
+            return sin(t * 20) * (0.3 + 0.7 * sin(t * 3)) * Float.random(in: 0.8...1.0)
+        }
+    }
+
     var body: some View {
-        VStack(spacing: 0) {
-            Text("Set Builder")
-                .font(.title2.bold())
-                .frame(maxWidth: .infinity, alignment: .leading)
+        HSplitView {
+            // Left: Set list
+            VStack(spacing: 0) {
+                HStack {
+                    Text("Set Builder")
+                        .font(CartoMixTypography.title)
+                    Spacer()
+                    Text("\(tracks.count) tracks")
+                        .font(CartoMixTypography.caption)
+                        .foregroundStyle(CartoMixColors.textSecondary)
+                }
                 .padding()
-                .background(.bar)
 
-            HStack(spacing: 20) {
-                // Set list
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("My Set")
-                        .font(.headline)
-                    ForEach(Array(tracks.enumerated()), id: \.offset) { index, track in
-                        HStack {
-                            Text("\(index + 1)")
-                                .font(.caption.monospacedDigit())
-                                .frame(width: 24)
-                            Text(track.title)
-                            Spacer()
-                            Text("→")
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding(8)
-                        .background(.quaternary, in: RoundedRectangle(cornerRadius: 8))
-                    }
-                }
-                .frame(maxWidth: 300)
+                ScrollView {
+                    LazyVStack(spacing: 4) {
+                        ForEach(Array(tracks.enumerated()), id: \.offset) { index, track in
+                            HStack(spacing: CartoMixSpacing.sm) {
+                                Text("\(index + 1)")
+                                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                                    .foregroundStyle(CartoMixColors.textSecondary)
+                                    .frame(width: 20)
 
-                // Transition info
-                VStack(alignment: .leading) {
-                    Text("Transition: Track 2 → Track 3")
-                        .font(.headline)
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("BPM: 116 → 118")
-                            Text("Key: 4A → 5A ✓")
-                            Text("Energy: +5%")
+                                RoundedRectangle(cornerRadius: 2)
+                                    .fill(CartoMixColors.colorForSection(["intro", "build", "drop", "breakdown"][index % 4]))
+                                    .frame(width: 4)
+
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(track.title)
+                                        .font(.system(size: 13, weight: .medium))
+                                    Text(track.artist)
+                                        .font(.system(size: 11))
+                                        .foregroundStyle(CartoMixColors.textSecondary)
+                                }
+
+                                Spacer()
+
+                                BadgeRow(bpm: 120 + Double(index) * 2, key: "\(6 + index)A", energy: nil, size: .small, spacing: 4)
+                            }
+                            .padding(.horizontal, CartoMixSpacing.md)
+                            .padding(.vertical, CartoMixSpacing.sm)
+                            .background(CartoMixColors.backgroundTertiary.opacity(0.5))
+                            .clipShape(RoundedRectangle(cornerRadius: CartoMixRadius.md))
+
+                            if index < tracks.count - 1 {
+                                // Transition indicator
+                                HStack {
+                                    Spacer()
+                                    HStack(spacing: 4) {
+                                        Text("+2 BPM")
+                                            .foregroundStyle(CartoMixColors.accentGreen)
+                                        Text("•")
+                                            .foregroundStyle(CartoMixColors.textTertiary)
+                                        Text("compatible")
+                                            .foregroundStyle(CartoMixColors.accentCyan)
+                                    }
+                                    .font(.system(size: 10))
+                                    Spacer()
+                                }
+                                .padding(.vertical, 2)
+                            }
                         }
-                        .font(.subheadline)
                     }
-                    .padding()
-                    .background(.green.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
+                    .padding(.horizontal)
                 }
-                .frame(maxWidth: .infinity)
+            }
+            .frame(minWidth: 350, maxWidth: 400)
+            .background(CartoMixColors.backgroundSecondary)
+
+            // Right: Energy Journey + Transition Preview
+            VStack(spacing: CartoMixSpacing.lg) {
+                VStack(alignment: .leading, spacing: CartoMixSpacing.sm) {
+                    Text("Energy Journey")
+                        .font(CartoMixTypography.headline)
+                    EnergyJourneyView(tracks: energyData)
+                        .frame(height: 150)
+                }
+
+                TransitionPreviewView(
+                    trackA: TransitionTrackData(
+                        title: "Latch",
+                        artist: "Disclosure",
+                        bpm: 126,
+                        key: "8A",
+                        energy: 7,
+                        waveform: mockWaveform,
+                        sections: [
+                            WaveformSection(type: "drop", startTime: 0, endTime: 150),
+                            WaveformSection(type: "outro", startTime: 150, endTime: 200)
+                        ]
+                    ),
+                    trackB: TransitionTrackData(
+                        title: "Line of Sight",
+                        artist: "ODESZA",
+                        bpm: 128,
+                        key: "9A",
+                        energy: 8,
+                        waveform: mockWaveform,
+                        sections: [
+                            WaveformSection(type: "intro", startTime: 0, endTime: 50),
+                            WaveformSection(type: "build", startTime: 50, endTime: 100)
+                        ]
+                    )
+                )
+
+                // Export buttons
+                HStack(spacing: CartoMixSpacing.md) {
+                    Button("Rekordbox") {}
+                        .buttonStyle(PrimaryButtonStyle(color: CartoMixColors.accentBlue))
+                    Button("Serato") {}
+                        .buttonStyle(SecondaryButtonStyle())
+                    Button("Traktor") {}
+                        .buttonStyle(SecondaryButtonStyle())
+                    Spacer()
+                }
             }
             .padding()
+            .background(CartoMixColors.backgroundPrimary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.background)
+        .preferredColorScheme(.dark)
     }
 }
 
 struct GraphViewPreview: View {
     let tracks: [Track]
 
-    var body: some View {
-        VStack(spacing: 0) {
-            Text("Similarity Graph")
-                .font(.title2.bold())
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
-                .background(.bar)
+    var mockWaveform: [Float] {
+        (0..<200).map { i in
+            let t = Float(i) / 200
+            return sin(t * 20) * (0.3 + 0.7 * sin(t * 3)) * Float.random(in: 0.8...1.0)
+        }
+    }
 
+    var body: some View {
+        HSplitView {
+            // Graph
             ZStack {
-                // Mock graph visualization
+                // Connections
                 ForEach(0..<5, id: \.self) { i in
-                    let angle = Double(i) * (2 * .pi / 5)
-                    let x = cos(angle) * 150 + 300
-                    let y = sin(angle) * 150 + 200
+                    let angle1 = Double(i) * (2 * Double.pi / 5) - Double.pi / 2
+                    let angle2 = Double((i + 1) % 5) * (2 * Double.pi / 5) - Double.pi / 2
+
+                    Path { path in
+                        path.move(to: CGPoint(x: cos(angle1) * 180 + 400, y: sin(angle1) * 180 + 300))
+                        path.addLine(to: CGPoint(x: cos(angle2) * 180 + 400, y: sin(angle2) * 180 + 300))
+                    }
+                    .stroke(CartoMixColors.accentGreen.opacity(0.4), lineWidth: 2)
+                }
+
+                // Nodes
+                ForEach(Array(tracks.prefix(5).enumerated()), id: \.offset) { index, track in
+                    let angle = Double(index) * (2 * Double.pi / 5) - Double.pi / 2
+                    let x = cos(angle) * 180 + 400
+                    let y = sin(angle) * 180 + 300
+                    let key = "\(6 + index)A"
 
                     Circle()
-                        .fill(.blue)
+                        .fill(CartoMixColors.colorForKey(key))
                         .frame(width: 60, height: 60)
                         .overlay {
-                            Text(tracks[i].title.prefix(3))
-                                .font(.caption)
-                                .foregroundStyle(.white)
+                            VStack(spacing: 2) {
+                                Text(track.title.prefix(6))
+                                    .font(.system(size: 10, weight: .semibold))
+                                Text(key)
+                                    .font(.system(size: 9))
+                                    .foregroundStyle(.white.opacity(0.8))
+                            }
+                            .foregroundStyle(.white)
                         }
+                        .shadow(color: CartoMixColors.colorForKey(key).opacity(0.5), radius: 10)
                         .position(x: x, y: y)
                 }
-
-                // Connection lines
-                Path { path in
-                    for i in 0..<5 {
-                        let angle1 = Double(i) * (2 * .pi / 5)
-                        let angle2 = Double((i + 1) % 5) * (2 * .pi / 5)
-                        path.move(to: CGPoint(x: cos(angle1) * 150 + 300, y: sin(angle1) * 150 + 200))
-                        path.addLine(to: CGPoint(x: cos(angle2) * 150 + 300, y: sin(angle2) * 150 + 200))
-                    }
-                }
-                .stroke(.gray.opacity(0.3), lineWidth: 2)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(CartoMixColors.backgroundPrimary)
+
+            // Right panel
+            VStack(alignment: .leading, spacing: CartoMixSpacing.lg) {
+                Text(tracks[0].title)
+                    .font(CartoMixTypography.title)
+
+                BadgeRow(bpm: 126, key: "8A", energy: 7)
+
+                CompactWaveformView(samples: mockWaveform, height: 50)
+
+                Divider()
+
+                Text("Key Distribution")
+                    .font(CartoMixTypography.headline)
+
+                KeyDistributionChart(
+                    distribution: ["8A": 12, "9A": 8, "7A": 6, "8B": 5, "10A": 4, "6A": 3],
+                    maxHeight: 80,
+                    showLabels: true
+                )
+
+                Divider()
+
+                Text("Set Energy")
+                    .font(CartoMixTypography.headline)
+
+                EnergyJourneyView(
+                    tracks: tracks.prefix(5).enumerated().map { i, t in
+                        EnergyTrackData(title: t.title, energy: [4, 6, 8, 9, 7][i], bpm: 126, key: "8A")
+                    },
+                    showLabels: false
+                )
+                .frame(height: 80)
+            }
+            .padding()
+            .frame(width: 300)
+            .background(CartoMixColors.backgroundSecondary)
         }
-        .background(.background)
+        .preferredColorScheme(.dark)
     }
 }
 
@@ -451,200 +596,257 @@ struct TrackAnalysisPreview: View {
     let track: Track
     let analysis: TrackAnalysis
 
+    var mockWaveform: [Float] {
+        (0..<500).map { i in
+            let t = Float(i) / 500
+            return sin(t * 20) * (0.3 + 0.7 * sin(t * 3)) * Float.random(in: 0.8...1.0)
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // Header
             HStack {
                 VStack(alignment: .leading) {
                     Text(track.title)
-                        .font(.title2.bold())
+                        .font(CartoMixTypography.title)
                     Text(track.artist)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(CartoMixColors.textSecondary)
                 }
                 Spacer()
-                HStack(spacing: 12) {
-                    ScreenshotBadge(label: "\(Int(analysis.bpm)) BPM", color: .blue)
-                    ScreenshotBadge(label: analysis.keyValue, color: .green)
-                    ScreenshotBadge(label: "Energy: \(analysis.energyGlobal)", color: .orange)
+                HStack(spacing: CartoMixSpacing.md) {
+                    ColoredBadge.bpm(analysis.bpm, size: .large)
+                    ColoredBadge.key(analysis.keyValue, size: .large)
+                    ColoredBadge.energy(analysis.energyGlobal / 10, size: .large)
+                    ColoredBadge.duration(analysis.durationSeconds, size: .large)
                 }
             }
             .padding()
-            .background(.bar)
+            .background(CartoMixColors.backgroundSecondary)
 
-            // Content
-            ScrollView {
-                VStack(spacing: 16) {
-                    // Waveform
-                    MockWaveformView(waveform: analysis.waveformPreview)
-                        .frame(height: 120)
+            HSplitView {
+                // Main content
+                ScrollView {
+                    VStack(spacing: CartoMixSpacing.lg) {
+                        GradientWaveformView(
+                            samples: mockWaveform,
+                            sections: analysis.sections.map {
+                                WaveformSection(type: $0.type.rawValue, startTime: $0.startTime, endTime: $0.endTime)
+                            },
+                            cuePoints: analysis.cuePoints.map {
+                                WaveformCuePoint(label: $0.label, time: $0.timeSeconds, type: $0.type.rawValue)
+                            },
+                            duration: analysis.durationSeconds,
+                            playheadPosition: 90
+                        )
+                        .frame(height: 160)
 
-                    // Sections
-                    VStack(alignment: .leading) {
-                        Text("Sections")
-                            .font(.headline)
-                        HStack(spacing: 4) {
-                            ForEach(analysis.sections, id: \.startTime) { section in
-                                Rectangle()
-                                    .fill(section.color)
-                                    .frame(width: CGFloat(section.duration) * 2)
-                                    .overlay {
-                                        Text(section.type.rawValue.prefix(3))
-                                            .font(.caption2)
-                                            .foregroundStyle(.white)
-                                    }
-                            }
-                        }
-                        .frame(height: 30)
-                    }
-                    .padding()
-                    .background(.quaternary, in: RoundedRectangle(cornerRadius: 12))
-
-                    // Cue Points
-                    VStack(alignment: .leading) {
-                        Text("Cue Points")
-                            .font(.headline)
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 8) {
-                            ForEach(analysis.cuePoints, id: \.index) { cue in
-                                HStack {
-                                    Circle()
-                                        .fill(cue.color)
-                                        .frame(width: 8, height: 8)
-                                    Text(cue.label)
-                                        .font(.caption)
+                        // Sections timeline
+                        VStack(alignment: .leading, spacing: CartoMixSpacing.sm) {
+                            Text("Sections")
+                                .font(CartoMixTypography.headline)
+                            HStack(spacing: 2) {
+                                ForEach(analysis.sections, id: \.startTime) { section in
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(section.color)
+                                        .frame(width: CGFloat(section.duration) * 2.5)
+                                        .overlay {
+                                            Text(section.type.displayName)
+                                                .font(.system(size: 10, weight: .medium))
+                                                .foregroundStyle(.white)
+                                        }
                                 }
-                                .padding(6)
-                                .background(.quaternary, in: RoundedRectangle(cornerRadius: 6))
                             }
+                            .frame(height: 32)
                         }
+                        .cardStyle()
                     }
                     .padding()
-                    .background(.quaternary, in: RoundedRectangle(cornerRadius: 12))
+                }
+                .background(CartoMixColors.backgroundPrimary)
+
+                // Side panel
+                VStack(alignment: .leading, spacing: CartoMixSpacing.lg) {
+                    Text("Cue Points")
+                        .font(CartoMixTypography.headline)
+
+                    CuePointsTable(cuePoints: analysis.cuePoints.map {
+                        CuePointData(label: $0.label, type: .hotcue, timeSeconds: $0.timeSeconds, beatIndex: $0.beatIndex)
+                    })
+
+                    Divider()
+
+                    Text("Analysis")
+                        .font(CartoMixTypography.headline)
+
+                    VStack(alignment: .leading, spacing: CartoMixSpacing.sm) {
+                        HStack {
+                            Text("Loudness")
+                            Spacer()
+                            Text("\(String(format: "%.1f", analysis.integratedLUFS)) LUFS")
+                                .foregroundStyle(CartoMixColors.accentCyan)
+                        }
+                        HStack {
+                            Text("True Peak")
+                            Spacer()
+                            Text("\(String(format: "%.1f", analysis.truePeakDB)) dB")
+                                .foregroundStyle(CartoMixColors.accentOrange)
+                        }
+                        HStack {
+                            Text("Context")
+                            Spacer()
+                            Text(analysis.soundContext ?? "Unknown")
+                                .foregroundStyle(CartoMixColors.accentPurple)
+                        }
+                    }
+                    .font(.system(size: 12))
                 }
                 .padding()
+                .frame(width: 280)
+                .background(CartoMixColors.backgroundSecondary)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.background)
+        .preferredColorScheme(.dark)
     }
 }
 
 struct WaveformPaintingPreview: View {
     let analysis: TrackAnalysis
 
+    var mockWaveform: [Float] {
+        (0..<500).map { i in
+            let t = Float(i) / 500
+            return sin(t * 20) * (0.3 + 0.7 * sin(t * 3)) * Float.random(in: 0.8...1.0)
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
                 Text("Waveform Label Painting")
-                    .font(.title2.bold())
+                    .font(CartoMixTypography.title)
                 Spacer()
                 Toggle("Paint Mode", isOn: .constant(true))
                     .toggleStyle(.button)
-                    .tint(.blue)
-                Picker("Section", selection: .constant(TrackSection.SectionType.drop)) {
-                    ForEach(TrackSection.SectionType.allCases, id: \.self) { type in
-                        Text(type.displayName).tag(type)
+                    .tint(CartoMixColors.accentBlue)
+                Picker("Section", selection: .constant("drop")) {
+                    ForEach(["intro", "build", "drop", "breakdown", "outro"], id: \.self) { type in
+                        Text(type.capitalized).tag(type)
                     }
                 }
                 .frame(width: 120)
             }
             .padding()
-            .background(.bar)
+            .background(CartoMixColors.backgroundSecondary)
 
-            VStack(spacing: 16) {
-                // Waveform with painted sections
-                ZStack(alignment: .bottom) {
-                    // Section backgrounds
-                    HStack(spacing: 0) {
-                        ForEach(analysis.sections, id: \.startTime) { section in
-                            Rectangle()
-                                .fill(section.color.opacity(0.3))
-                                .frame(width: CGFloat(section.duration) * 3)
+            VStack(spacing: CartoMixSpacing.lg) {
+                GradientWaveformView(
+                    samples: mockWaveform,
+                    sections: analysis.sections.map {
+                        WaveformSection(type: $0.type.rawValue, startTime: $0.startTime, endTime: $0.endTime)
+                    },
+                    cuePoints: [],
+                    duration: analysis.durationSeconds
+                )
+                .frame(height: 250)
+                .overlay(alignment: .bottom) {
+                    // Section legend
+                    HStack(spacing: CartoMixSpacing.lg) {
+                        ForEach(["intro", "build", "drop", "breakdown", "outro"], id: \.self) { type in
+                            HStack(spacing: 4) {
+                                Circle()
+                                    .fill(CartoMixColors.colorForSection(type))
+                                    .frame(width: 10, height: 10)
+                                Text(type.capitalized)
+                                    .font(CartoMixTypography.caption)
+                            }
                         }
                     }
-
-                    // Waveform
-                    MockWaveformView(waveform: analysis.waveformPreview)
+                    .padding(CartoMixSpacing.sm)
+                    .background(CartoMixColors.backgroundSecondary.opacity(0.9))
+                    .clipShape(RoundedRectangle(cornerRadius: CartoMixRadius.md))
+                    .padding(.bottom, CartoMixSpacing.md)
                 }
-                .frame(height: 200)
-                .background(.black.opacity(0.05), in: RoundedRectangle(cornerRadius: 12))
 
-                // Legend
-                HStack(spacing: 12) {
-                    ForEach(TrackSection.SectionType.allCases, id: \.self) { type in
-                        HStack(spacing: 4) {
-                            Circle()
-                                .fill(type.color)
-                                .frame(width: 8, height: 8)
-                            Text(type.displayName)
-                                .font(.caption)
-                        }
-                    }
-                }
+                Text("Drag to paint section labels • Click sections to edit • Labels train the AI")
+                    .font(CartoMixTypography.caption)
+                    .foregroundStyle(CartoMixColors.textSecondary)
             }
             .padding()
+            .background(CartoMixColors.backgroundPrimary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.background)
+        .preferredColorScheme(.dark)
     }
 }
 
 struct AudioPlaybackPreview: View {
     let analysis: TrackAnalysis
 
+    var mockWaveform: [Float] {
+        (0..<500).map { i in
+            let t = Float(i) / 500
+            return sin(t * 20) * (0.3 + 0.7 * sin(t * 3)) * Float.random(in: 0.8...1.0)
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Text("Audio Playback")
-                    .font(.title2.bold())
+                Text("Real-Time Playback")
+                    .font(CartoMixTypography.title)
                 Spacer()
-                HStack(spacing: 16) {
-                    Button(action: {}) {
-                        Image(systemName: "backward.fill")
-                    }
+                HStack(spacing: CartoMixSpacing.lg) {
+                    Button(action: {}) { Image(systemName: "backward.fill") }
                     Button(action: {}) {
                         Image(systemName: "play.fill")
                             .font(.title2)
                     }
-                    .buttonStyle(.borderedProminent)
-                    Button(action: {}) {
-                        Image(systemName: "forward.fill")
-                    }
+                    .buttonStyle(PrimaryButtonStyle())
+                    Button(action: {}) { Image(systemName: "forward.fill") }
                 }
                 Spacer()
                 Text("1:45 / 4:45")
-                    .font(.caption.monospacedDigit())
+                    .font(CartoMixTypography.mono)
+                    .foregroundStyle(CartoMixColors.textSecondary)
             }
             .padding()
-            .background(.bar)
+            .background(CartoMixColors.backgroundSecondary)
 
-            VStack(spacing: 16) {
-                // Waveform with playhead
-                ZStack(alignment: .leading) {
-                    MockWaveformView(waveform: analysis.waveformPreview)
-
-                    // Playhead
-                    Rectangle()
-                        .fill(.white)
-                        .frame(width: 2)
-                        .offset(x: 350)
-                        .shadow(color: .black.opacity(0.5), radius: 2)
-                }
+            VStack(spacing: CartoMixSpacing.lg) {
+                GradientWaveformView(
+                    samples: mockWaveform,
+                    sections: analysis.sections.map {
+                        WaveformSection(type: $0.type.rawValue, startTime: $0.startTime, endTime: $0.endTime)
+                    },
+                    cuePoints: analysis.cuePoints.map {
+                        WaveformCuePoint(label: $0.label, time: $0.timeSeconds, type: $0.type.rawValue)
+                    },
+                    duration: analysis.durationSeconds,
+                    playheadPosition: 105
+                )
                 .frame(height: 200)
-                .background(.black.opacity(0.05), in: RoundedRectangle(cornerRadius: 12))
 
-                // Transport controls
-                HStack {
-                    Text("Space: Play/Pause")
-                    Text("←/→: Skip 5s")
-                    Text("Click: Seek")
+                HStack(spacing: CartoMixSpacing.xxl) {
+                    VStack {
+                        Image(systemName: "keyboard")
+                        Text("Space: Play/Pause")
+                    }
+                    VStack {
+                        Image(systemName: "arrow.left.arrow.right")
+                        Text("←/→: Skip 5s")
+                    }
+                    VStack {
+                        Image(systemName: "cursorarrow.click")
+                        Text("Click: Seek")
+                    }
                 }
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(CartoMixTypography.caption)
+                .foregroundStyle(CartoMixColors.textSecondary)
             }
             .padding()
+            .background(CartoMixColors.backgroundPrimary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.background)
+        .preferredColorScheme(.dark)
     }
 }
 
@@ -654,24 +856,24 @@ struct UserOverridesPreview: View {
     var body: some View {
         VStack(spacing: 0) {
             Text("User Overrides")
-                .font(.title2.bold())
+                .font(CartoMixTypography.title)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                .background(.bar)
+                .background(CartoMixColors.backgroundSecondary)
 
-            HStack(alignment: .top, spacing: 20) {
+            HStack(alignment: .top, spacing: CartoMixSpacing.lg) {
                 // BPM Override
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: CartoMixSpacing.md) {
                     HStack {
                         Text("BPM")
-                            .font(.headline)
+                            .font(CartoMixTypography.headline)
                         Spacer()
                         Image(systemName: "lock.fill")
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(CartoMixColors.accentOrange)
                     }
                     HStack {
-                        Text("Auto: 116.2")
-                            .foregroundStyle(.secondary)
+                        Text("Detected: 116.2")
+                            .foregroundStyle(CartoMixColors.textSecondary)
                         Spacer()
                     }
                     HStack {
@@ -680,196 +882,230 @@ struct UserOverridesPreview: View {
                             .frame(width: 80)
                         Toggle("Lock", isOn: .constant(true))
                             .toggleStyle(.button)
+                            .tint(CartoMixColors.accentOrange)
                     }
                 }
-                .padding()
-                .background(.quaternary, in: RoundedRectangle(cornerRadius: 12))
+                .cardStyle()
 
                 // Key Override
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: CartoMixSpacing.md) {
                     Text("Key")
-                        .font(.headline)
+                        .font(CartoMixTypography.headline)
                     HStack {
-                        Text("Auto: 4A")
-                            .foregroundStyle(.secondary)
+                        Text("Detected: 8A")
+                            .foregroundStyle(CartoMixColors.textSecondary)
                         Spacer()
                     }
-                    Picker("Key", selection: .constant("4A")) {
-                        Text("4A").tag("4A")
-                        Text("5A").tag("5A")
+                    Picker("Key", selection: .constant("8A")) {
+                        ForEach(["7A", "8A", "9A", "8B"], id: \.self) { key in
+                            Text(key).tag(key)
+                        }
                     }
                     .pickerStyle(.menu)
                 }
-                .padding()
-                .background(.quaternary, in: RoundedRectangle(cornerRadius: 12))
+                .cardStyle()
 
                 // Custom Cue Points
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: CartoMixSpacing.md) {
                     Text("Custom Cue Points")
-                        .font(.headline)
-                    VStack(alignment: .leading, spacing: 4) {
+                        .font(CartoMixTypography.headline)
+                    VStack(alignment: .leading, spacing: CartoMixSpacing.sm) {
                         HStack {
-                            Circle().fill(.red).frame(width: 8, height: 8)
-                            Text("My Drop Marker - 1:30")
-                                .font(.caption)
+                            Circle().fill(CartoMixColors.accentRed).frame(width: 8, height: 8)
+                            Text("My Drop Marker")
+                            Spacer()
+                            Text("1:30")
+                                .font(CartoMixTypography.monoSmall)
+                                .foregroundStyle(CartoMixColors.textSecondary)
                         }
                         HStack {
-                            Circle().fill(.green).frame(width: 8, height: 8)
-                            Text("Mix In Point - 0:45")
-                                .font(.caption)
+                            Circle().fill(CartoMixColors.accentGreen).frame(width: 8, height: 8)
+                            Text("Mix In Point")
+                            Spacer()
+                            Text("0:45")
+                                .font(CartoMixTypography.monoSmall)
+                                .foregroundStyle(CartoMixColors.textSecondary)
                         }
                     }
+                    .font(CartoMixTypography.body)
                     Button("Add Cue Point") {}
-                        .buttonStyle(.bordered)
+                        .buttonStyle(SecondaryButtonStyle(color: CartoMixColors.accentGreen))
                 }
-                .padding()
-                .background(.quaternary, in: RoundedRectangle(cornerRadius: 12))
+                .cardStyle()
             }
             .padding()
-
-            Spacer()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(CartoMixColors.backgroundPrimary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.background)
+        .preferredColorScheme(.dark)
     }
 }
 
 struct TransitionDetectionPreview: View {
     let analysis: TrackAnalysis
 
+    var mockWaveform: [Float] {
+        (0..<300).map { i in
+            let t = Float(i) / 300
+            return sin(t * 20) * (0.3 + 0.7 * sin(t * 3)) * Float.random(in: 0.8...1.0)
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             Text("Transition Detection")
-                .font(.title2.bold())
+                .font(CartoMixTypography.title)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                .background(.bar)
+                .background(CartoMixColors.backgroundSecondary)
 
-            HStack(spacing: 20) {
-                // Track A waveform
-                VStack(alignment: .leading) {
-                    Text("Track A: Get Lucky")
-                        .font(.headline)
-                    ZStack(alignment: .bottom) {
-                        MockWaveformView(waveform: analysis.waveformPreview)
-                        // Mix-out points
-                        HStack {
-                            Spacer()
-                            Rectangle()
-                                .fill(.red)
-                                .frame(width: 2, height: 80)
-                                .overlay(alignment: .top) {
-                                    Text("Out")
-                                        .font(.caption2)
-                                        .foregroundStyle(.red)
-                                        .offset(y: -15)
-                                }
-                        }
-                        .padding(.trailing, 100)
-                    }
-                    .frame(height: 100)
-                    .background(.black.opacity(0.05), in: RoundedRectangle(cornerRadius: 8))
-                }
+            VStack(spacing: CartoMixSpacing.lg) {
+                TransitionPreviewView(
+                    trackA: TransitionTrackData(
+                        title: "Get Lucky",
+                        artist: "Daft Punk",
+                        bpm: 116,
+                        key: "8A",
+                        energy: 7,
+                        waveform: mockWaveform,
+                        sections: [
+                            WaveformSection(type: "drop", startTime: 0, endTime: 200),
+                            WaveformSection(type: "outro", startTime: 200, endTime: 285)
+                        ]
+                    ),
+                    trackB: TransitionTrackData(
+                        title: "Instant Crush",
+                        artist: "Daft Punk",
+                        bpm: 118,
+                        key: "9A",
+                        energy: 6,
+                        waveform: mockWaveform.reversed(),
+                        sections: [
+                            WaveformSection(type: "intro", startTime: 0, endTime: 45),
+                            WaveformSection(type: "build", startTime: 45, endTime: 90)
+                        ]
+                    )
+                )
 
-                // Track B waveform
-                VStack(alignment: .leading) {
-                    Text("Track B: Instant Crush")
-                        .font(.headline)
-                    ZStack(alignment: .bottom) {
-                        MockWaveformView(waveform: analysis.waveformPreview.reversed())
-                        // Mix-in points
-                        HStack {
-                            Rectangle()
-                                .fill(.green)
-                                .frame(width: 2, height: 80)
-                                .overlay(alignment: .top) {
-                                    Text("In")
-                                        .font(.caption2)
-                                        .foregroundStyle(.green)
-                                        .offset(y: -15)
-                                }
-                            Spacer()
-                        }
-                        .padding(.leading, 50)
-                    }
-                    .frame(height: 100)
-                    .background(.black.opacity(0.05), in: RoundedRectangle(cornerRadius: 8))
-                }
-            }
-            .padding()
-
-            // Transition recommendation
-            VStack(alignment: .leading) {
-                Text("Recommended Transition")
-                    .font(.headline)
+                // Recommendation
                 HStack {
-                    VStack(alignment: .leading) {
-                        Text("Mix-out: 3:45 (breakdown before drop)")
-                        Text("Mix-in: 0:30 (after intro)")
-                        Text("Transition length: 16 bars")
+                    VStack(alignment: .leading, spacing: CartoMixSpacing.sm) {
+                        Text("Recommended Transition")
+                            .font(CartoMixTypography.headline)
+                        Text("Mix-out at breakdown (3:45) • Mix-in after intro (0:30)")
+                            .font(CartoMixTypography.body)
+                            .foregroundStyle(CartoMixColors.textSecondary)
+                        Text("16-bar transition • Beat-grid aligned")
+                            .font(CartoMixTypography.caption)
+                            .foregroundStyle(CartoMixColors.textTertiary)
                     }
-                    .font(.subheadline)
                     Spacer()
-                    Text("95%")
-                        .font(.title)
-                        .foregroundStyle(.green)
+                    VStack {
+                        Text("95%")
+                            .font(.system(size: 36, weight: .bold))
+                            .foregroundStyle(CartoMixColors.accentGreen)
+                        Text("match")
+                            .font(CartoMixTypography.caption)
+                            .foregroundStyle(CartoMixColors.textSecondary)
+                    }
                 }
+                .cardStyle()
             }
             .padding()
-            .background(.green.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
-            .padding()
-
-            Spacer()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(CartoMixColors.backgroundPrimary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.background)
+        .preferredColorScheme(.dark)
     }
 }
 
 struct EnergyMatchingPreview: View {
-    let analysis: TrackAnalysis
+    let tracks: [Track]
+
+    var energyData: [EnergyTrackData] {
+        tracks.prefix(6).enumerated().map { i, t in
+            EnergyTrackData(title: t.title, energy: [4, 6, 7, 9, 8, 5][i], bpm: 120 + Double(i) * 2, key: "\(6 + i)A")
+        }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
             Text("Energy Curve Matching")
-                .font(.title2.bold())
+                .font(CartoMixTypography.title)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                .background(.bar)
+                .background(CartoMixColors.backgroundSecondary)
 
-            HStack(spacing: 20) {
-                // Energy curve visualization
-                VStack(alignment: .leading) {
-                    Text("Energy Curves")
-                        .font(.headline)
-                    ZStack {
-                        // Track A curve (blue)
-                        MockEnergyCurve(color: .blue, label: "Track A")
-                        // Track B curve (orange)
-                        MockEnergyCurve(color: .orange, label: "Track B", offset: 0.2)
-                    }
-                    .frame(height: 150)
-                    .background(.black.opacity(0.05), in: RoundedRectangle(cornerRadius: 8))
+            HStack(spacing: CartoMixSpacing.lg) {
+                VStack(alignment: .leading, spacing: CartoMixSpacing.md) {
+                    Text("Set Energy Journey")
+                        .font(CartoMixTypography.headline)
+                    EnergyJourneyView(tracks: energyData)
+                        .frame(height: 200)
                 }
                 .frame(maxWidth: .infinity)
 
-                // Match results
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Match Results")
-                        .font(.headline)
+                VStack(alignment: .leading, spacing: CartoMixSpacing.md) {
+                    Text("Match Patterns")
+                        .font(CartoMixTypography.headline)
 
-                    MatchResult(type: "Parallel", score: 85, color: .blue)
-                    MatchResult(type: "Complementary", score: 72, color: .purple)
-                    MatchResult(type: "Continuation", score: 91, color: .green)
+                    VStack(spacing: CartoMixSpacing.sm) {
+                        MatchResultRow(type: "Continuation", description: "Smooth energy flow", score: 91, color: CartoMixColors.accentGreen)
+                        MatchResultRow(type: "Parallel", description: "Matching intensity", score: 85, color: CartoMixColors.accentBlue)
+                        MatchResultRow(type: "Complementary", description: "Energy contrast", score: 72, color: CartoMixColors.accentPurple)
+                    }
+
+                    Divider()
+
+                    Text("Suggestions")
+                        .font(CartoMixTypography.headline)
+
+                    VStack(alignment: .leading, spacing: CartoMixSpacing.sm) {
+                        HStack {
+                            Circle().fill(CartoMixColors.accentGreen).frame(width: 8, height: 8)
+                            Text("Good energy progression")
+                        }
+                        HStack {
+                            Circle().fill(CartoMixColors.accentYellow).frame(width: 8, height: 8)
+                            Text("Consider energy dip before track 5")
+                        }
+                    }
+                    .font(CartoMixTypography.body)
                 }
-                .frame(width: 200)
+                .frame(width: 300)
+                .cardStyle()
             }
             .padding()
-
-            Spacer()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(CartoMixColors.backgroundPrimary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.background)
+        .preferredColorScheme(.dark)
+    }
+}
+
+struct MatchResultRow: View {
+    let type: String
+    let description: String
+    let score: Int
+    let color: Color
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(type)
+                    .font(.system(size: 13, weight: .medium))
+                Text(description)
+                    .font(CartoMixTypography.caption)
+                    .foregroundStyle(CartoMixColors.textSecondary)
+            }
+            Spacer()
+            Text("\(score)%")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(color)
+        }
+        .padding(CartoMixSpacing.sm)
+        .background(color.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: CartoMixRadius.md))
     }
 }
 
@@ -879,165 +1115,106 @@ struct SectionEmbeddingsPreview: View {
     var body: some View {
         VStack(spacing: 0) {
             Text("Section-Level Embeddings")
-                .font(.title2.bold())
+                .font(CartoMixTypography.title)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                .background(.bar)
+                .background(CartoMixColors.backgroundSecondary)
 
-            HStack(alignment: .top, spacing: 20) {
+            HStack(alignment: .top, spacing: CartoMixSpacing.lg) {
                 // Section list
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: CartoMixSpacing.md) {
                     Text("Sections")
-                        .font(.headline)
-                    ForEach(analysis.sections, id: \.startTime) { section in
-                        HStack {
-                            Circle()
-                                .fill(section.color)
-                                .frame(width: 12, height: 12)
-                            Text(section.type.displayName)
-                            Spacer()
-                            Text("512-dim")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                        .font(CartoMixTypography.headline)
+
+                    VStack(spacing: CartoMixSpacing.sm) {
+                        ForEach(analysis.sections, id: \.startTime) { section in
+                            HStack {
+                                Circle()
+                                    .fill(section.color)
+                                    .frame(width: 12, height: 12)
+                                Text(section.type.displayName)
+                                    .font(.system(size: 13, weight: .medium))
+                                Spacer()
+                                Text("512-dim")
+                                    .font(CartoMixTypography.monoSmall)
+                                    .foregroundStyle(CartoMixColors.textSecondary)
+                            }
+                            .padding(CartoMixSpacing.sm)
+                            .background(CartoMixColors.backgroundTertiary)
+                            .clipShape(RoundedRectangle(cornerRadius: CartoMixRadius.md))
                         }
-                        .padding(8)
-                        .background(.quaternary, in: RoundedRectangle(cornerRadius: 8))
                     }
                 }
-                .frame(width: 250)
+                .frame(width: 280)
+                .cardStyle()
 
                 // Similar sections
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: CartoMixSpacing.md) {
                     Text("Similar Drops in Library")
-                        .font(.headline)
-                    ForEach(0..<4, id: \.self) { i in
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("Track \(i + 1) - Drop")
-                                    .font(.subheadline)
-                                Text("95% match")
-                                    .font(.caption)
-                                    .foregroundStyle(.green)
-                            }
-                            Spacer()
-                            Button("Preview") {}
-                                .buttonStyle(.bordered)
-                                .controlSize(.small)
-                        }
-                        .padding(8)
-                        .background(.quaternary, in: RoundedRectangle(cornerRadius: 8))
+                        .font(CartoMixTypography.headline)
+
+                    VStack(spacing: CartoMixSpacing.sm) {
+                        SimilarSectionRow(title: "Strobe - Drop 2", artist: "deadmau5", score: 96)
+                        SimilarSectionRow(title: "Opus - Main Drop", artist: "Eric Prydz", score: 94)
+                        SimilarSectionRow(title: "Midnight City - Drop", artist: "M83", score: 91)
+                        SimilarSectionRow(title: "In The Morning - Drop", artist: "ZHU", score: 88)
                     }
+
+                    Divider()
+
+                    Text("Embedding Visualization")
+                        .font(CartoMixTypography.headline)
+
+                    // Mock t-SNE visualization
+                    ZStack {
+                        ForEach(0..<20, id: \.self) { i in
+                            let x = CGFloat.random(in: 20...280)
+                            let y = CGFloat.random(in: 20...100)
+                            Circle()
+                                .fill(CartoMixColors.colorForSection(["drop", "intro", "build", "breakdown", "outro"][i % 5]))
+                                .frame(width: 10, height: 10)
+                                .position(x: x, y: y)
+                        }
+                    }
+                    .frame(height: 120)
+                    .background(CartoMixColors.backgroundTertiary)
+                    .clipShape(RoundedRectangle(cornerRadius: CartoMixRadius.md))
                 }
                 .frame(maxWidth: .infinity)
+                .cardStyle()
             }
             .padding()
-
-            Spacer()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(CartoMixColors.backgroundPrimary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.background)
+        .preferredColorScheme(.dark)
     }
 }
 
-// MARK: - Helper Views
-
-struct ScreenshotBadge: View {
-    let label: String
-    let color: Color
-
-    var body: some View {
-        Text(label)
-            .font(.caption.bold())
-            .padding(.horizontal, 10)
-            .padding(.vertical, 4)
-            .background(color.opacity(0.2), in: Capsule())
-            .foregroundStyle(color)
-    }
-}
-
-struct MockWaveformView: View {
-    let waveform: [Float]
-
-    var body: some View {
-        GeometryReader { geometry in
-            Canvas { context, size in
-                let midY = size.height / 2
-                let step = max(1, waveform.count / Int(size.width))
-
-                var path = Path()
-                path.move(to: CGPoint(x: 0, y: midY))
-
-                for x in stride(from: 0, to: Int(size.width), by: 1) {
-                    let idx = min(x * step, waveform.count - 1)
-                    let sample = CGFloat(waveform[idx])
-                    path.addLine(to: CGPoint(x: CGFloat(x), y: midY - sample * midY * 0.8))
-                }
-
-                for x in stride(from: Int(size.width) - 1, through: 0, by: -1) {
-                    let idx = min(x * step, waveform.count - 1)
-                    let sample = CGFloat(waveform[idx])
-                    path.addLine(to: CGPoint(x: CGFloat(x), y: midY + sample * midY * 0.8))
-                }
-
-                path.closeSubpath()
-
-                context.fill(
-                    path,
-                    with: .linearGradient(
-                        Gradient(colors: [.cyan.opacity(0.8), .blue.opacity(0.6), .purple.opacity(0.4)]),
-                        startPoint: CGPoint(x: 0, y: size.height / 2),
-                        endPoint: CGPoint(x: size.width, y: size.height / 2)
-                    )
-                )
-            }
-        }
-    }
-}
-
-struct MockEnergyCurve: View {
-    let color: Color
-    let label: String
-    var offset: Double = 0
-
-    var body: some View {
-        GeometryReader { geometry in
-            Path { path in
-                let width = geometry.size.width
-                let height = geometry.size.height
-
-                path.move(to: CGPoint(x: 0, y: height * 0.8))
-
-                for x in stride(from: 0, to: width, by: 2) {
-                    let progress = x / width
-                    let energy = sin((progress + offset) * .pi * 2) * 0.3 + 0.5
-                    let y = height * (1 - energy)
-                    path.addLine(to: CGPoint(x: x, y: y))
-                }
-            }
-            .stroke(color, lineWidth: 2)
-
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(color)
-                .position(x: 50, y: 20 + offset * 30)
-        }
-    }
-}
-
-struct MatchResult: View {
-    let type: String
+struct SimilarSectionRow: View {
+    let title: String
+    let artist: String
     let score: Int
-    let color: Color
 
     var body: some View {
         HStack {
-            Text(type)
+            VStack(alignment: .leading) {
+                Text(title)
+                    .font(.system(size: 13, weight: .medium))
+                Text(artist)
+                    .font(CartoMixTypography.caption)
+                    .foregroundStyle(CartoMixColors.textSecondary)
+            }
             Spacer()
             Text("\(score)%")
-                .font(.headline)
-                .foregroundStyle(color)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(CartoMixColors.accentGreen)
+            Button("Preview") {}
+                .buttonStyle(SecondaryButtonStyle())
+                .controlSize(.small)
         }
-        .padding(8)
-        .background(color.opacity(0.1), in: RoundedRectangle(cornerRadius: 8))
+        .padding(CartoMixSpacing.sm)
+        .background(CartoMixColors.backgroundTertiary)
+        .clipShape(RoundedRectangle(cornerRadius: CartoMixRadius.md))
     }
 }

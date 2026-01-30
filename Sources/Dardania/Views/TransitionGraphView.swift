@@ -22,6 +22,7 @@ struct TransitionGraphView: View {
             )
 
             Divider()
+                .background(CartoMixColors.backgroundTertiary)
 
             // Graph canvas
             ZStack {
@@ -42,7 +43,7 @@ struct TransitionGraphView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.black.opacity(0.05))
+            .background(CartoMixColors.backgroundPrimary)
             .gesture(
                 MagnificationGesture()
                     .onChanged { value in
@@ -61,6 +62,7 @@ struct TransitionGraphView: View {
                 GraphInfoPanel(track: node)
             }
         }
+        .background(CartoMixColors.backgroundPrimary)
         .navigationTitle("Transition Graph")
         .onChange(of: selectedNode) { _, newValue in
             if let track = newValue {
@@ -94,26 +96,35 @@ struct GraphToolbar: View {
         HStack(spacing: 16) {
             Toggle("Show Set Only", isOn: $showOnlySet)
                 .toggleStyle(.switch)
+                .tint(CartoMixColors.accentBlue)
 
             Divider()
                 .frame(height: 20)
+                .background(CartoMixColors.backgroundTertiary)
 
             HStack {
                 Text("Min Similarity:")
+                    .font(CartoMixTypography.body)
+                    .foregroundStyle(CartoMixColors.textSecondary)
                 Slider(value: $minSimilarity, in: 0.3...0.9, step: 0.1)
                     .frame(width: 100)
+                    .tint(CartoMixColors.accentCyan)
                 Text(String(format: "%.0f%%", minSimilarity * 100))
-                    .monospacedDigit()
+                    .font(.system(size: 12, weight: .medium, design: .monospaced))
+                    .foregroundStyle(CartoMixColors.accentCyan)
             }
 
             Spacer()
 
             Text("\(nodeCount) nodes")
-                .foregroundStyle(.secondary)
+                .font(CartoMixTypography.body)
+                .foregroundStyle(CartoMixColors.textSecondary)
 
             Button("Reset View", action: onResetView)
+                .buttonStyle(SecondaryButtonStyle())
         }
         .padding()
+        .background(CartoMixColors.backgroundSecondary)
     }
 }
 
@@ -233,7 +244,7 @@ struct EdgeView: View {
                 path.addLine(to: to)
             }
             .stroke(
-                edgeColor.opacity(edge.similarity),
+                edgeColor.opacity(edge.similarity * 0.8),
                 lineWidth: CGFloat(edge.similarity * 3)
             )
         }
@@ -241,9 +252,9 @@ struct EdgeView: View {
 
     private var edgeColor: Color {
         switch edge.similarity {
-        case 0.8...: return .green
-        case 0.6..<0.8: return .yellow
-        default: return .orange
+        case 0.8...: return CartoMixColors.accentGreen
+        case 0.6..<0.8: return CartoMixColors.accentYellow
+        default: return CartoMixColors.accentOrange
         }
     }
 }
@@ -257,20 +268,41 @@ struct NodeView: View {
 
     var body: some View {
         VStack(spacing: 4) {
-            Circle()
-                .fill(nodeColor)
-                .frame(width: nodeSize, height: nodeSize)
-                .overlay {
-                    if let analysis = track.analysis {
-                        Text("\(analysis.energyGlobal)")
-                            .font(.caption.bold())
-                            .foregroundStyle(.white)
-                    }
+            // Glow effect for selected node
+            ZStack {
+                if isSelected {
+                    Circle()
+                        .fill(nodeColor.opacity(0.3))
+                        .frame(width: nodeSize + 12, height: nodeSize + 12)
+                        .blur(radius: 4)
                 }
-                .shadow(color: isSelected ? .accentColor : .clear, radius: 8)
+
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [nodeColor, nodeColor.opacity(0.7)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: nodeSize, height: nodeSize)
+                    .overlay {
+                        if let analysis = track.analysis {
+                            Text("\(analysis.energyGlobal)")
+                                .font(.system(size: 11, weight: .bold, design: .monospaced))
+                                .foregroundStyle(.white)
+                        }
+                    }
+                    .overlay {
+                        Circle()
+                            .stroke(isSelected ? CartoMixColors.textPrimary : .clear, lineWidth: 2)
+                    }
+                    .shadow(color: nodeColor.opacity(0.5), radius: isSelected ? 8 : 4)
+            }
 
             Text(track.title)
-                .font(.caption2)
+                .font(CartoMixTypography.caption)
+                .foregroundStyle(CartoMixColors.textSecondary)
                 .lineLimit(1)
                 .frame(maxWidth: 80)
         }
@@ -279,17 +311,13 @@ struct NodeView: View {
 
     private var nodeSize: CGFloat {
         guard let analysis = track.analysis else { return 30 }
-        return 20 + CGFloat(analysis.energyGlobal) * 3
+        return 24 + CGFloat(analysis.energyGlobal) * 2.5
     }
 
+    // Color node by Camelot key
     private var nodeColor: Color {
-        guard let analysis = track.analysis else { return .gray }
-        let energy = Double(analysis.energyGlobal) / 10.0
-        return Color(
-            hue: 0.1 - energy * 0.1,
-            saturation: 0.8,
-            brightness: 0.8 + energy * 0.2
-        )
+        guard let analysis = track.analysis else { return CartoMixColors.textTertiary }
+        return CartoMixColors.colorForKey(analysis.keyValue)
     }
 }
 
@@ -299,44 +327,76 @@ struct GraphInfoPanel: View {
     let track: Track
 
     var body: some View {
-        HStack(spacing: 24) {
-            VStack(alignment: .leading, spacing: 4) {
+        HStack(spacing: CartoMixSpacing.lg) {
+            // Key color indicator
+            if let analysis = track.analysis {
+                Circle()
+                    .fill(CartoMixColors.colorForKey(analysis.keyValue))
+                    .frame(width: 12, height: 12)
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
                 Text(track.title)
-                    .font(.headline)
+                    .font(CartoMixTypography.headline)
+                    .foregroundStyle(CartoMixColors.textPrimary)
                 Text(track.artist)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(CartoMixTypography.body)
+                    .foregroundStyle(CartoMixColors.textSecondary)
             }
 
             Divider()
+                .background(CartoMixColors.backgroundTertiary)
 
             if let analysis = track.analysis {
-                HStack(spacing: 16) {
-                    InfoItem(label: "BPM", value: String(format: "%.1f", analysis.bpm))
-                    InfoItem(label: "Key", value: analysis.keyValue)
-                    InfoItem(label: "Energy", value: "\(analysis.energyGlobal)/10")
-                }
+                BadgeRow(
+                    bpm: analysis.bpm,
+                    key: analysis.keyValue,
+                    energy: analysis.energyGlobal,
+                    size: .regular,
+                    spacing: 8
+                )
             }
 
             Spacer()
+
+            // Quick action buttons
+            HStack(spacing: CartoMixSpacing.sm) {
+                Button {
+                    // Add to set action
+                } label: {
+                    Image(systemName: "plus.circle")
+                        .foregroundStyle(CartoMixColors.accentGreen)
+                }
+                .buttonStyle(.plain)
+
+                Button {
+                    // Show similar action
+                } label: {
+                    Image(systemName: "point.3.connected.trianglepath.dotted")
+                        .foregroundStyle(CartoMixColors.accentCyan)
+                }
+                .buttonStyle(.plain)
+            }
         }
-        .padding()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-        .padding()
+        .padding(CartoMixSpacing.md)
+        .background(CartoMixColors.backgroundSecondary, in: RoundedRectangle(cornerRadius: CartoMixRadius.md))
+        .padding(CartoMixSpacing.md)
     }
 }
 
 struct InfoItem: View {
     let label: String
     let value: String
+    var color: Color = CartoMixColors.textPrimary
 
     var body: some View {
         VStack(spacing: 2) {
             Text(value)
-                .font(.headline.monospacedDigit())
+                .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                .foregroundStyle(color)
             Text(label)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(CartoMixTypography.caption)
+                .foregroundStyle(CartoMixColors.textSecondary)
         }
     }
 }

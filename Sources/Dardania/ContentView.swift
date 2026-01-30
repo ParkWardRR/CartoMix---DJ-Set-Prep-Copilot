@@ -10,6 +10,7 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             SidebarView()
+                .navigationSplitViewColumnWidth(min: 180, ideal: 220, max: 280)
         } content: {
             switch appState.selectedTab {
             case .library:
@@ -32,7 +33,7 @@ struct ContentView: View {
                 )
             }
         }
-        .navigationSplitViewStyle(.balanced)
+        .navigationSplitViewStyle(.prominentDetail)
         .preferredColorScheme(appState.isDarkMode ? .dark : .light)
         .overlay(alignment: .bottom) {
             if appState.isScanning {
@@ -60,16 +61,17 @@ struct SidebarView: View {
                 ForEach(NavigationTab.allCases, id: \.self) { tab in
                     Label(tab.rawValue, systemImage: tab.icon)
                         .tag(tab)
+                        .foregroundStyle(appState.selectedTab == tab ? CartoMixColors.accentBlue : CartoMixColors.textPrimary)
                 }
             }
 
             Section("Library") {
                 Label("\(appState.tracks.count) Tracks", systemImage: "music.note.list")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(CartoMixColors.textSecondary)
 
                 if !appState.setTracks.isEmpty {
                     Label("\(appState.setTracks.count) in Set", systemImage: "list.bullet.rectangle")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(CartoMixColors.accentGreen)
                 }
             }
 
@@ -77,17 +79,21 @@ struct SidebarView: View {
                 let analyzedCount = appState.tracks.filter { $0.analysis != nil }.count
                 HStack {
                     Text("Analyzed")
+                        .foregroundStyle(CartoMixColors.textSecondary)
                     Spacer()
                     Text("\(analyzedCount)/\(appState.tracks.count)")
-                        .foregroundStyle(.secondary)
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                        .foregroundStyle(CartoMixColors.textTertiary)
                 }
 
                 if let avgBPM = averageBPM {
                     HStack {
                         Text("Avg BPM")
+                            .foregroundStyle(CartoMixColors.textSecondary)
                         Spacer()
                         Text(String(format: "%.1f", avgBPM))
-                            .foregroundStyle(.secondary)
+                            .font(.system(size: 12, weight: .medium, design: .monospaced))
+                            .foregroundStyle(CartoMixColors.accentBlue)
                     }
                 }
             }
@@ -100,6 +106,7 @@ struct SidebarView: View {
                     appState.isDarkMode.toggle()
                 } label: {
                     Image(systemName: appState.isDarkMode ? "sun.max.fill" : "moon.fill")
+                        .foregroundStyle(CartoMixColors.accentYellow)
                 }
                 .help("Toggle Theme")
             }
@@ -133,21 +140,23 @@ struct ScanProgressBar: View {
         VStack(spacing: 8) {
             HStack {
                 Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(CartoMixColors.accentCyan)
                 Text("Scanning library...")
-                    .font(.subheadline)
+                    .font(CartoMixTypography.body)
+                    .foregroundStyle(CartoMixColors.textPrimary)
                 Spacer()
                 Text("\(Int(progress * 100))%")
-                    .font(.subheadline.monospacedDigit())
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 13, weight: .medium, design: .monospaced))
+                    .foregroundStyle(CartoMixColors.textSecondary)
             }
 
             ProgressView(value: progress)
                 .progressViewStyle(.linear)
+                .tint(CartoMixColors.accentCyan)
         }
-        .padding()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-        .padding()
+        .padding(CartoMixSpacing.md)
+        .background(CartoMixColors.backgroundSecondary, in: RoundedRectangle(cornerRadius: CartoMixRadius.md))
+        .padding(CartoMixSpacing.md)
     }
 }
 
@@ -159,20 +168,27 @@ struct EmptyStateView: View {
     let subtitle: String
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: CartoMixSpacing.md) {
             Image(systemName: icon)
-                .font(.system(size: 64))
-                .foregroundStyle(.tertiary)
+                .font(.system(size: 48))
+                .foregroundStyle(CartoMixColors.textTertiary)
 
             Text(title)
-                .font(.title2.bold())
+                .font(CartoMixTypography.headline)
+                .foregroundStyle(CartoMixColors.textPrimary)
+                .lineLimit(1)
+                .fixedSize(horizontal: false, vertical: true)
 
             Text(subtitle)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .font(CartoMixTypography.body)
+                .foregroundStyle(CartoMixColors.textSecondary)
                 .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
         }
+        .padding(CartoMixSpacing.lg)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(CartoMixColors.backgroundPrimary)
     }
 }
 

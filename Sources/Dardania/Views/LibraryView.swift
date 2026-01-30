@@ -23,6 +23,7 @@ struct LibraryView: View {
             )
 
             Divider()
+                .background(CartoMixColors.backgroundTertiary)
 
             // Track Grid
             if filteredTracks.isEmpty {
@@ -50,6 +51,7 @@ struct LibraryView: View {
                 }
             }
         }
+        .background(CartoMixColors.backgroundPrimary)
         .navigationTitle("Library")
     }
 
@@ -121,74 +123,113 @@ struct LibraryToolbar: View {
     let onAnalyzeAll: () -> Void
 
     var body: some View {
-        HStack(spacing: 16) {
-            // Search
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.secondary)
-                TextField("Search tracks...", text: $searchText)
-                    .textFieldStyle(.plain)
+        VStack(spacing: 0) {
+            // Main toolbar row
+            HStack(spacing: 12) {
+                // Search field
+                HStack(spacing: 8) {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(CartoMixColors.textTertiary)
+                    TextField("Search tracks...", text: $searchText)
+                        .textFieldStyle(.plain)
+                        .foregroundStyle(CartoMixColors.textPrimary)
 
-                if !searchText.isEmpty {
-                    Button {
-                        searchText = ""
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.secondary)
+                    if !searchText.isEmpty {
+                        Button {
+                            searchText = ""
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(CartoMixColors.textTertiary)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
-            }
-            .padding(8)
-            .background(.quaternary, in: RoundedRectangle(cornerRadius: 8))
-            .frame(maxWidth: 300)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+                .background(CartoMixColors.backgroundTertiary, in: RoundedRectangle(cornerRadius: CartoMixRadius.sm))
+                .frame(minWidth: 180, maxWidth: 280)
 
-            Spacer()
+                Spacer()
 
-            // Track count
-            Text("\(trackCount) tracks")
-                .foregroundStyle(.secondary)
-                .font(.subheadline)
+                // Track count badge
+                HStack(spacing: 4) {
+                    Image(systemName: "music.note.list")
+                        .font(.caption)
+                    Text("\(trackCount)")
+                        .font(.system(.subheadline, design: .monospaced).weight(.medium))
+                }
+                .foregroundStyle(CartoMixColors.textSecondary)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(CartoMixColors.backgroundTertiary, in: Capsule())
 
-            Divider()
-                .frame(height: 20)
-
-            // Sort
-            Menu {
-                ForEach(SortOrder.allCases, id: \.self) { order in
-                    Button {
-                        sortOrder = order
-                    } label: {
-                        HStack {
-                            Text(order.rawValue)
-                            if sortOrder == order {
-                                Image(systemName: "checkmark")
+                // Sort menu
+                Menu {
+                    ForEach(SortOrder.allCases, id: \.self) { order in
+                        Button {
+                            sortOrder = order
+                        } label: {
+                            HStack {
+                                Text(order.rawValue)
+                                if sortOrder == order {
+                                    Image(systemName: "checkmark")
+                                }
                             }
                         }
                     }
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "arrow.up.arrow.down")
+                        Text(sortOrder.rawValue)
+                            .lineLimit(1)
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(CartoMixColors.textSecondary)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(CartoMixColors.backgroundTertiary, in: RoundedRectangle(cornerRadius: CartoMixRadius.sm))
                 }
-            } label: {
-                Label("Sort", systemImage: "arrow.up.arrow.down")
-            }
+                .menuStyle(.borderlessButton)
+                .fixedSize()
 
-            // BPM Range
-            Menu {
-                Button("60-90 BPM") { bpmRange = 60...90 }
-                Button("90-120 BPM") { bpmRange = 90...120 }
-                Button("120-140 BPM") { bpmRange = 120...140 }
-                Button("140-180 BPM") { bpmRange = 140...180 }
-                Divider()
-                Button("All BPMs") { bpmRange = 60...200 }
-            } label: {
-                Label("BPM", systemImage: "metronome")
-            }
+                // BPM filter menu
+                Menu {
+                    Button("All BPMs") { bpmRange = 60...200 }
+                    Divider()
+                    Button("60-90 BPM") { bpmRange = 60...90 }
+                    Button("90-120 BPM") { bpmRange = 90...120 }
+                    Button("120-140 BPM") { bpmRange = 120...140 }
+                    Button("140-180 BPM") { bpmRange = 140...180 }
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "metronome")
+                        if bpmRange != 60...200 {
+                            Text("\(Int(bpmRange.lowerBound))-\(Int(bpmRange.upperBound))")
+                                .font(.system(.caption, design: .monospaced))
+                        }
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(bpmRange != 60...200 ? CartoMixColors.accentBlue : CartoMixColors.textSecondary)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(CartoMixColors.backgroundTertiary, in: RoundedRectangle(cornerRadius: CartoMixRadius.sm))
+                }
+                .menuStyle(.borderlessButton)
+                .fixedSize()
 
-            // Analyze All
-            Button(action: onAnalyzeAll) {
-                Label("Analyze All", systemImage: "waveform.badge.plus")
+                // Analyze All button
+                Button(action: onAnalyzeAll) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "waveform.badge.plus")
+                        Text("Analyze")
+                    }
+                }
+                .buttonStyle(PrimaryButtonStyle())
             }
+            .padding(.horizontal, CartoMixSpacing.md)
+            .padding(.vertical, CartoMixSpacing.sm)
         }
-        .padding()
+        .background(CartoMixColors.backgroundSecondary)
     }
 }
 
@@ -210,17 +251,17 @@ struct TrackCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Waveform preview
+            // Waveform preview with gradient
             ZStack {
                 if let waveform = track.analysis?.waveformPreview {
-                    WaveformPreviewView(samples: waveform)
+                    CompactWaveformView(samples: waveform)
                 } else {
                     Rectangle()
-                        .fill(.quaternary)
+                        .fill(CartoMixColors.backgroundTertiary)
                         .overlay {
                             Image(systemName: "waveform")
                                 .font(.title)
-                                .foregroundStyle(.tertiary)
+                                .foregroundStyle(CartoMixColors.textTertiary)
                         }
                 }
 
@@ -232,6 +273,7 @@ struct TrackCard: View {
                         } label: {
                             Image(systemName: "plus.circle.fill")
                                 .font(.title2)
+                                .foregroundStyle(CartoMixColors.accentGreen)
                         }
                         .buttonStyle(.plain)
 
@@ -242,82 +284,63 @@ struct TrackCard: View {
                         } label: {
                             Image(systemName: "waveform.badge.plus")
                                 .font(.title2)
+                                .foregroundStyle(CartoMixColors.accentBlue)
                         }
                         .buttonStyle(.plain)
                     }
                     .padding(8)
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+                    .background(CartoMixColors.backgroundSecondary.opacity(0.9), in: RoundedRectangle(cornerRadius: CartoMixRadius.sm))
                 }
             }
             .frame(height: 80)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(RoundedRectangle(cornerRadius: CartoMixRadius.sm))
 
             // Track info
             VStack(alignment: .leading, spacing: 4) {
                 Text(track.title)
-                    .font(.headline)
+                    .font(CartoMixTypography.headline)
+                    .foregroundStyle(CartoMixColors.textPrimary)
                     .lineLimit(1)
 
                 Text(track.artist)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(CartoMixTypography.body)
+                    .foregroundStyle(CartoMixColors.textSecondary)
                     .lineLimit(1)
             }
 
-            // Analysis badges
+            // Analysis badges using ColoredBadge
             if let analysis = track.analysis {
-                HStack(spacing: 8) {
-                    AnalysisBadge(
-                        icon: "metronome",
-                        value: String(format: "%.1f", analysis.bpm),
-                        color: .blue
-                    )
-
-                    AnalysisBadge(
-                        icon: "music.note",
-                        value: analysis.keyValue,
-                        color: .purple
-                    )
-
-                    AnalysisBadge(
-                        icon: "bolt.fill",
-                        value: "\(analysis.energyGlobal)",
-                        color: .orange
-                    )
+                HStack(spacing: 6) {
+                    ColoredBadge.bpm(analysis.bpm, size: .small)
+                    ColoredBadge.key(analysis.keyValue, size: .small)
+                    ColoredBadge.energy(analysis.energyGlobal, size: .small)
 
                     Spacer()
 
-                    Text(formatDuration(analysis.durationSeconds))
-                        .font(.caption.monospacedDigit())
-                        .foregroundStyle(.secondary)
+                    ColoredBadge.duration(analysis.durationSeconds, size: .small)
                 }
             } else {
                 HStack {
                     Image(systemName: "exclamationmark.circle")
-                        .foregroundStyle(.yellow)
+                        .foregroundStyle(CartoMixColors.accentYellow)
                     Text("Not analyzed")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(CartoMixTypography.caption)
+                        .foregroundStyle(CartoMixColors.textSecondary)
                 }
             }
         }
-        .padding()
-        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12))
+        .padding(CartoMixSpacing.md)
+        .background(CartoMixColors.backgroundSecondary, in: RoundedRectangle(cornerRadius: CartoMixRadius.md))
         .overlay {
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(appState.selectedTrack?.id == track.id ? Color.accentColor : .clear, lineWidth: 2)
+            RoundedRectangle(cornerRadius: CartoMixRadius.md)
+                .stroke(appState.selectedTrack?.id == track.id ? CartoMixColors.accentBlue : .clear, lineWidth: 2)
         }
+        .hoverHighlight()
         .onHover { isHovered = $0 }
-    }
-
-    private func formatDuration(_ seconds: Double) -> String {
-        let mins = Int(seconds) / 60
-        let secs = Int(seconds) % 60
-        return String(format: "%d:%02d", mins, secs)
     }
 }
 
-// MARK: - Analysis Badge
+// MARK: - Analysis Badge (Legacy - kept for compatibility)
 
 struct AnalysisBadge: View {
     let icon: String
@@ -335,6 +358,19 @@ struct AnalysisBadge: View {
         .padding(.vertical, 4)
         .background(color.opacity(0.15), in: Capsule())
         .foregroundStyle(color)
+    }
+}
+
+// MARK: - Section Indicator (for track rows)
+
+struct TrackSectionIndicator: View {
+    let sectionType: String
+
+    var body: some View {
+        Rectangle()
+            .fill(CartoMixColors.colorForSection(sectionType))
+            .frame(width: 4)
+            .clipShape(RoundedRectangle(cornerRadius: 2))
     }
 }
 
@@ -401,22 +437,18 @@ struct WaveformPreviewView: View {
 
                 path.closeSubpath()
 
-                let gradient = Gradient(colors: [
-                    .cyan.opacity(0.8),
-                    .blue.opacity(0.6),
-                    .purple.opacity(0.4)
-                ])
-
+                // Use CartoMix waveform gradient
                 context.fill(
                     path,
                     with: .linearGradient(
-                        gradient,
+                        CartoMixGradients.waveformGradient,
                         startPoint: CGPoint(x: 0, y: 0),
                         endPoint: CGPoint(x: width, y: 0)
                     )
                 )
             }
         }
+        .background(CartoMixColors.backgroundTertiary)
     }
 }
 
