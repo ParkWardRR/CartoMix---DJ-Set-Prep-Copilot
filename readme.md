@@ -91,6 +91,12 @@ Traktor export
 
 **Professional dark theme matching industry-standard DJ software.** Clean waveforms, color-coded energy levels, smooth animations.
 
+<br/>
+
+<img src="docs/assets/screens/cartomix-library-view.png" alt="CartoMix Library View" width="90%" style="border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+
+<sub>Library view with track list, waveform previews, BPM/key/energy columns, and filtering options</sub>
+
 </div>
 
 <br/>
