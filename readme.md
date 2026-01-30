@@ -23,7 +23,7 @@
 [![macOS 15+](https://img.shields.io/badge/macOS%2015+-000000?style=for-the-badge&logo=apple&logoColor=white)](#requirements)
 [![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon%20Native-000000?style=for-the-badge&logo=apple&logoColor=white)](#apple-silicon)
 [![Swift 6](https://img.shields.io/badge/Swift%206-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![Version](https://img.shields.io/badge/v0.3.0--alpha-blue?style=for-the-badge)](#changelog)
+[![Version](https://img.shields.io/badge/v0.3.2--alpha-blue?style=for-the-badge)](#changelog)
 
 <!-- Architecture Badges -->
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-0A84FF?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
