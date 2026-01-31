@@ -216,7 +216,8 @@ public actor SimilarityScorer {
         )
     }
 
-    /// Generate human-readable explanation
+    /// Generate human-readable explanation for transition
+    /// Format: "similar vibe (82%); Δ+2 BPM; key: 8A→9A (compatible); energy +1; beat-grid aligned"
     private func generateExplanation(
         openL3Sim: Double,
         tempoSim: Double,
@@ -230,36 +231,113 @@ public actor SimilarityScorer {
     ) -> String {
         var parts: [String] = []
 
-        // Vibe match
+        // Vibe match (OpenL3 similarity)
         let vibePercent = Int(openL3Sim * 100)
         if vibePercent >= 70 {
             parts.append("similar vibe (\(vibePercent)%)")
         } else if vibePercent >= 50 {
             parts.append("moderate vibe (\(vibePercent)%)")
+        } else if vibePercent >= 30 {
+            parts.append("weak vibe (\(vibePercent)%)")
         }
 
-        // Tempo
-        if abs(bpmDelta) < 1 {
+        // Tempo delta
+        if abs(bpmDelta) < 0.5 {
             parts.append("tempo match")
         } else {
             let sign = bpmDelta >= 0 ? "+" : ""
-            parts.append("Δ\(sign)\(String(format: "%.1f", bpmDelta)) BPM")
+            parts.append("Δ\(sign)\(Int(round(bpmDelta))) BPM")
         }
 
-        // Key
+        // Key compatibility with Camelot notation
         if keyA == keyB {
             parts.append("same key")
         } else {
-            parts.append("key: \(keyA)→\(keyB) (\(keyRelation))")
+            switch keyRelation {
+            case "relative":
+                parts.append("\(keyA)→\(keyB) (relative)")
+            case "compatible":
+                parts.append("\(keyA)→\(keyB) (compatible)")
+            case "harmonic":
+                parts.append("\(keyA)→\(keyB) (harmonic)")
+            case "diagonal":
+                parts.append("\(keyA)→\(keyB) (diagonal)")
+            case "clash":
+                parts.append("\(keyA)→\(keyB) \u{26A0} clash")
+            default:
+                parts.append("key: \(keyA)→\(keyB)")
+            }
         }
 
-        // Energy
-        if energyDelta != 0 {
+        // Energy flow
+        if energyDelta == 0 {
+            parts.append("same energy")
+        } else {
             let sign = energyDelta > 0 ? "+" : ""
             parts.append("energy \(sign)\(energyDelta)")
         }
 
+        // Beat-grid alignment (based on BPM compatibility)
+        if tempoSim >= 0.9 {
+            parts.append("beat-grid aligned")
+        }
+
         return parts.joined(separator: "; ")
+    }
+
+    /// Generate detailed transition analysis for two tracks
+    public func generateTransitionAnalysis(
+        trackA: Track,
+        trackB: Track,
+        embeddingA: [Float]?,
+        embeddingB: [Float]?
+    ) -> TransitionExplanation {
+        let result = computeSimilarity(
+            trackA: trackA,
+            trackB: trackB,
+            embeddingA: embeddingA,
+            embeddingB: embeddingB
+        )
+
+        let analysisA = trackA.analysis
+        let analysisB = trackB.analysis
+
+        return TransitionExplanation(
+            overallScore: result.combinedScore,
+            vibeMatch: result.openL3Similarity * 100,
+            tempoMatch: result.tempoSimilarity * 100,
+            keyMatch: result.keySimilarity * 100,
+            energyMatch: result.energySimilarity * 100,
+            bpmDelta: (analysisB?.bpm ?? 0) - (analysisA?.bpm ?? 0),
+            keyRelation: result.keyRelation,
+            energyDelta: (analysisB?.energyGlobal ?? 0) - (analysisA?.energyGlobal ?? 0),
+            beatGridAligned: result.tempoSimilarity >= 0.9,
+            explanation: result.explanation,
+            warnings: generateWarnings(result: result, keyRelation: result.keyRelation)
+        )
+    }
+
+    /// Generate warnings for problematic transitions
+    private func generateWarnings(result: SimilarityResult, keyRelation: String) -> [String] {
+        var warnings: [String] = []
+
+        if keyRelation == "clash" {
+            warnings.append("Key clash detected - consider harmonic transition")
+        }
+
+        if result.tempoSimilarity < 0.5 {
+            warnings.append("Large BPM difference - may require pitch adjustment")
+        }
+
+        if result.openL3Similarity < 0.3 {
+            warnings.append("Low vibe match - tracks have different sonic character")
+        }
+
+        if result.combinedScore < 0.4 {
+            warnings.append("Overall compatibility is low")
+        }
+
+        return warnings
     }
 
     // MARK: - Batch Similarity
@@ -331,4 +409,19 @@ public actor SimilarityScorer {
             }
         }
     }
+}
+
+/// Detailed transition explanation for UI display
+public struct TransitionExplanation: Sendable {
+    public let overallScore: Double
+    public let vibeMatch: Double
+    public let tempoMatch: Double
+    public let keyMatch: Double
+    public let energyMatch: Double
+    public let bpmDelta: Double
+    public let keyRelation: String
+    public let energyDelta: Int
+    public let beatGridAligned: Bool
+    public let explanation: String
+    public let warnings: [String]
 }
