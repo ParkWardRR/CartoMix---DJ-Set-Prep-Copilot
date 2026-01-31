@@ -17,7 +17,7 @@
 [![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#performance)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#architecture)
 [![Swift 6](https://img.shields.io/badge/Swift_6-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![v0.6.0](https://img.shields.io/badge/v0.6.0-22C55E?style=for-the-badge)](#changelog)
+[![v0.7.0](https://img.shields.io/badge/v0.7.0-22C55E?style=for-the-badge)](#changelog)
 
 <br/>
 
@@ -42,24 +42,23 @@
 
 <br/>
 
-## v0.6.0 — Native Platform Integration!
+## v0.7.0 — Audio Playback & UX Polish!
 
-We're excited to announce **v0.6.0** with full native platform channel integration. The Flutter UI now connects directly to the Swift backend via high-performance platform channels.
+We're excited to announce **v0.7.0** with native audio playback via AVAudioEngine and polished UX improvements throughout the app.
 
-### What's New in v0.6.0
+### What's New in v0.7.0
 
-- **GRDB Database Integration** — Native SQLite backend with WAL mode and migrations
-- **FlutterBridge** — Complete Swift bridge connecting all platform channels
-- **Track Management** — Full CRUD operations via platform channels
-- **Music Folder Scanning** — Native directory scanning with file discovery
-- **Analysis Progress Streaming** — Real-time updates via event channels
-- **Similarity Search** — Find similar tracks directly from native backend
+- **Native Audio Playback** — Real-time audio via AVAudioEngine with waveform generation
+- **Enhanced Waveform View** — Gradient coloring, playhead with glow, beat grid
+- **UX/UI Polish** — Refined styling, better responsive design, improved hover states
+- **Player State Streaming** — Real-time playback position via event channels
+- **Waveform Data API** — Native waveform generation for visualization
 
 ### What's Included
 
 - **Hybrid Flutter + Native Swift Architecture** — Beautiful UI meets native performance
 - **Bundled OpenL3 Model** — 512-dimensional audio embeddings included (18MB)
-- **Apple SoundAnalysis** — Automatic audio context detection
+- **Full Platform Channel Integration** — Database, Analyzer, Player, Similarity
 - **62 Comprehensive Tests** — 23 Flutter + 39 Swift tests
 - **Signed & Notarized** — Opens without macOS Gatekeeper warnings
 
@@ -464,22 +463,20 @@ make help           # Show all targets
 
 ## Roadmap
 
-**v0.6.0 (Current)**
-- [x] Flutter UI with native Swift backend
-- [x] Full Platform Channel integration with GRDB
-- [x] FlutterBridge.swift database backend
-- [x] Track loading and management via channels
-- [x] Music folder scanning with native picker
-- [x] Analysis progress event streaming
-- [x] Similarity search via platform channels
+**v0.7.0 (Current)**
+- [x] Native audio playback via AVAudioEngine
+- [x] Real-time waveform generation
+- [x] Enhanced waveform view with playhead glow
+- [x] Player state streaming via event channels
+- [x] UX/UI polish and responsive improvements
+- [x] Full Platform Channel integration
 - [x] Comprehensive test suite (62 tests total)
 - [x] macOS notarization and code signing
-- [x] Bundled OpenL3 Core ML model
 
-**v0.7.0 (Next)**
-- [ ] Real-time audio playback
-- [ ] Waveform visualization
-- [ ] Beat grid display
+**v0.8.0 (Next)**
+- [ ] Drag-and-drop set building
+- [ ] Energy journey visualization
+- [ ] Transition suggestions
 
 **v1.0.0 (Stable)**
 - [ ] Sparkle auto-updates
@@ -537,6 +534,6 @@ flutter run -d macos
 
 <br/>
 
-*Codename: Bordeaux*
+*Codename: Cairo*
 
 </div>

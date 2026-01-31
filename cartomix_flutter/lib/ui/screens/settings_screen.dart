@@ -260,7 +260,7 @@ class SettingsScreen extends StatelessWidget {
                   style: CartoMixTypography.headline,
                 ),
                 Text(
-                  'Version 0.4.0-alpha (Flutter)',
+                  'Version 0.7.0 (Codename: Cairo)',
                   style: CartoMixTypography.caption.copyWith(
                     color: CartoMixColors.textMuted,
                   ),
