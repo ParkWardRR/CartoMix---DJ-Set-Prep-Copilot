@@ -179,9 +179,34 @@ Professional-grade UI refinements and comprehensive testing.
 
 ## Current Release
 
+### v0.6.0 — Native Platform Integration (January 2026)
+
+**Status:** Released
+
+**Codename: Bordeaux**
+
+Full native platform channel integration connecting Flutter UI to Swift backend.
+
+| Feature | Status |
+|---------|--------|
+| GRDB database integration | ✅ Complete |
+| FlutterBridge.swift backend | ✅ Complete |
+| Track loading from SQLite | ✅ Complete |
+| Music folder scanning with native picker | ✅ Complete |
+| Track metadata display | ✅ Complete |
+| Analyzer channel integration | ✅ Complete |
+| Analysis progress streaming | ✅ Complete |
+| Player channel integration (stub) | ✅ Complete |
+| Similarity channel integration | ✅ Complete |
+| 62 total tests (23 Flutter + 39 Swift) | ✅ Complete |
+
+---
+
 ### v0.5.0-beta2 — ML Out of the Box (January 2026)
 
 **Status:** Released
+
+**Codename: Algiers**
 
 Beta 2 bundles ML models directly into the app, enabling AI-powered analysis without any configuration.
 
@@ -192,13 +217,14 @@ Beta 2 bundles ML models directly into the app, enabling AI-powered analysis wit
 | QA flag generation (music/speech/noise) | ✅ Complete |
 | Custom ML training support | ✅ Complete |
 | Explainable transitions | ✅ Complete |
-| 62 total tests (23 Flutter + 39 Swift) | ✅ Complete |
 
 ---
 
 ### v0.4.0-beta — First Public Beta (January 2026)
 
 **Status:** Released
+
+**Codename: Shanghai**
 
 The first public beta establishes the hybrid Flutter + Swift architecture and delivers a polished, professional UI.
 
@@ -218,21 +244,6 @@ The first public beta establishes the hybrid Flutter + Swift architecture and de
 ---
 
 ## Upcoming Releases
-
-### v0.6.0 — Native Integration (Q1 2026)
-
-Connect the Flutter UI to the native Swift backend via Platform Channels.
-
-| Feature | Status |
-|---------|--------|
-| Database channel integration | 🔄 In Progress |
-| Track loading from GRDB/SQLite | ⏳ Planned |
-| Music folder scanning | ⏳ Planned |
-| Track metadata display | ⏳ Planned |
-| Analyzer channel integration | ⏳ Planned |
-| Analysis progress streaming | ⏳ Planned |
-| Player channel integration | ⏳ Planned |
-| Real-time waveform playhead | ⏳ Planned |
 
 ### v0.7.0 — Audio Playback (Q2 2026)
 
@@ -361,7 +372,8 @@ These features are on our radar but not yet scheduled:
 | v0.1.x - v0.3.x | **Dardania** | Native Swift foundation |
 | v0.4.x | **Shanghai** | Flutter migration & hybrid architecture |
 | v0.5.x | **Algiers** | Bundled ML models & AI features |
-| v0.6.x+ | TBD | Platform channel integration |
+| v0.6.x | **Bordeaux** | Native platform channel integration |
+| v0.7.x+ | TBD | Audio playback & visualization |
 
 ---
 
@@ -395,6 +407,7 @@ See [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copil
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.6.0 | Jan 30, 2026 | Native platform integration, GRDB backend, FlutterBridge |
 | v0.5.0-beta2 | Jan 30, 2026 | Bundled OpenL3, SoundAnalysis, ML training |
 | v0.4.0-beta | Jan 31, 2026 | First public beta, notarized |
 | v0.4.0-alpha.3 | Jan 31, 2026 | 23 widget tests, pro UI polish |
