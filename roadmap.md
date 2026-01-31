@@ -179,7 +179,27 @@ Professional-grade UI refinements and comprehensive testing.
 
 ## Current Release
 
-### v0.10.0 — Export & Import (January 2026)
+### v0.11.0 — Import from DJ Software (January 2026)
+
+**Status:** Released
+
+**Codename: Import**
+
+Full import support to complement export features — complete round-trip DJ software integration.
+
+| Feature | Status |
+|---------|--------|
+| Rekordbox XML import | ✅ Complete |
+| Serato crate import | ✅ Complete |
+| Traktor NML import | ✅ Complete |
+| M3U/M3U8 playlist import | ✅ Complete |
+| Import dialog UI | ✅ Complete |
+| Add imported tracks to library | ✅ Complete |
+| 67 total tests (28 Flutter + 39 Swift) | ✅ Complete |
+
+---
+
+### v0.10.0 — Export to DJ Software (January 2026)
 
 **Status:** Released
 
@@ -401,7 +421,8 @@ These features are on our radar but not yet scheduled:
 | v0.7.x | **Cairo** | Audio playback & UX polish |
 | v0.8.x | **Tokyo** | Set building & energy optimization |
 | v0.9.x | **Graph** | Force-directed graph visualization |
-| v0.10.x | **Export** | Export & Import for DJ software |
+| v0.10.x | **Export** | Export to DJ software |
+| v0.11.x | **Import** | Import from DJ software |
 
 ---
 
@@ -435,6 +456,7 @@ See [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copil
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.11.0 | Jan 31, 2026 | Full import support (Rekordbox, Serato, Traktor, M3U8), import dialog UI |
 | v0.10.0 | Jan 31, 2026 | Full export support (Rekordbox, Serato, Traktor, JSON, M3U8, CSV), export dialog UI |
 | v0.9.0 | Jan 30, 2026 | Force-directed graph visualization, similarity edges, node selection |
 | v0.8.0 | Jan 30, 2026 | Drag-and-drop set building, energy journey, transition suggestions |

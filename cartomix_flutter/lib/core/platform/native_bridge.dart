@@ -297,6 +297,53 @@ class NativeBridge {
     return result ?? '';
   }
 
+  // MARK: - Import Methods
+
+  /// Import from Rekordbox XML file
+  Future<ImportResult> importRekordbox({required String filePath}) async {
+    final result = await _exporterChannel.invokeMethod<Map>(
+      'importRekordbox',
+      {'path': filePath},
+    );
+    return ImportResult.fromMap(Map<String, dynamic>.from(result ?? {}));
+  }
+
+  /// Import from Serato crate file
+  Future<ImportResult> importSerato({required String filePath}) async {
+    final result = await _exporterChannel.invokeMethod<Map>(
+      'importSerato',
+      {'path': filePath},
+    );
+    return ImportResult.fromMap(Map<String, dynamic>.from(result ?? {}));
+  }
+
+  /// Import from Traktor NML file
+  Future<ImportResult> importTraktor({required String filePath}) async {
+    final result = await _exporterChannel.invokeMethod<Map>(
+      'importTraktor',
+      {'path': filePath},
+    );
+    return ImportResult.fromMap(Map<String, dynamic>.from(result ?? {}));
+  }
+
+  /// Import from M3U/M3U8 playlist file
+  Future<ImportResult> importM3U({required String filePath}) async {
+    final result = await _exporterChannel.invokeMethod<Map>(
+      'importM3U',
+      {'path': filePath},
+    );
+    return ImportResult.fromMap(Map<String, dynamic>.from(result ?? {}));
+  }
+
+  /// Add imported tracks to the database
+  Future<int> addImportedTracks(List<Map<String, dynamic>> tracks) async {
+    final result = await _exporterChannel.invokeMethod<Map>(
+      'addImportedTracks',
+      {'tracks': tracks},
+    );
+    return (result?['addedCount'] as int?) ?? 0;
+  }
+
   // MARK: - File Picker
 
   /// Open native folder picker
@@ -462,6 +509,28 @@ class TransitionPlan {
       toTrackId: map['toTrackId'] as int? ?? 0,
       score: (map['score'] as num?)?.toDouble() ?? 0.0,
       reason: map['reason'] as String? ?? '',
+    );
+  }
+}
+
+/// Import result containing parsed tracks
+class ImportResult {
+  final List<Map<String, dynamic>> tracks;
+  final int count;
+
+  const ImportResult({
+    required this.tracks,
+    required this.count,
+  });
+
+  factory ImportResult.fromMap(Map<String, dynamic> map) {
+    final tracksList = (map['tracks'] as List?)
+            ?.map((t) => Map<String, dynamic>.from(t as Map))
+            .toList() ??
+        [];
+    return ImportResult(
+      tracks: tracksList,
+      count: map['count'] as int? ?? tracksList.length,
     );
   }
 }
