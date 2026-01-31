@@ -17,11 +17,22 @@
 [![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#performance)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#architecture)
 [![Swift 6](https://img.shields.io/badge/Swift_6-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![v0.4.0](https://img.shields.io/badge/v0.4.0--alpha-0A84FF?style=for-the-badge)](#changelog)
+[![v0.4.0-beta](https://img.shields.io/badge/v0.4.0--beta-22C55E?style=for-the-badge)](#changelog)
 
 <br/>
 
-[**Download**](#install) · [**Features**](#features) · [**Screenshots**](#screenshots) · [**How It Works**](#how-it-works) · [**Documentation**](#documentation)
+### Ready to Try!
+
+<a href="https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/releases/latest">
+  <img src="https://img.shields.io/badge/Download_CartoMix-0A84FF?style=for-the-badge&logo=apple&logoColor=white" alt="Download CartoMix" height="50">
+</a>
+
+<sub>Signed & Notarized for macOS • No Gatekeeper warnings</sub>
+
+<br/>
+<br/>
+
+[**Features**](#features) · [**Screenshots**](#screenshots) · [**How It Works**](#architecture) · [**Documentation**](#development)
 
 <br/>
 
@@ -31,14 +42,21 @@
 
 <br/>
 
-## What's New in v0.4.0
+## v0.4.0-beta — First Public Beta!
 
-**Hybrid Flutter + Native Swift Architecture**
+We're excited to announce the **first public beta** of CartoMix! This release marks a major milestone in our journey to build the ultimate DJ set preparation tool.
 
-- **Flutter UI** — Beautiful, responsive interface inspired by the web version
-- **Native Swift Backend** — All audio analysis stays on Apple Silicon with Neural Engine acceleration
-- **Platform Channels** — Seamless communication between Flutter and native code
-- **Zero Performance Compromise** — Flutter for UI, Swift for computation
+### What's Included
+
+- **Hybrid Flutter + Native Swift Architecture** — Beautiful UI meets native performance
+- **Guided Onboarding** — First-launch wizard helps you set up your music library
+- **Pro-Level UI Polish** — Custom navigation, animations, and responsive layouts
+- **23 Comprehensive Tests** — Thoroughly tested for reliability
+- **Signed & Notarized** — Opens without macOS Gatekeeper warnings
+
+### Download Now
+
+Download the DMG from [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/releases/latest), drag to Applications, and launch. The onboarding wizard will guide you through adding your music folders.
 
 <br/>
 
@@ -101,6 +119,17 @@ Traktor export
 
 <br/>
 
+### First-Launch Onboarding
+
+New to CartoMix? The onboarding wizard guides you through:
+
+1. **Welcome** — Introduction to CartoMix features
+2. **Add Library** — Select your music folders (MP3, WAV, FLAC, AIFF, M4A)
+3. **Scanning** — Real-time progress as tracks are discovered
+4. **Ready** — Jump straight into analyzing your collection
+
+<br/>
+
 <table>
 <tr>
 <td width="50%">
@@ -135,10 +164,10 @@ Traktor export
 
 | Energy | Color | Description |
 |:------:|:-----:|-------------|
-| 1-3 | 🟢 Green | Low energy / Warm-up |
-| 4-5 | 🔵 Blue | Medium energy / Building |
-| 6-7 | 🟡 Yellow | High energy / Peak time |
-| 8-10 | 🔴 Red | Peak energy / Main room |
+| 1-3 | Green | Low energy / Warm-up |
+| 4-5 | Blue | Medium energy / Building |
+| 6-7 | Yellow | High energy / Peak time |
+| 8-10 | Red | Peak energy / Main room |
 
 <br/>
 
@@ -207,12 +236,18 @@ Traktor export
 
 ## Install
 
-### Download Release
+### Download Release (Recommended)
 
-```bash
-# Download from GitHub Releases
-open https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/releases/latest
-```
+<a href="https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/releases/latest">
+  <img src="https://img.shields.io/badge/Download_DMG-0A84FF?style=for-the-badge&logo=apple&logoColor=white" alt="Download DMG">
+</a>
+
+1. Download `CartoMix.dmg` from Releases
+2. Open the DMG
+3. Drag CartoMix to Applications
+4. Launch and follow the onboarding wizard
+
+**Note:** The app is signed and notarized — it will open without Gatekeeper warnings.
 
 ### Build from Source (Flutter)
 
@@ -223,6 +258,9 @@ cd CartoMix---DJ-Set-Prep-Copilot/cartomix_flutter
 
 # Install dependencies
 flutter pub get
+
+# Run tests (23 tests)
+flutter test
 
 # Build for macOS
 flutter build macos
@@ -323,6 +361,28 @@ All exports include **SHA-256 checksums** for verification.
 
 <br/>
 
+## Quality & Testing
+
+CartoMix includes a comprehensive test suite to ensure reliability:
+
+```
+$ flutter test
+00:02 +23: All tests passed!
+```
+
+**Test Coverage:**
+- Onboarding flow (first launch, navigation, skip/back)
+- Library screen (empty states, search, toolbar)
+- Main navigation (all 4 destinations)
+- Theme verification (dark mode, styling)
+- State persistence (settings saved across restarts)
+
+<br/>
+
+---
+
+<br/>
+
 ## Project Structure
 
 ```
@@ -340,12 +400,13 @@ cartomix/
 │   ├── lib/
 │   │   ├── core/
 │   │   │   ├── theme/      # Colors, typography, spacing
-│   │   │   └── platform/   # Native bridge
+│   │   │   └── providers/  # Riverpod state management
 │   │   ├── models/         # Dart data models
 │   │   └── ui/
 │   │       ├── screens/    # Main screens
 │   │       └── widgets/    # Reusable components
 │   ├── macos/              # macOS platform code
+│   ├── test/               # Widget tests (23 tests)
 │   └── assets/             # Icons, fonts
 │
 └── docs/                   # Documentation
@@ -394,13 +455,14 @@ make help           # Show all targets
 
 ## Roadmap
 
-**v0.4.x (Current)**
+**v0.4.0-beta (Current)**
 - [x] Flutter UI with native Swift backend
 - [x] Hybrid architecture via Platform Channels
 - [x] Dark theme matching web UI
-- [x] Waveform with sections, cues, beat grid
-- [x] Energy arc visualization
-- [x] List/grid view toggle
+- [x] First-launch onboarding wizard
+- [x] Pro-level UI polish and animations
+- [x] Comprehensive test suite (23 tests)
+- [x] macOS notarization and code signing
 - [ ] Full Platform Channel integration
 
 **v0.5.0 (Next)**
@@ -422,10 +484,13 @@ make help           # Show all targets
 
 ## Contributing
 
+We welcome contributions! Here's how to get started:
+
 ```bash
 git clone https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot.git
 cd CartoMix---DJ-Set-Prep-Copilot/cartomix_flutter
 flutter pub get
+flutter test    # Run tests first
 flutter run -d macos
 ```
 
@@ -455,6 +520,10 @@ flutter run -d macos
 
 [![GitHub stars](https://img.shields.io/github/stars/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot?style=social)](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot)
 [![GitHub forks](https://img.shields.io/github/forks/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot?style=social)](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/fork)
+
+<br/>
+
+**[Download the Beta](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/releases/latest)**
 
 <br/>
 
