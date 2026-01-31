@@ -9,6 +9,7 @@ import '../widgets/library/track_card.dart';
 import '../widgets/library/track_list_item.dart';
 import '../widgets/waveform/waveform_view.dart';
 import '../widgets/import/import_dialog.dart';
+import '../widgets/common/empty_state.dart';
 
 /// Library screen showing all tracks with search and filtering
 class LibraryScreen extends ConsumerWidget {
@@ -407,35 +408,107 @@ class _TrackDisplay extends ConsumerWidget {
     required String subtitle,
     Widget? action,
   }) {
+    // Enhanced empty state with v0.12.0 animations
     return Center(
       key: const Key('library.emptyState'),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 80,
-            color: CartoMixColors.textMuted,
+          // Animated icon container
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0.0, end: 1.0),
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.elasticOut,
+            builder: (context, value, child) {
+              return Transform.scale(
+                scale: value,
+                child: child,
+              );
+            },
+            child: Container(
+              width: 96,
+              height: 96,
+              decoration: BoxDecoration(
+                color: CartoMixColors.primary.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: CartoMixColors.primary.withValues(alpha: 0.3),
+                  width: 2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: CartoMixColors.primary.withValues(alpha: 0.2),
+                    blurRadius: 20,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Icon(
+                icon,
+                size: 48,
+                color: CartoMixColors.primary.withValues(alpha: 0.7),
+              ),
+            ),
           ),
-          const SizedBox(height: CartoMixSpacing.lg),
-          Text(
-            title,
-            style: CartoMixTypography.headline.copyWith(
-              color: CartoMixColors.textSecondary,
-              fontSize: 20,
+          const SizedBox(height: CartoMixSpacing.xl),
+          // Title with fade animation
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0.0, end: 1.0),
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeOut,
+            builder: (context, value, child) {
+              return Opacity(
+                opacity: value,
+                child: Transform.translate(
+                  offset: Offset(0, 10 * (1 - value)),
+                  child: child,
+                ),
+              );
+            },
+            child: Text(
+              title,
+              style: CartoMixTypography.headline.copyWith(
+                color: CartoMixColors.textPrimary,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
           const SizedBox(height: CartoMixSpacing.sm),
-          Text(
-            subtitle,
-            style: CartoMixTypography.body.copyWith(
-              color: CartoMixColors.textMuted,
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0.0, end: 1.0),
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeOut,
+            builder: (context, value, child) {
+              return Opacity(
+                opacity: value,
+                child: child,
+              );
+            },
+            child: Text(
+              subtitle,
+              style: CartoMixTypography.body.copyWith(
+                color: CartoMixColors.textMuted,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
           if (action != null) ...[
-            const SizedBox(height: CartoMixSpacing.lg),
-            action,
+            const SizedBox(height: CartoMixSpacing.xl),
+            TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0.0, end: 1.0),
+              duration: const Duration(milliseconds: 600),
+              curve: Curves.easeOut,
+              builder: (context, value, child) {
+                return Opacity(
+                  opacity: value,
+                  child: Transform.translate(
+                    offset: Offset(0, 20 * (1 - value)),
+                    child: child,
+                  ),
+                );
+              },
+              child: action,
+            ),
           ],
         ],
       ),

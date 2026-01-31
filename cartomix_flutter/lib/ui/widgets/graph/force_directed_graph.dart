@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/graph_state.dart';
 import '../../../core/providers/app_state.dart';
 import '../../../core/theme/theme.dart';
+import '../common/empty_state.dart';
 
 /// Interactive force-directed graph visualization
 class ForceDirectedGraph extends ConsumerStatefulWidget {
@@ -396,7 +397,7 @@ class _GraphPainter extends CustomPainter {
   }
 }
 
-/// Empty state widget for graph
+/// Empty state widget for graph using standardized EmptyState
 class GraphEmptyState extends StatelessWidget {
   const GraphEmptyState({super.key});
 
@@ -404,44 +405,10 @@ class GraphEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: CartoMixColors.bgPrimary,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: CartoMixColors.primary.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: CartoMixColors.primary.withValues(alpha: 0.3),
-                  width: 2,
-                ),
-              ),
-              child: Icon(
-                Icons.hub_outlined,
-                size: 40,
-                color: CartoMixColors.primary.withValues(alpha: 0.7),
-              ),
-            ),
-            const SizedBox(height: CartoMixSpacing.lg),
-            Text(
-              'No Tracks to Visualize',
-              style: CartoMixTypography.headline.copyWith(
-                color: CartoMixColors.textSecondary,
-              ),
-            ),
-            const SizedBox(height: CartoMixSpacing.sm),
-            Text(
-              'Add tracks to your library and analyze them\nto see their similarity relationships',
-              style: CartoMixTypography.body.copyWith(
-                color: CartoMixColors.textMuted,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+      child: const EmptyState(
+        icon: Icons.hub_outlined,
+        title: 'No Tracks to Visualize',
+        subtitle: 'Add tracks to your library and analyze them\nto see their similarity relationships',
       ),
     );
   }

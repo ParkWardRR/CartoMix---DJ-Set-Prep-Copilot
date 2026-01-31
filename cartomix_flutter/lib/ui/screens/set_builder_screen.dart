@@ -8,6 +8,7 @@ import '../widgets/set_builder/energy_arc.dart';
 import '../widgets/set_builder/set_track_item.dart';
 import '../widgets/set_builder/transition_indicator.dart';
 import '../widgets/export/export_dialog.dart';
+import '../widgets/common/empty_state.dart';
 
 /// Set Builder screen for composing and optimizing DJ sets
 class SetBuilderScreen extends ConsumerWidget {
@@ -50,47 +51,18 @@ class SetBuilderScreen extends ConsumerWidget {
   }
 
   Widget _buildEmptyState(WidgetRef ref) {
-    return Center(
+    return Column(
       key: const Key('setBuilder.emptyState'),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(CartoMixSpacing.lg),
-            decoration: BoxDecoration(
-              color: CartoMixColors.bgTertiary,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.queue_music_outlined,
-              size: 64,
-              color: CartoMixColors.textMuted,
-            ),
-          ),
-          const SizedBox(height: CartoMixSpacing.lg),
-          Text(
-            'No tracks in set',
-            style: CartoMixTypography.headline.copyWith(
-              color: CartoMixColors.textSecondary,
-            ),
-          ),
-          const SizedBox(height: CartoMixSpacing.sm),
-          Text(
-            'Double-click tracks in the library to add them\nor drag them here',
-            style: CartoMixTypography.body.copyWith(
-              color: CartoMixColors.textMuted,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: CartoMixSpacing.xl),
-          // Demo button to add sample tracks
-          OutlinedButton.icon(
-            onPressed: () => _addDemoTracks(ref),
-            icon: const Icon(Icons.science_outlined, size: 16),
-            label: const Text('Add Demo Tracks'),
-          ),
-        ],
-      ),
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        EmptyState(
+          icon: Icons.queue_music_outlined,
+          title: 'No tracks in set',
+          subtitle: 'Double-click tracks in the library to add them\nor drag them here',
+          actionLabel: 'Add Demo Tracks',
+          onAction: () => _addDemoTracks(ref),
+        ),
+      ],
     );
   }
 
