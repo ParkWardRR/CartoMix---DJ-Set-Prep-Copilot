@@ -179,6 +179,28 @@ Professional-grade UI refinements and comprehensive testing.
 
 ## Current Release
 
+### v0.12.0 — UX/UI Overhaul (January 2026)
+
+**Status:** Released
+
+**Codename: Polish**
+
+Comprehensive UX/UI improvements with animated empty states, standardized components, and enhanced visual feedback.
+
+| Feature | Status |
+|---------|--------|
+| Standardized EmptyState widget | ✅ Complete |
+| Animated icon with elastic spring | ✅ Complete |
+| Staggered text fade animations | ✅ Complete |
+| Glow effects on empty state icons | ✅ Complete |
+| CompactEmptyState for inline use | ✅ Complete |
+| Library screen enhanced animations | ✅ Complete |
+| Set Builder uses EmptyState | ✅ Complete |
+| Graph screen uses EmptyState | ✅ Complete |
+| 28 Flutter widget tests passing | ✅ Complete |
+
+---
+
 ### v0.11.0 — Import from DJ Software (January 2026)
 
 **Status:** Released
@@ -423,6 +445,7 @@ These features are on our radar but not yet scheduled:
 | v0.9.x | **Graph** | Force-directed graph visualization |
 | v0.10.x | **Export** | Export to DJ software |
 | v0.11.x | **Import** | Import from DJ software |
+| v0.12.x | **Polish** | UX/UI overhaul & animations |
 
 ---
 
@@ -456,6 +479,7 @@ See [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copil
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.12.0 | Jan 31, 2026 | UX/UI overhaul, animated empty states, standardized components |
 | v0.11.0 | Jan 31, 2026 | Full import support (Rekordbox, Serato, Traktor, M3U8), import dialog UI |
 | v0.10.0 | Jan 31, 2026 | Full export support (Rekordbox, Serato, Traktor, JSON, M3U8, CSV), export dialog UI |
 | v0.9.0 | Jan 30, 2026 | Force-directed graph visualization, similarity edges, node selection |
