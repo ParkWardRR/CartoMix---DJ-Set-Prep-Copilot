@@ -317,16 +317,25 @@ class SettingsScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: CartoMixTypography.body.copyWith(
-            color: CartoMixColors.textSecondary,
+        Flexible(
+          flex: 1,
+          child: Text(
+            label,
+            style: CartoMixTypography.body.copyWith(
+              color: CartoMixColors.textSecondary,
+            ),
           ),
         ),
-        Text(
-          value,
-          style: CartoMixTypography.mono.copyWith(
-            color: CartoMixColors.textPrimary,
+        const SizedBox(width: CartoMixSpacing.md),
+        Flexible(
+          flex: 2,
+          child: Text(
+            value,
+            style: CartoMixTypography.monoSmall.copyWith(
+              color: CartoMixColors.textPrimary,
+            ),
+            textAlign: TextAlign.right,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
