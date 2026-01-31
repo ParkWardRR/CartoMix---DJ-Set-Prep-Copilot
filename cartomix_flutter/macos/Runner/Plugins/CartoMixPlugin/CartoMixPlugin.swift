@@ -536,6 +536,98 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
                 result(FlutterError(code: "EXPORT_ERROR", message: error.localizedDescription, details: nil))
             }
 
+        // MARK: - Import Methods
+
+        case "importRekordbox":
+            guard let filePath = args["path"] as? String else {
+                result(FlutterError(code: "INVALID_ARGS", message: "Missing file path", details: nil))
+                return
+            }
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                do {
+                    let tracks = try self?.bridge.importRekordbox(filePath: filePath) ?? []
+                    DispatchQueue.main.async {
+                        result(["tracks": tracks, "count": tracks.count])
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        result(FlutterError(code: "IMPORT_ERROR", message: error.localizedDescription, details: nil))
+                    }
+                }
+            }
+
+        case "importSerato":
+            guard let filePath = args["path"] as? String else {
+                result(FlutterError(code: "INVALID_ARGS", message: "Missing file path", details: nil))
+                return
+            }
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                do {
+                    let tracks = try self?.bridge.importSerato(filePath: filePath) ?? []
+                    DispatchQueue.main.async {
+                        result(["tracks": tracks, "count": tracks.count])
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        result(FlutterError(code: "IMPORT_ERROR", message: error.localizedDescription, details: nil))
+                    }
+                }
+            }
+
+        case "importTraktor":
+            guard let filePath = args["path"] as? String else {
+                result(FlutterError(code: "INVALID_ARGS", message: "Missing file path", details: nil))
+                return
+            }
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                do {
+                    let tracks = try self?.bridge.importTraktor(filePath: filePath) ?? []
+                    DispatchQueue.main.async {
+                        result(["tracks": tracks, "count": tracks.count])
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        result(FlutterError(code: "IMPORT_ERROR", message: error.localizedDescription, details: nil))
+                    }
+                }
+            }
+
+        case "importM3U":
+            guard let filePath = args["path"] as? String else {
+                result(FlutterError(code: "INVALID_ARGS", message: "Missing file path", details: nil))
+                return
+            }
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                do {
+                    let tracks = try self?.bridge.importM3U(filePath: filePath) ?? []
+                    DispatchQueue.main.async {
+                        result(["tracks": tracks, "count": tracks.count])
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        result(FlutterError(code: "IMPORT_ERROR", message: error.localizedDescription, details: nil))
+                    }
+                }
+            }
+
+        case "addImportedTracks":
+            guard let tracks = args["tracks"] as? [[String: Any]] else {
+                result(FlutterError(code: "INVALID_ARGS", message: "Missing tracks array", details: nil))
+                return
+            }
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                do {
+                    let addedCount = try self?.bridge.addImportedTracks(tracks) ?? 0
+                    DispatchQueue.main.async {
+                        result(["addedCount": addedCount])
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        result(FlutterError(code: "IMPORT_ERROR", message: error.localizedDescription, details: nil))
+                    }
+                }
+            }
+
         default:
             result(FlutterMethodNotImplemented)
         }

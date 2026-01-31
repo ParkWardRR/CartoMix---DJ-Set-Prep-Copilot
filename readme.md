@@ -18,7 +18,7 @@
 [![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#performance)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#architecture)
 [![Swift 6](https://img.shields.io/badge/Swift_6-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![v0.10.0](https://img.shields.io/badge/v0.10.0-22C55E?style=for-the-badge)](#changelog)
+[![v0.11.0](https://img.shields.io/badge/v0.11.0-22C55E?style=for-the-badge)](#changelog)
 
 <br/>
 
@@ -62,24 +62,23 @@
 
 <br/>
 
-## v0.10.0 — Export to DJ Software!
+## v0.11.0 — Import from DJ Software!
 
-We're excited to announce **v0.10.0** with full export support for all major DJ software platforms!
+We're excited to announce **v0.11.0** with full import support to complement the export features!
 
-### What's New in v0.10.0
+### What's New in v0.11.0
 
-- **Rekordbox Export** — Full XML format with cue points, BPM, key, and all metadata
-- **Serato Export** — Native .crate binary format with track paths and cue markers
-- **Traktor Export** — Complete NML format with CUE_V2 and key mapping
-- **JSON Export** — Full analysis data with embeddings for backup or custom integrations
-- **M3U8 Export** — Standard playlist format compatible with any media player
-- **CSV Export** — Spreadsheet format for Excel/Google Sheets analysis
-- **Export Dialog UI** — Beautiful format selection with progress indicators
+- **Rekordbox Import** — Import from Rekordbox XML library exports with BPM, key, and metadata
+- **Serato Import** — Parse Serato .crate files to import your Serato library
+- **Traktor Import** — Import from Native Instruments Traktor NML collections
+- **M3U/M3U8 Import** — Import standard playlist files from any media player
+- **Import Dialog UI** — Beautiful format selection with file scanning and progress
+- **Add to Library** — Imported tracks are added to your CartoMix database
 
 ### What's Included
 
 - **Hybrid Flutter + Native Swift Architecture** — Beautiful UI meets native performance
-- **6 Export Formats** — Rekordbox, Serato, Traktor, JSON, M3U8, CSV
+- **10 Import/Export Formats** — Full round-trip support for all major DJ software
 - **Force-Directed Graph Visualization** — Explore track relationships visually
 - **Drag-and-Drop Set Builder** — Build sets with visual feedback and reordering
 - **Native Audio Playback** — AVAudioEngine with waveform visualization
@@ -602,7 +601,14 @@ make help           # Show all targets
 
 ## Roadmap
 
-**v0.10.0 (Current)**
+**v0.11.0 (Current)**
+- [x] Rekordbox XML import
+- [x] Serato .crate import
+- [x] Traktor NML import
+- [x] M3U/M3U8 playlist import
+- [x] Import dialog UI with file scanning
+
+**v0.10.0**
 - [x] Rekordbox XML export with cue points and metadata
 - [x] Serato .crate binary export
 - [x] Traktor NML export with CUE_V2
@@ -629,7 +635,7 @@ make help           # Show all targets
 - [ ] Sparkle auto-updates
 - [ ] Homebrew distribution
 - [ ] Performance optimization
-- [ ] Import from DJ software
+- [ ] Advanced playlist management
 
 <br/>
 
@@ -682,6 +688,6 @@ flutter run -d macos
 
 <br/>
 
-*Codename: Export*
+*Codename: Import*
 
 </div>

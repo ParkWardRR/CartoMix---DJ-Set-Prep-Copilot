@@ -709,6 +709,293 @@ public class FlutterBridge {
         return url.path
     }
 
+    // MARK: - Import Methods
+
+    /// Import tracks from Rekordbox XML
+    public func importRekordbox(filePath: String) throws -> [[String: Any]] {
+        let url = URL(fileURLWithPath: filePath)
+        let xmlData = try Data(contentsOf: url)
+
+        guard let xmlString = String(data: xmlData, encoding: .utf8) else {
+            throw BridgeError.invalidArguments
+        }
+
+        var importedTracks: [[String: Any]] = []
+
+        // Parse TRACK elements from XML
+        let trackPattern = #"<TRACK[^>]*TrackID="(\d+)"[^>]*Name="([^"]*)"[^>]*Artist="([^"]*)"[^>]*(?:Album="([^"]*)")?[^>]*AverageBpm="([^"]*)"[^>]*(?:Tonality="([^"]*)")?[^>]*Location="([^"]*)"[^/>]*/?>"#
+
+        let regex = try NSRegularExpression(pattern: trackPattern, options: [.dotMatchesLineSeparators])
+        let matches = regex.matches(in: xmlString, range: NSRange(xmlString.startIndex..., in: xmlString))
+
+        for match in matches {
+            var track: [String: Any] = [:]
+
+            if let range = Range(match.range(at: 2), in: xmlString) {
+                track["title"] = unescapeXML(String(xmlString[range]))
+            }
+            if let range = Range(match.range(at: 3), in: xmlString) {
+                track["artist"] = unescapeXML(String(xmlString[range]))
+            }
+            if let range = Range(match.range(at: 4), in: xmlString) {
+                track["album"] = unescapeXML(String(xmlString[range]))
+            }
+            if let range = Range(match.range(at: 5), in: xmlString) {
+                track["bpm"] = Double(String(xmlString[range])) ?? 0
+            }
+            if let range = Range(match.range(at: 6), in: xmlString) {
+                track["key"] = String(xmlString[range])
+            }
+            if let range = Range(match.range(at: 7), in: xmlString) {
+                var path = String(xmlString[range])
+                // Convert file:// URL to path
+                if path.hasPrefix("file://localhost") {
+                    path = path.replacingOccurrences(of: "file://localhost", with: "")
+                    path = path.removingPercentEncoding ?? path
+                }
+                track["path"] = path
+            }
+
+            track["source"] = "rekordbox"
+            importedTracks.append(track)
+        }
+
+        return importedTracks
+    }
+
+    /// Import tracks from Serato crate
+    public func importSerato(filePath: String) throws -> [[String: Any]] {
+        let url = URL(fileURLWithPath: filePath)
+        let data = try Data(contentsOf: url)
+
+        var importedTracks: [[String: Any]] = []
+        var offset = 0
+
+        // Skip header (vrsn tag)
+        while offset < data.count - 4 {
+            let tag = String(data: data.subdata(in: offset..<offset+4), encoding: .ascii) ?? ""
+
+            if tag == "vrsn" {
+                // Read version length and skip
+                let length = Int(data[offset+4]) << 24 | Int(data[offset+5]) << 16 | Int(data[offset+6]) << 8 | Int(data[offset+7])
+                offset += 8 + length
+            } else if tag == "otrk" {
+                // Read otrk length
+                let otrkLength = Int(data[offset+4]) << 24 | Int(data[offset+5]) << 16 | Int(data[offset+6]) << 8 | Int(data[offset+7])
+                offset += 8
+
+                // Look for ptrk tag
+                if offset + 4 < data.count {
+                    let ptrkTag = String(data: data.subdata(in: offset..<offset+4), encoding: .ascii) ?? ""
+                    if ptrkTag == "ptrk" {
+                        let ptrkLength = Int(data[offset+4]) << 24 | Int(data[offset+5]) << 16 | Int(data[offset+6]) << 8 | Int(data[offset+7])
+                        offset += 8
+
+                        if offset + ptrkLength <= data.count {
+                            let pathData = data.subdata(in: offset..<offset+ptrkLength)
+                            if let path = String(data: pathData, encoding: .utf16BigEndian) {
+                                let filename = (path as NSString).lastPathComponent
+                                var track: [String: Any] = [
+                                    "path": path,
+                                    "title": (filename as NSString).deletingPathExtension,
+                                    "artist": "Unknown",
+                                    "source": "serato"
+                                ]
+                                importedTracks.append(track)
+                            }
+                        }
+                        offset += ptrkLength
+                    } else {
+                        offset += otrkLength
+                    }
+                }
+            } else {
+                offset += 1
+            }
+        }
+
+        return importedTracks
+    }
+
+    /// Import tracks from Traktor NML
+    public func importTraktor(filePath: String) throws -> [[String: Any]] {
+        let url = URL(fileURLWithPath: filePath)
+        let xmlData = try Data(contentsOf: url)
+
+        guard let xmlString = String(data: xmlData, encoding: .utf8) else {
+            throw BridgeError.invalidArguments
+        }
+
+        var importedTracks: [[String: Any]] = []
+
+        // Parse ENTRY elements from NML
+        let entryPattern = #"<ENTRY[^>]*>.*?<LOCATION[^>]*DIR="([^"]*)"[^>]*FILE="([^"]*)".*?(?:<ALBUM[^>]*TITLE="([^"]*)")?.*?(?:<INFO[^>]*KEY="([^"]*)")?.*?(?:<TEMPO[^>]*BPM="([^"]*)")?.*?</ENTRY>"#
+
+        let regex = try NSRegularExpression(pattern: entryPattern, options: [.dotMatchesLineSeparators])
+        let matches = regex.matches(in: xmlString, range: NSRange(xmlString.startIndex..., in: xmlString))
+
+        for match in matches {
+            var track: [String: Any] = [:]
+            var dirPath = ""
+            var fileName = ""
+
+            if let range = Range(match.range(at: 1), in: xmlString) {
+                // Convert Traktor path format (/:) back to normal path
+                dirPath = String(xmlString[range]).replacingOccurrences(of: "/:", with: "/")
+            }
+            if let range = Range(match.range(at: 2), in: xmlString) {
+                fileName = unescapeXML(String(xmlString[range]))
+            }
+
+            let fullPath = dirPath.isEmpty ? fileName : (dirPath + "/" + fileName)
+            track["path"] = fullPath
+            track["title"] = (fileName as NSString).deletingPathExtension
+            track["artist"] = "Unknown"
+
+            if let range = Range(match.range(at: 3), in: xmlString) {
+                track["album"] = unescapeXML(String(xmlString[range]))
+            }
+            if let range = Range(match.range(at: 4), in: xmlString) {
+                track["key"] = String(xmlString[range])
+            }
+            if let range = Range(match.range(at: 5), in: xmlString) {
+                track["bpm"] = Double(String(xmlString[range])) ?? 0
+            }
+
+            track["source"] = "traktor"
+            importedTracks.append(track)
+        }
+
+        return importedTracks
+    }
+
+    /// Import tracks from M3U/M3U8 playlist
+    public func importM3U(filePath: String) throws -> [[String: Any]] {
+        let url = URL(fileURLWithPath: filePath)
+        let content = try String(contentsOf: url, encoding: .utf8)
+
+        var importedTracks: [[String: Any]] = []
+        let lines = content.components(separatedBy: .newlines)
+
+        var currentTitle = ""
+        var currentArtist = ""
+        var currentDuration = 0
+
+        for line in lines {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+
+            if trimmed.hasPrefix("#EXTINF:") {
+                // Parse extended info: #EXTINF:duration,artist - title
+                let info = trimmed.dropFirst(8)
+                let parts = info.split(separator: ",", maxSplits: 1)
+
+                if let durationStr = parts.first {
+                    currentDuration = Int(durationStr) ?? 0
+                }
+
+                if parts.count > 1 {
+                    let titlePart = String(parts[1])
+                    if titlePart.contains(" - ") {
+                        let artistTitle = titlePart.split(separator: " - ", maxSplits: 1)
+                        currentArtist = String(artistTitle[0])
+                        currentTitle = artistTitle.count > 1 ? String(artistTitle[1]) : ""
+                    } else {
+                        currentTitle = titlePart
+                    }
+                }
+            } else if !trimmed.isEmpty && !trimmed.hasPrefix("#") {
+                // This is a file path
+                var track: [String: Any] = [
+                    "path": trimmed,
+                    "source": "m3u"
+                ]
+
+                if !currentTitle.isEmpty {
+                    track["title"] = currentTitle
+                } else {
+                    track["title"] = (trimmed as NSString).lastPathComponent
+                }
+
+                if !currentArtist.isEmpty {
+                    track["artist"] = currentArtist
+                } else {
+                    track["artist"] = "Unknown"
+                }
+
+                if currentDuration > 0 {
+                    track["duration"] = currentDuration
+                }
+
+                importedTracks.append(track)
+
+                // Reset for next track
+                currentTitle = ""
+                currentArtist = ""
+                currentDuration = 0
+            }
+        }
+
+        return importedTracks
+    }
+
+    /// Add imported tracks to database
+    public func addImportedTracks(_ tracks: [[String: Any]]) throws -> Int {
+        guard let db = dbQueue else { throw BridgeError.databaseNotInitialized }
+
+        var addedCount = 0
+
+        try db.write { database in
+            for track in tracks {
+                guard let path = track["path"] as? String else { continue }
+
+                // Check if file exists
+                let fileURL = URL(fileURLWithPath: path)
+                guard fileManager.fileExists(atPath: path) else { continue }
+
+                // Check if already in database
+                let existingCount = try Int.fetchOne(database, sql: "SELECT COUNT(*) FROM tracks WHERE path = ?", arguments: [path]) ?? 0
+                if existingCount > 0 { continue }
+
+                // Get file info
+                let attrs = try fileManager.attributesOfItem(atPath: path)
+                let fileSize = attrs[.size] as? Int64 ?? 0
+                let modDate = attrs[.modificationDate] as? Date ?? Date()
+
+                // Create content hash from path
+                let contentHash = path.data(using: .utf8)!.base64EncodedString()
+
+                // Insert track
+                try database.execute(sql: """
+                    INSERT INTO tracks (content_hash, path, title, artist, album, file_size, file_modified_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, arguments: [
+                    contentHash,
+                    path,
+                    track["title"] as? String ?? "Unknown",
+                    track["artist"] as? String ?? "Unknown",
+                    track["album"] as? String ?? "",
+                    fileSize,
+                    modDate
+                ])
+
+                addedCount += 1
+            }
+        }
+
+        return addedCount
+    }
+
+    // MARK: - Import Helpers
+
+    private func unescapeXML(_ string: String) -> String {
+        string
+            .replacingOccurrences(of: "&amp;", with: "&")
+            .replacingOccurrences(of: "&lt;", with: "<")
+            .replacingOccurrences(of: "&gt;", with: ">")
+            .replacingOccurrences(of: "&quot;", with: "\"")
+            .replacingOccurrences(of: "&apos;", with: "'")
+    }
+
     // MARK: - Export Helpers
 
     private func escapeXML(_ string: String) -> String {

@@ -8,6 +8,7 @@ import '../widgets/common/colored_badge.dart';
 import '../widgets/library/track_card.dart';
 import '../widgets/library/track_list_item.dart';
 import '../widgets/waveform/waveform_view.dart';
+import '../widgets/import/import_dialog.dart';
 
 /// Library screen showing all tracks with search and filtering
 class LibraryScreen extends ConsumerWidget {
@@ -149,6 +150,14 @@ class _LibraryToolbar extends ConsumerWidget {
             ),
           ),
           const SizedBox(width: CartoMixSpacing.md),
+          // Import button
+          OutlinedButton.icon(
+            key: const Key('library.import'),
+            onPressed: () => showImportDialog(context),
+            icon: const Icon(Icons.file_upload, size: 16),
+            label: const Text('Import'),
+          ),
+          const SizedBox(width: CartoMixSpacing.sm),
           // Analyze all button (right side)
           ElevatedButton.icon(
             key: const Key('library.analyzeAll'),
