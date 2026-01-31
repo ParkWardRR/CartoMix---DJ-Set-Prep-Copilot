@@ -18,7 +18,7 @@
 [![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#performance)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#architecture)
 [![Swift 6](https://img.shields.io/badge/Swift_6-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![v0.9.0](https://img.shields.io/badge/v0.9.0-22C55E?style=for-the-badge)](#changelog)
+[![v0.10.0](https://img.shields.io/badge/v0.10.0-22C55E?style=for-the-badge)](#changelog)
 
 <br/>
 
@@ -62,28 +62,29 @@
 
 <br/>
 
-## v0.9.0 — Graph Visualization!
+## v0.10.0 — Export to DJ Software!
 
-We're excited to announce **v0.9.0** with a brand new force-directed graph visualization for exploring track relationships!
+We're excited to announce **v0.10.0** with full export support for all major DJ software platforms!
 
-### What's New in v0.9.0
+### What's New in v0.10.0
 
-- **Force-Directed Graph Layout** — Physics-based node positioning with real-time simulation
-- **Similarity Edge Rendering** — Color-coded edges showing track compatibility scores
-- **Node Selection & Details** — Click any node to view track details and connections
-- **Interactive Zoom & Pan** — Mouse wheel zoom, drag to pan, pinch to zoom
-- **Similarity Threshold Filter** — Adjust the minimum score to show only strong matches
-- **Set-Only View Mode** — Toggle to show only tracks in your current set
-- **Graph Statistics** — Live node count, edge count, and average similarity score
+- **Rekordbox Export** — Full XML format with cue points, BPM, key, and all metadata
+- **Serato Export** — Native .crate binary format with track paths and cue markers
+- **Traktor Export** — Complete NML format with CUE_V2 and key mapping
+- **JSON Export** — Full analysis data with embeddings for backup or custom integrations
+- **M3U8 Export** — Standard playlist format compatible with any media player
+- **CSV Export** — Spreadsheet format for Excel/Google Sheets analysis
+- **Export Dialog UI** — Beautiful format selection with progress indicators
 
 ### What's Included
 
 - **Hybrid Flutter + Native Swift Architecture** — Beautiful UI meets native performance
+- **6 Export Formats** — Rekordbox, Serato, Traktor, JSON, M3U8, CSV
 - **Force-Directed Graph Visualization** — Explore track relationships visually
 - **Drag-and-Drop Set Builder** — Build sets with visual feedback and reordering
 - **Native Audio Playback** — AVAudioEngine with waveform visualization
 - **Bundled OpenL3 Model** — 512-dimensional audio embeddings included (18MB)
-- **Full Platform Channel Integration** — Database, Analyzer, Player, Similarity, Graph
+- **Full Platform Channel Integration** — Database, Analyzer, Player, Similarity, Graph, Exporter
 - **67 Comprehensive Tests** — 28 Flutter + 39 Swift tests
 - **Signed & Notarized** — Opens without macOS Gatekeeper warnings
 
@@ -601,7 +602,16 @@ make help           # Show all targets
 
 ## Roadmap
 
-**v0.9.0 (Current)**
+**v0.10.0 (Current)**
+- [x] Rekordbox XML export with cue points and metadata
+- [x] Serato .crate binary export
+- [x] Traktor NML export with CUE_V2
+- [x] JSON export with full analysis data
+- [x] M3U8 playlist export
+- [x] CSV spreadsheet export
+- [x] Export dialog UI with format selection
+
+**v0.9.0**
 - [x] Force-directed graph visualization
 - [x] Similarity edge rendering with color coding
 - [x] Node selection and track details
@@ -616,10 +626,10 @@ make help           # Show all targets
 - [x] Set optimization for warm-up/peak/open formats
 
 **v1.0.0 (Stable)**
-- [ ] Full export support (Rekordbox, Serato, Traktor)
 - [ ] Sparkle auto-updates
 - [ ] Homebrew distribution
 - [ ] Performance optimization
+- [ ] Import from DJ software
 
 <br/>
 
@@ -672,6 +682,6 @@ flutter run -d macos
 
 <br/>
 
-*Codename: Graph*
+*Codename: Export*
 
 </div>

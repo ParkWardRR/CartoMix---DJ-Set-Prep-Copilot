@@ -7,6 +7,7 @@ import '../../models/models.dart';
 import '../widgets/set_builder/energy_arc.dart';
 import '../widgets/set_builder/set_track_item.dart';
 import '../widgets/set_builder/transition_indicator.dart';
+import '../widgets/export/export_dialog.dart';
 
 /// Set Builder screen for composing and optimizing DJ sets
 class SetBuilderScreen extends ConsumerWidget {
@@ -248,9 +249,25 @@ class _SetBuilderToolbar extends ConsumerWidget {
               icon: const Icon(Icons.clear_all, size: 16),
               label: const Text('Clear'),
             ),
+            const SizedBox(width: CartoMixSpacing.lg),
+            // Export button
+            ElevatedButton.icon(
+              onPressed: setTracks.isNotEmpty
+                  ? () => _showExportDialog(context, setTracks)
+                  : null,
+              icon: const Icon(Icons.file_download, size: 16),
+              label: const Text('Export'),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  void _showExportDialog(BuildContext context, List<Track> tracks) {
+    showDialog(
+      context: context,
+      builder: (context) => ExportDialog(tracks: tracks),
     );
   }
 

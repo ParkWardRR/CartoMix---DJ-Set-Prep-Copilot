@@ -247,7 +247,7 @@ class _MainScreenState extends State<MainScreen> {
               borderRadius: BorderRadius.circular(CartoMixSpacing.radiusSm),
             ),
             child: Text(
-              'v0.9.0',
+              'v0.10.0',
               style: CartoMixTypography.badgeSmall.copyWith(
                 color: CartoMixColors.textMuted,
               ),

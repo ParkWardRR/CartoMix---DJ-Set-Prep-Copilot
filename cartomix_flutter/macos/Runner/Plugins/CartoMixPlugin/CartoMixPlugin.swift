@@ -428,9 +428,113 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
     // MARK: - Exporter Handler
 
     private func handleExporterCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let args = call.arguments as? [String: Any] else {
+            result(FlutterError(code: "INVALID_ARGS", message: "Missing arguments", details: nil))
+            return
+        }
+
         switch call.method {
-        case "exportRekordbox", "exportSerato", "exportTraktor", "exportJSON", "exportM3U":
-            result(FlutterError(code: "NOT_IMPLEMENTED", message: "Export coming in v0.10", details: nil))
+        case "exportRekordbox":
+            guard let trackIds = args["trackIds"] as? [Int],
+                  let playlistName = args["playlistName"] as? String,
+                  let outputPath = args["path"] as? String else {
+                result(FlutterError(code: "INVALID_ARGS", message: "Missing trackIds, playlistName, or path", details: nil))
+                return
+            }
+            do {
+                let path = try bridge.exportRekordbox(
+                    trackIds: trackIds.map { Int64($0) },
+                    playlistName: playlistName,
+                    outputPath: outputPath
+                )
+                result(path)
+            } catch {
+                result(FlutterError(code: "EXPORT_ERROR", message: error.localizedDescription, details: nil))
+            }
+
+        case "exportSerato":
+            guard let trackIds = args["trackIds"] as? [Int],
+                  let playlistName = args["playlistName"] as? String,
+                  let outputPath = args["path"] as? String else {
+                result(FlutterError(code: "INVALID_ARGS", message: "Missing trackIds, playlistName, or path", details: nil))
+                return
+            }
+            do {
+                let path = try bridge.exportSerato(
+                    trackIds: trackIds.map { Int64($0) },
+                    playlistName: playlistName,
+                    outputPath: outputPath
+                )
+                result(path)
+            } catch {
+                result(FlutterError(code: "EXPORT_ERROR", message: error.localizedDescription, details: nil))
+            }
+
+        case "exportTraktor":
+            guard let trackIds = args["trackIds"] as? [Int],
+                  let playlistName = args["playlistName"] as? String,
+                  let outputPath = args["path"] as? String else {
+                result(FlutterError(code: "INVALID_ARGS", message: "Missing trackIds, playlistName, or path", details: nil))
+                return
+            }
+            do {
+                let path = try bridge.exportTraktor(
+                    trackIds: trackIds.map { Int64($0) },
+                    playlistName: playlistName,
+                    outputPath: outputPath
+                )
+                result(path)
+            } catch {
+                result(FlutterError(code: "EXPORT_ERROR", message: error.localizedDescription, details: nil))
+            }
+
+        case "exportJSON":
+            guard let trackIds = args["trackIds"] as? [Int],
+                  let outputPath = args["path"] as? String else {
+                result(FlutterError(code: "INVALID_ARGS", message: "Missing trackIds or path", details: nil))
+                return
+            }
+            do {
+                let path = try bridge.exportJSON(
+                    trackIds: trackIds.map { Int64($0) },
+                    outputPath: outputPath
+                )
+                result(path)
+            } catch {
+                result(FlutterError(code: "EXPORT_ERROR", message: error.localizedDescription, details: nil))
+            }
+
+        case "exportM3U":
+            guard let trackIds = args["trackIds"] as? [Int],
+                  let outputPath = args["path"] as? String else {
+                result(FlutterError(code: "INVALID_ARGS", message: "Missing trackIds or path", details: nil))
+                return
+            }
+            do {
+                let path = try bridge.exportM3U(
+                    trackIds: trackIds.map { Int64($0) },
+                    outputPath: outputPath
+                )
+                result(path)
+            } catch {
+                result(FlutterError(code: "EXPORT_ERROR", message: error.localizedDescription, details: nil))
+            }
+
+        case "exportCSV":
+            guard let trackIds = args["trackIds"] as? [Int],
+                  let outputPath = args["path"] as? String else {
+                result(FlutterError(code: "INVALID_ARGS", message: "Missing trackIds or path", details: nil))
+                return
+            }
+            do {
+                let path = try bridge.exportCSV(
+                    trackIds: trackIds.map { Int64($0) },
+                    outputPath: outputPath
+                )
+                result(path)
+            } catch {
+                result(FlutterError(code: "EXPORT_ERROR", message: error.localizedDescription, details: nil))
+            }
 
         default:
             result(FlutterMethodNotImplemented)
