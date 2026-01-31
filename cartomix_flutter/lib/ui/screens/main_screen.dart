@@ -6,6 +6,7 @@ import 'graph_screen.dart';
 import 'settings_screen.dart';
 
 /// Main application screen with navigation
+/// Pro-level DJ software UI with custom navigation rail
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -16,25 +17,25 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  static const _destinations = [
-    NavigationDestination(
-      icon: Icon(Icons.library_music_outlined),
-      selectedIcon: Icon(Icons.library_music),
+  static const _navItems = [
+    _NavItem(
+      icon: Icons.library_music_outlined,
+      selectedIcon: Icons.library_music,
       label: 'Library',
     ),
-    NavigationDestination(
-      icon: Icon(Icons.queue_music_outlined),
-      selectedIcon: Icon(Icons.queue_music),
+    _NavItem(
+      icon: Icons.queue_music_outlined,
+      selectedIcon: Icons.queue_music,
       label: 'Set Builder',
     ),
-    NavigationDestination(
-      icon: Icon(Icons.hub_outlined),
-      selectedIcon: Icon(Icons.hub),
+    _NavItem(
+      icon: Icons.hub_outlined,
+      selectedIcon: Icons.hub,
       label: 'Graph',
     ),
-    NavigationDestination(
-      icon: Icon(Icons.settings_outlined),
-      selectedIcon: Icon(Icons.settings),
+    _NavItem(
+      icon: Icons.settings_outlined,
+      selectedIcon: Icons.settings,
       label: 'Settings',
     ),
   ];
@@ -42,6 +43,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const Key('main.screen'),
       body: Column(
         children: [
           // Custom title bar for macOS
@@ -50,29 +52,13 @@ class _MainScreenState extends State<MainScreen> {
           Expanded(
             child: Row(
               children: [
-                // Navigation rail
-                NavigationRail(
-                  selectedIndex: _selectedIndex,
-                  onDestinationSelected: (index) {
-                    setState(() => _selectedIndex = index);
-                  },
-                  labelType: NavigationRailLabelType.all,
-                  backgroundColor: CartoMixColors.bgSecondary,
-                  indicatorColor: CartoMixColors.primary.withValues(alpha: 0.2),
-                  destinations: _destinations
-                      .map((d) => NavigationRailDestination(
-                            icon: d.icon,
-                            selectedIcon: d.selectedIcon,
-                            label: Text(d.label),
-                          ))
-                      .toList(),
-                  leading: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: CartoMixSpacing.lg),
-                    child: _buildLogo(),
-                  ),
-                ),
+                // Custom navigation rail (more control than NavigationRail)
+                _buildNavRail(),
                 // Vertical divider
-                const VerticalDivider(width: 1),
+                Container(
+                  width: 1,
+                  color: CartoMixColors.border,
+                ),
                 // Content area
                 Expanded(
                   child: _buildContent(),
@@ -89,13 +75,14 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildTitleBar() {
     return Container(
+      key: const Key('main.titleBar'),
       height: 28,
       color: CartoMixColors.bgPrimary,
       child: Row(
         children: [
-          // Window buttons area (macOS)
+          // Window buttons area (macOS - 78px for traffic lights)
           const SizedBox(width: 78),
-          // Draggable area
+          // Draggable area for window movement
           Expanded(
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
@@ -104,6 +91,91 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildNavRail() {
+    return Container(
+      key: const Key('main.navRail'),
+      width: 80,
+      color: CartoMixColors.bgSecondary,
+      child: Column(
+        children: [
+          // Logo at top
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: CartoMixSpacing.lg),
+            child: _buildLogo(),
+          ),
+          const SizedBox(height: CartoMixSpacing.md),
+          // Navigation items
+          Expanded(
+            child: Column(
+              children: [
+                for (int i = 0; i < _navItems.length; i++)
+                  _buildNavItem(_navItems[i], i),
+              ],
+            ),
+          ),
+          // Bottom indicator (optional future use)
+          const SizedBox(height: CartoMixSpacing.lg),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavItem(_NavItem item, int index) {
+    final isSelected = _selectedIndex == index;
+
+    return Tooltip(
+      message: item.label,
+      preferBelow: false,
+      child: InkWell(
+        onTap: () => setState(() => _selectedIndex = index),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(
+            vertical: CartoMixSpacing.md,
+            horizontal: CartoMixSpacing.sm,
+          ),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? CartoMixColors.primary.withValues(alpha: 0.15)
+                : Colors.transparent,
+            border: Border(
+              left: BorderSide(
+                color: isSelected ? CartoMixColors.primary : Colors.transparent,
+                width: 2,
+              ),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                isSelected ? item.selectedIcon : item.icon,
+                size: 22,
+                color: isSelected
+                    ? CartoMixColors.primary
+                    : CartoMixColors.textSecondary,
+              ),
+              const SizedBox(height: CartoMixSpacing.xxs),
+              Text(
+                item.label,
+                style: CartoMixTypography.badgeSmall.copyWith(
+                  color: isSelected
+                      ? CartoMixColors.textPrimary
+                      : CartoMixColors.textMuted,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -117,6 +189,13 @@ class _MainScreenState extends State<MainScreen> {
           decoration: BoxDecoration(
             gradient: CartoMixGradients.waveform,
             borderRadius: BorderRadius.circular(CartoMixSpacing.radiusMd),
+            boxShadow: [
+              BoxShadow(
+                color: CartoMixColors.primary.withValues(alpha: 0.3),
+                blurRadius: 12,
+                spreadRadius: 0,
+              ),
+            ],
           ),
           child: const Icon(
             Icons.music_note,
@@ -129,6 +208,7 @@ class _MainScreenState extends State<MainScreen> {
           'CartoMix',
           style: CartoMixTypography.badgeSmall.copyWith(
             color: CartoMixColors.textSecondary,
+            letterSpacing: 0.3,
           ),
         ),
       ],
@@ -137,6 +217,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildContent() {
     return IndexedStack(
+      key: const Key('main.content'),
       index: _selectedIndex,
       children: const [
         LibraryScreen(),
@@ -149,29 +230,49 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildFooter() {
     return Container(
+      key: const Key('main.footer'),
       height: 24,
       color: CartoMixColors.bgSecondary,
       padding: const EdgeInsets.symmetric(horizontal: CartoMixSpacing.md),
       child: Row(
         children: [
-          // Version
-          Text(
-            'v0.4.0-alpha',
-            style: CartoMixTypography.badgeSmall.copyWith(
-              color: CartoMixColors.textMuted,
+          // Version badge
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: CartoMixSpacing.sm,
+              vertical: 2,
+            ),
+            decoration: BoxDecoration(
+              color: CartoMixColors.bgTertiary,
+              borderRadius: BorderRadius.circular(CartoMixSpacing.radiusSm),
+            ),
+            child: Text(
+              'v0.4.0-alpha',
+              style: CartoMixTypography.badgeSmall.copyWith(
+                color: CartoMixColors.textMuted,
+              ),
             ),
           ),
+          const SizedBox(width: CartoMixSpacing.md),
+          // Spacer
           const Spacer(),
-          // Connection status
+          // Connection status indicator
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 width: 6,
                 height: 6,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: CartoMixColors.success,
                   shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: CartoMixColors.success.withValues(alpha: 0.5),
+                      blurRadius: 4,
+                      spreadRadius: 1,
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(width: CartoMixSpacing.xs),
@@ -187,4 +288,17 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
+}
+
+/// Navigation item data class
+class _NavItem {
+  final IconData icon;
+  final IconData selectedIcon;
+  final String label;
+
+  const _NavItem({
+    required this.icon,
+    required this.selectedIcon,
+    required this.label,
+  });
 }

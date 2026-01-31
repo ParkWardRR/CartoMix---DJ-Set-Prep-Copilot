@@ -37,53 +37,58 @@ class SetBuilderScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(CartoMixSpacing.md),
       color: CartoMixColors.bgSecondary,
-      child: Row(
-        children: [
-          // Set mode selector
-          SegmentedButton<String>(
-            segments: const [
-              ButtonSegment(value: 'warmup', label: Text('Warm-up')),
-              ButtonSegment(value: 'peak', label: Text('Peak Time')),
-              ButtonSegment(value: 'open', label: Text('Open Format')),
-            ],
-            selected: const {'peak'},
-            onSelectionChanged: (value) {},
-            style: ButtonStyle(
-              textStyle: WidgetStateProperty.all(CartoMixTypography.badge),
-            ),
-          ),
-          const SizedBox(width: CartoMixSpacing.md),
-          // Track count badge
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: CartoMixSpacing.sm,
-              vertical: CartoMixSpacing.xxs,
-            ),
-            decoration: BoxDecoration(
-              color: CartoMixColors.primary.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(CartoMixSpacing.radiusPill),
-            ),
-            child: Text(
-              '0 tracks',
-              style: CartoMixTypography.badge.copyWith(
-                color: CartoMixColors.primary,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Set mode selector
+            SegmentedButton<String>(
+              segments: const [
+                ButtonSegment(value: 'warmup', label: Text('Warm-up')),
+                ButtonSegment(value: 'peak', label: Text('Peak')),
+                ButtonSegment(value: 'open', label: Text('Open')),
+              ],
+              selected: const {'peak'},
+              onSelectionChanged: (value) {},
+              style: ButtonStyle(
+                textStyle: WidgetStateProperty.all(CartoMixTypography.badge),
+                visualDensity: VisualDensity.compact,
               ),
             ),
-          ),
-          const Spacer(),
-          // Actions
-          OutlinedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.auto_awesome, size: 16),
-            label: const Text('Optimize'),
-          ),
-          const SizedBox(width: CartoMixSpacing.sm),
-          OutlinedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.clear_all, size: 16),
-            label: const Text('Clear'),
-          ),
-        ],
+            const SizedBox(width: CartoMixSpacing.md),
+            // Track count badge
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: CartoMixSpacing.sm,
+                vertical: CartoMixSpacing.xxs,
+              ),
+              decoration: BoxDecoration(
+                color: CartoMixColors.primary.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(CartoMixSpacing.radiusPill),
+              ),
+              child: Text(
+                '0 tracks',
+                style: CartoMixTypography.badge.copyWith(
+                  color: CartoMixColors.primary,
+                ),
+              ),
+            ),
+            const SizedBox(width: CartoMixSpacing.lg),
+            // Actions
+            OutlinedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.auto_awesome, size: 16),
+              label: const Text('Optimize'),
+            ),
+            const SizedBox(width: CartoMixSpacing.sm),
+            OutlinedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.clear_all, size: 16),
+              label: const Text('Clear'),
+            ),
+          ],
+        ),
       ),
     );
   }

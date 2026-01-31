@@ -36,63 +36,73 @@ class GraphScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(CartoMixSpacing.md),
       color: CartoMixColors.bgSecondary,
-      child: Row(
-        children: [
-          // Similarity threshold slider
-          Text(
-            'Min Score:',
-            style: CartoMixTypography.caption,
-          ),
-          const SizedBox(width: CartoMixSpacing.sm),
-          SizedBox(
-            width: 150,
-            child: Slider(
-              value: 6.0,
-              min: 0,
-              max: 10,
-              divisions: 20,
-              label: '6.0',
-              onChanged: (value) {},
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Similarity threshold slider
+            Text(
+              'Min Score:',
+              style: CartoMixTypography.caption,
             ),
-          ),
-          const SizedBox(width: CartoMixSpacing.md),
-          // Show set only toggle
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 16,
-                height: 16,
-                child: Checkbox(
-                  value: false,
-                  onChanged: (value) {},
+            const SizedBox(width: CartoMixSpacing.sm),
+            SizedBox(
+              width: 120,
+              child: Slider(
+                value: 6.0,
+                min: 0,
+                max: 10,
+                divisions: 20,
+                label: '6.0',
+                onChanged: (value) {},
+              ),
+            ),
+            const SizedBox(width: CartoMixSpacing.md),
+            // Show set only toggle
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: Checkbox(
+                    value: false,
+                    onChanged: (value) {},
+                  ),
                 ),
-              ),
-              const SizedBox(width: CartoMixSpacing.xs),
-              Text(
-                'Show Set Only',
-                style: CartoMixTypography.caption,
-              ),
-            ],
-          ),
-          const Spacer(),
-          // Zoom controls
-          IconButton(
-            icon: const Icon(Icons.zoom_out, size: 18),
-            onPressed: () {},
-            tooltip: 'Zoom Out',
-          ),
-          IconButton(
-            icon: const Icon(Icons.zoom_in, size: 18),
-            onPressed: () {},
-            tooltip: 'Zoom In',
-          ),
-          IconButton(
-            icon: const Icon(Icons.center_focus_strong, size: 18),
-            onPressed: () {},
-            tooltip: 'Reset View',
-          ),
-        ],
+                const SizedBox(width: CartoMixSpacing.xs),
+                Text(
+                  'Set Only',
+                  style: CartoMixTypography.caption,
+                ),
+              ],
+            ),
+            const SizedBox(width: CartoMixSpacing.lg),
+            // Zoom controls
+            IconButton(
+              icon: const Icon(Icons.zoom_out, size: 18),
+              onPressed: () {},
+              tooltip: 'Zoom Out',
+              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+              padding: EdgeInsets.zero,
+            ),
+            IconButton(
+              icon: const Icon(Icons.zoom_in, size: 18),
+              onPressed: () {},
+              tooltip: 'Zoom In',
+              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+              padding: EdgeInsets.zero,
+            ),
+            IconButton(
+              icon: const Icon(Icons.center_focus_strong, size: 18),
+              onPressed: () {},
+              tooltip: 'Reset View',
+              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+              padding: EdgeInsets.zero,
+            ),
+          ],
+        ),
       ),
     );
   }

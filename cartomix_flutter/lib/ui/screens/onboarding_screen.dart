@@ -6,6 +6,7 @@ import '../../core/theme/theme.dart';
 import '../../core/providers/app_state.dart';
 
 /// Onboarding screen shown on first launch
+/// Pro-level DJ software onboarding with smooth animations
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -23,15 +24,83 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     return Scaffold(
       key: const Key('onboarding.screen'),
       backgroundColor: CartoMixColors.bgPrimary,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: 600),
-            padding: const EdgeInsets.all(CartoMixSpacing.xl),
-            child: _buildCurrentStep(),
+      body: Stack(
+        children: [
+          // Background gradient effect
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  center: Alignment.topCenter,
+                  radius: 1.5,
+                  colors: [
+                    CartoMixColors.primary.withValues(alpha: 0.08),
+                    CartoMixColors.bgPrimary,
+                  ],
+                ),
+              ),
+            ),
           ),
-        ),
+          // Content with animated transitions
+          Center(
+            child: SingleChildScrollView(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 600),
+                padding: const EdgeInsets.all(CartoMixSpacing.xl),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  switchInCurve: Curves.easeOut,
+                  switchOutCurve: Curves.easeIn,
+                  transitionBuilder: (child, animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(0, 0.05),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: _buildCurrentStep(),
+                ),
+              ),
+            ),
+          ),
+          // Step indicator at bottom
+          Positioned(
+            bottom: CartoMixSpacing.xl,
+            left: 0,
+            right: 0,
+            child: _buildStepIndicator(),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildStepIndicator() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(4, (index) {
+        final isActive = index == _currentStep;
+        final isPast = index < _currentStep;
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: isActive ? 24 : 8,
+          height: 8,
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          decoration: BoxDecoration(
+            color: isActive
+                ? CartoMixColors.primary
+                : isPast
+                    ? CartoMixColors.primary.withValues(alpha: 0.5)
+                    : CartoMixColors.bgTertiary,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        );
+      }),
     );
   }
 
