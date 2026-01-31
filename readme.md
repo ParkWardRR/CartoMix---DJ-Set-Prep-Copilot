@@ -17,7 +17,7 @@
 [![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#performance)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#architecture)
 [![Swift 6](https://img.shields.io/badge/Swift_6-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![v0.5.0-beta2](https://img.shields.io/badge/v0.5.0--beta2-22C55E?style=for-the-badge)](#changelog)
+[![v0.6.0](https://img.shields.io/badge/v0.6.0-22C55E?style=for-the-badge)](#changelog)
 
 <br/>
 
@@ -42,24 +42,25 @@
 
 <br/>
 
-## v0.5.0-beta2 — ML Out of the Box!
+## v0.6.0 — Native Platform Integration!
 
-We're excited to announce **beta 2** with bundled ML models for instant AI-powered analysis. No downloads, no configuration — just install and go.
+We're excited to announce **v0.6.0** with full native platform channel integration. The Flutter UI now connects directly to the Swift backend via high-performance platform channels.
 
-### What's New in Beta 2
+### What's New in v0.6.0
 
-- **Bundled OpenL3 Model** — 512-dimensional audio embeddings included in the app (18MB)
-- **Apple SoundAnalysis** — Automatic audio context detection (music/speech/noise)
-- **QA Flags** — Automatic flagging of tracks needing review
-- **Custom ML Training** — Train your own section classifier (intro/build/drop/outro)
-- **Explainable Transitions** — Human-readable explanations for every mix suggestion
+- **GRDB Database Integration** — Native SQLite backend with WAL mode and migrations
+- **FlutterBridge** — Complete Swift bridge connecting all platform channels
+- **Track Management** — Full CRUD operations via platform channels
+- **Music Folder Scanning** — Native directory scanning with file discovery
+- **Analysis Progress Streaming** — Real-time updates via event channels
+- **Similarity Search** — Find similar tracks directly from native backend
 
 ### What's Included
 
 - **Hybrid Flutter + Native Swift Architecture** — Beautiful UI meets native performance
-- **Guided Onboarding** — First-launch wizard helps you set up your music library
-- **Pro-Level UI Polish** — Custom navigation, animations, and responsive layouts
-- **23 Comprehensive Tests** — Thoroughly tested for reliability
+- **Bundled OpenL3 Model** — 512-dimensional audio embeddings included (18MB)
+- **Apple SoundAnalysis** — Automatic audio context detection
+- **62 Comprehensive Tests** — 23 Flutter + 39 Swift tests
 - **Signed & Notarized** — Opens without macOS Gatekeeper warnings
 
 ### Download Now
@@ -463,23 +464,22 @@ make help           # Show all targets
 
 ## Roadmap
 
-**v0.5.0-beta2 (Current)**
+**v0.6.0 (Current)**
 - [x] Flutter UI with native Swift backend
-- [x] Hybrid architecture via Platform Channels
-- [x] Dark theme matching web UI
-- [x] First-launch onboarding wizard
-- [x] Pro-level UI polish and animations
-- [x] Comprehensive test suite (23 Flutter + 39 Swift tests)
+- [x] Full Platform Channel integration with GRDB
+- [x] FlutterBridge.swift database backend
+- [x] Track loading and management via channels
+- [x] Music folder scanning with native picker
+- [x] Analysis progress event streaming
+- [x] Similarity search via platform channels
+- [x] Comprehensive test suite (62 tests total)
 - [x] macOS notarization and code signing
 - [x] Bundled OpenL3 Core ML model
-- [x] Apple SoundAnalysis integration
-- [x] Custom ML training support
-- [x] Explainable transitions
 
-**v0.6.0 (Next)**
-- [ ] Full Platform Channel integration
+**v0.7.0 (Next)**
 - [ ] Real-time audio playback
-- [ ] Drag-and-drop set building
+- [ ] Waveform visualization
+- [ ] Beat grid display
 
 **v1.0.0 (Stable)**
 - [ ] Sparkle auto-updates
@@ -537,6 +537,6 @@ flutter run -d macos
 
 <br/>
 
-*Codename: Algiers*
+*Codename: Bordeaux*
 
 </div>
