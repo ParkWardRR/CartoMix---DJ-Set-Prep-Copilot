@@ -317,7 +317,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('v0.4.0-alpha'), findsOneWidget);
+      expect(find.text('v0.8.0'), findsOneWidget);
       expect(find.text('Native Backend Connected'), findsOneWidget);
     });
 

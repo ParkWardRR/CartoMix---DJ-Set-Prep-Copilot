@@ -167,6 +167,82 @@ final selectedTrackProvider = StateProvider<Track?>((ref) => null);
 enum LibraryViewMode { list, grid }
 final libraryViewModeProvider = StateProvider<LibraryViewMode>((ref) => LibraryViewMode.list);
 
+/// Provider for current set mode (uses SetMode from models/enums.dart)
+final setModeProvider = StateProvider<SetMode>((ref) => SetMode.peakTime);
+
+/// Provider for tracks in the current set
+final setTracksProvider = StateNotifierProvider<SetTracksNotifier, List<Track>>((ref) {
+  return SetTracksNotifier();
+});
+
+class SetTracksNotifier extends StateNotifier<List<Track>> {
+  SetTracksNotifier() : super([]);
+
+  void addTrack(Track track) {
+    if (!state.any((t) => t.id == track.id)) {
+      state = [...state, track];
+    }
+  }
+
+  void removeTrack(int trackId) {
+    state = state.where((t) => t.id != trackId).toList();
+  }
+
+  void reorderTracks(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final track = state[oldIndex];
+    final newList = [...state]..removeAt(oldIndex)..insert(newIndex, track);
+    state = newList;
+  }
+
+  void clearSet() {
+    state = [];
+  }
+
+  void setTracks(List<Track> tracks) {
+    state = tracks;
+  }
+}
+
+/// Provider for energy values of tracks in set
+final setEnergyValuesProvider = Provider<List<int>>((ref) {
+  final tracks = ref.watch(setTracksProvider);
+  return tracks.map((t) => t.energy ?? 5).toList();
+});
+
+/// Provider for selected track in set builder
+final selectedSetTrackIndexProvider = StateProvider<int?>((ref) => null);
+
+/// Provider for set statistics
+final setStatsProvider = Provider<Map<String, dynamic>>((ref) {
+  final tracks = ref.watch(setTracksProvider);
+
+  if (tracks.isEmpty) {
+    return {
+      'avgBpm': null,
+      'bpmRange': null,
+      'avgEnergy': null,
+      'keysUsed': <String>{},
+      'totalDuration': 0.0,
+    };
+  }
+
+  final bpms = tracks.where((t) => t.bpm != null).map((t) => t.bpm!).toList();
+  final energies = tracks.where((t) => t.energy != null).map((t) => t.energy!).toList();
+  final keys = tracks.where((t) => t.key != null).map((t) => t.key!).toSet();
+  final durations = tracks.where((t) => t.durationSeconds != null).map((t) => t.durationSeconds!).toList();
+
+  return {
+    'avgBpm': bpms.isEmpty ? null : bpms.reduce((a, b) => a + b) / bpms.length,
+    'bpmRange': bpms.isEmpty ? null : '${bpms.reduce((a, b) => a < b ? a : b).round()}-${bpms.reduce((a, b) => a > b ? a : b).round()}',
+    'avgEnergy': energies.isEmpty ? null : energies.reduce((a, b) => a + b) / energies.length,
+    'keysUsed': keys,
+    'totalDuration': durations.isEmpty ? 0.0 : durations.reduce((a, b) => a + b),
+  };
+});
+
 /// Provider for search query
 final searchQueryProvider = StateProvider<String>((ref) => '');
 

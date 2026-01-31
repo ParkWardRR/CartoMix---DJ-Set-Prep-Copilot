@@ -17,7 +17,7 @@
 [![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#performance)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#architecture)
 [![Swift 6](https://img.shields.io/badge/Swift_6-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![v0.7.0](https://img.shields.io/badge/v0.7.0-22C55E?style=for-the-badge)](#changelog)
+[![v0.8.0](https://img.shields.io/badge/v0.8.0-22C55E?style=for-the-badge)](#changelog)
 
 <br/>
 
@@ -42,21 +42,24 @@
 
 <br/>
 
-## v0.7.0 — Audio Playback & UX Polish!
+## v0.8.0 — Set Building!
 
-We're excited to announce **v0.7.0** with native audio playback via AVAudioEngine and polished UX improvements throughout the app.
+We're excited to announce **v0.8.0** with drag-and-drop set building, energy journey visualization, and transition suggestions.
 
-### What's New in v0.7.0
+### What's New in v0.8.0
 
-- **Native Audio Playback** — Real-time audio via AVAudioEngine with waveform generation
-- **Enhanced Waveform View** — Gradient coloring, playhead with glow, beat grid
-- **UX/UI Polish** — Refined styling, better responsive design, improved hover states
-- **Player State Streaming** — Real-time playback position via event channels
-- **Waveform Data API** — Native waveform generation for visualization
+- **Drag-and-Drop Set Building** — Reorder tracks by dragging, with smooth animations
+- **Energy Journey Visualization** — Interactive energy arc showing your set's flow
+- **Transition Suggestions** — BPM, key, and energy compatibility indicators between tracks
+- **Set Optimization** — Automatically optimize for warm-up, peak time, or open format sets
+- **Transition Warnings** — Get alerts for large BPM jumps or energy changes
+- **Set Statistics** — Live stats showing average BPM, energy, keys used, and duration
 
 ### What's Included
 
 - **Hybrid Flutter + Native Swift Architecture** — Beautiful UI meets native performance
+- **Drag-and-Drop Set Builder** — Build sets with visual feedback and reordering
+- **Native Audio Playback** — AVAudioEngine with waveform visualization
 - **Bundled OpenL3 Model** — 512-dimensional audio embeddings included (18MB)
 - **Full Platform Channel Integration** — Database, Analyzer, Player, Similarity
 - **62 Comprehensive Tests** — 23 Flutter + 39 Swift tests
@@ -463,20 +466,18 @@ make help           # Show all targets
 
 ## Roadmap
 
-**v0.7.0 (Current)**
-- [x] Native audio playback via AVAudioEngine
-- [x] Real-time waveform generation
-- [x] Enhanced waveform view with playhead glow
-- [x] Player state streaming via event channels
-- [x] UX/UI polish and responsive improvements
-- [x] Full Platform Channel integration
-- [x] Comprehensive test suite (62 tests total)
-- [x] macOS notarization and code signing
+**v0.8.0 (Current)**
+- [x] Drag-and-drop set building with ReorderableListView
+- [x] Energy journey visualization with interactive arc
+- [x] Transition suggestions between tracks
+- [x] Set optimization for warm-up/peak/open formats
+- [x] BPM range validation and key compatibility warnings
+- [x] Set statistics (avg BPM, energy, keys, duration)
 
-**v0.8.0 (Next)**
-- [ ] Drag-and-drop set building
-- [ ] Energy journey visualization
-- [ ] Transition suggestions
+**v0.9.0 (Next)**
+- [ ] Force-directed graph visualization
+- [ ] Similarity edge rendering
+- [ ] Node selection and details
 
 **v1.0.0 (Stable)**
 - [ ] Sparkle auto-updates
@@ -534,6 +535,6 @@ flutter run -d macos
 
 <br/>
 
-*Codename: Cairo*
+*Codename: Tokyo*
 
 </div>
