@@ -179,6 +179,26 @@ Professional-grade UI refinements and comprehensive testing.
 
 ## Current Release
 
+### v0.7.0 — Audio Playback & UX Polish (January 2026)
+
+**Status:** Released
+
+**Codename: Cairo**
+
+Native audio playback via AVAudioEngine with enhanced waveform visualization and UX improvements.
+
+| Feature | Status |
+|---------|--------|
+| Native audio playback (AVAudioEngine) | ✅ Complete |
+| Real-time waveform generation | ✅ Complete |
+| Enhanced waveform view | ✅ Complete |
+| Playhead with glow effect | ✅ Complete |
+| Player state streaming | ✅ Complete |
+| UX/UI polish and refinements | ✅ Complete |
+| 62 total tests (23 Flutter + 39 Swift) | ✅ Complete |
+
+---
+
 ### v0.6.0 — Native Platform Integration (January 2026)
 
 **Status:** Released
@@ -198,7 +218,6 @@ Full native platform channel integration connecting Flutter UI to Swift backend.
 | Analysis progress streaming | ✅ Complete |
 | Player channel integration (stub) | ✅ Complete |
 | Similarity channel integration | ✅ Complete |
-| 62 total tests (23 Flutter + 39 Swift) | ✅ Complete |
 
 ---
 
@@ -244,20 +263,6 @@ The first public beta establishes the hybrid Flutter + Swift architecture and de
 ---
 
 ## Upcoming Releases
-
-### v0.7.0 — Audio Playback (Q2 2026)
-
-Full audio playback with waveform visualization and section markers.
-
-| Feature | Status |
-|---------|--------|
-| Audio playback controls | ⏳ Planned |
-| Gradient waveform painter | ⏳ Planned |
-| Section overlay visualization | ⏳ Planned |
-| Cue point markers | ⏳ Planned |
-| Seek gesture handling | ⏳ Planned |
-| Beat grid display | ⏳ Planned |
-| Playhead with glow effect | ⏳ Planned |
 
 ### v0.8.0 — Set Building (Q2 2026)
 
@@ -373,7 +378,8 @@ These features are on our radar but not yet scheduled:
 | v0.4.x | **Shanghai** | Flutter migration & hybrid architecture |
 | v0.5.x | **Algiers** | Bundled ML models & AI features |
 | v0.6.x | **Bordeaux** | Native platform channel integration |
-| v0.7.x+ | TBD | Audio playback & visualization |
+| v0.7.x | **Cairo** | Audio playback & UX polish |
+| v0.8.x+ | TBD | Set building & visualization |
 
 ---
 
@@ -407,6 +413,7 @@ See [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copil
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.7.0 | Jan 30, 2026 | Native audio playback, waveform enhancements, UX polish |
 | v0.6.0 | Jan 30, 2026 | Native platform integration, GRDB backend, FlutterBridge |
 | v0.5.0-beta2 | Jan 30, 2026 | Bundled OpenL3, SoundAnalysis, ML training |
 | v0.4.0-beta | Jan 31, 2026 | First public beta, notarized |

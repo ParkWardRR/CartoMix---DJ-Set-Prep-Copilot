@@ -9,6 +9,7 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
 
     private let registrar: FlutterPluginRegistrar
     private let bridge = FlutterBridge.shared
+    private let audioPlayer = AudioPlayer.shared
 
     // Method channels
     private var databaseChannel: FlutterMethodChannel?
@@ -37,6 +38,11 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
     init(registrar: FlutterPluginRegistrar) {
         self.registrar = registrar
         super.init()
+
+        // Set up audio player state callback
+        audioPlayer.onStateChange = { [weak self] state in
+            self?.sendPlayerState(state)
+        }
     }
 
     // MARK: - Channel Setup
@@ -284,29 +290,28 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
                 result(FlutterError(code: "INVALID_ARGS", message: nil, details: nil))
                 return
             }
-            // Audio playback coming in v0.7
-            sendPlayerState([
-                "isPlaying": false,
-                "currentTime": 0.0,
-                "duration": 0.0,
-                "trackId": trackId,
-                "path": path,
-            ])
-            result(nil)
+
+            do {
+                try audioPlayer.load(path: path, trackId: trackId)
+                sendPlayerState(audioPlayer.getState())
+                result([
+                    "waveformData": audioPlayer.getWaveformData(),
+                    "duration": audioPlayer.duration
+                ])
+            } catch {
+                result(FlutterError(code: "PLAYER_ERROR", message: error.localizedDescription, details: nil))
+            }
 
         case "play":
-            sendPlayerState(["isPlaying": true])
+            audioPlayer.play()
             result(nil)
 
         case "pause":
-            sendPlayerState(["isPlaying": false])
+            audioPlayer.pause()
             result(nil)
 
         case "stop":
-            sendPlayerState([
-                "isPlaying": false,
-                "currentTime": 0.0,
-            ])
+            audioPlayer.stop()
             result(nil)
 
         case "seek":
@@ -315,7 +320,7 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
                 result(FlutterError(code: "INVALID_ARGS", message: nil, details: nil))
                 return
             }
-            sendPlayerState(["currentTime": time])
+            audioPlayer.seek(to: time)
             result(nil)
 
         case "setVolume":
@@ -324,7 +329,7 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
                 result(FlutterError(code: "INVALID_ARGS", message: nil, details: nil))
                 return
             }
-            sendPlayerState(["volume": volume])
+            audioPlayer.setVolume(Float(volume))
             result(nil)
 
         case "setRate":
@@ -333,8 +338,14 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
                 result(FlutterError(code: "INVALID_ARGS", message: nil, details: nil))
                 return
             }
-            sendPlayerState(["rate": rate])
+            audioPlayer.setRate(Float(rate))
             result(nil)
+
+        case "getWaveformData":
+            result(audioPlayer.getWaveformData())
+
+        case "getState":
+            result(audioPlayer.getState())
 
         default:
             result(FlutterMethodNotImplemented)
