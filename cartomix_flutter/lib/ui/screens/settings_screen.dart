@@ -260,7 +260,7 @@ class SettingsScreen extends StatelessWidget {
                   style: CartoMixTypography.headline,
                 ),
                 Text(
-                  'Version 0.7.0 (Codename: Cairo)',
+                  'Version 0.8.0 (Codename: Tokyo)',
                   style: CartoMixTypography.caption.copyWith(
                     color: CartoMixColors.textMuted,
                   ),

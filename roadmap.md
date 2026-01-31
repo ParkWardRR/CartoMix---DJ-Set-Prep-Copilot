@@ -179,6 +179,27 @@ Professional-grade UI refinements and comprehensive testing.
 
 ## Current Release
 
+### v0.8.0 — Set Building (January 2026)
+
+**Status:** Released
+
+**Codename: Tokyo**
+
+Interactive set building with drag-and-drop reordering and energy optimization.
+
+| Feature | Status |
+|---------|--------|
+| Drag-and-drop track ordering | ✅ Complete |
+| Energy journey visualization | ✅ Complete |
+| Set optimization (warm-up/peak/open) | ✅ Complete |
+| BPM range validation | ✅ Complete |
+| Key compatibility warnings | ✅ Complete |
+| Transition suggestions | ✅ Complete |
+| Set statistics (BPM, energy, keys, duration) | ✅ Complete |
+| 62 total tests (23 Flutter + 39 Swift) | ✅ Complete |
+
+---
+
 ### v0.7.0 — Audio Playback & UX Polish (January 2026)
 
 **Status:** Released
@@ -264,20 +285,7 @@ The first public beta establishes the hybrid Flutter + Swift architecture and de
 
 ## Upcoming Releases
 
-### v0.8.0 — Set Building (Q2 2026)
-
-Interactive set building with drag-and-drop and energy optimization.
-
-| Feature | Status |
-|---------|--------|
-| Drag-and-drop track ordering | ⏳ Planned |
-| Energy journey visualization | ⏳ Planned |
-| Set optimization (warm-up/peak/open) | ⏳ Planned |
-| BPM range validation | ⏳ Planned |
-| Key compatibility warnings | ⏳ Planned |
-| Transition suggestions | ⏳ Planned |
-
-### v0.9.0 — Graph Visualization (Q3 2026)
+### v0.9.0 — Graph Visualization (Q2 2026)
 
 Force-directed graph showing track relationships and similarity scores.
 
@@ -379,7 +387,8 @@ These features are on our radar but not yet scheduled:
 | v0.5.x | **Algiers** | Bundled ML models & AI features |
 | v0.6.x | **Bordeaux** | Native platform channel integration |
 | v0.7.x | **Cairo** | Audio playback & UX polish |
-| v0.8.x+ | TBD | Set building & visualization |
+| v0.8.x | **Tokyo** | Set building & energy optimization |
+| v0.9.x+ | TBD | Graph visualization |
 
 ---
 
@@ -413,6 +422,7 @@ See [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copil
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.8.0 | Jan 30, 2026 | Drag-and-drop set building, energy journey, transition suggestions |
 | v0.7.0 | Jan 30, 2026 | Native audio playback, waveform enhancements, UX polish |
 | v0.6.0 | Jan 30, 2026 | Native platform integration, GRDB backend, FlutterBridge |
 | v0.5.0-beta2 | Jan 30, 2026 | Bundled OpenL3, SoundAnalysis, ML training |

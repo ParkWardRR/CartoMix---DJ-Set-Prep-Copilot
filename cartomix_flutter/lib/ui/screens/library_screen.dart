@@ -350,7 +350,7 @@ class _TrackDisplay extends ConsumerWidget {
                         ref.read(selectedTrackProvider.notifier).state = track;
                       },
                       onDoubleTap: () {
-                        // TODO: Add to set
+                        ref.read(setTracksProvider.notifier).addTrack(track);
                       },
                     );
                   },
@@ -381,7 +381,7 @@ class _TrackDisplay extends ConsumerWidget {
                 ref.read(selectedTrackProvider.notifier).state = track;
               },
               onDoubleTap: () {
-                // TODO: Add to set
+                ref.read(setTracksProvider.notifier).addTrack(track);
               },
             );
           },
@@ -516,13 +516,13 @@ class _ListHeader extends StatelessWidget {
 }
 
 /// Detail panel showing selected track info
-class _DetailPanel extends StatelessWidget {
+class _DetailPanel extends ConsumerWidget {
   final Track track;
 
   const _DetailPanel({required this.track});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       key: const Key('library.detailPanel'),
       color: CartoMixColors.bgSecondary,
@@ -623,7 +623,7 @@ class _DetailPanel extends StatelessWidget {
                   child: ElevatedButton.icon(
                     key: const Key('library.addToSet'),
                     onPressed: () {
-                      // TODO: Add to set
+                      ref.read(setTracksProvider.notifier).addTrack(track);
                     },
                     icon: const Icon(Icons.add, size: 16),
                     label: const Text('Add to Set'),
