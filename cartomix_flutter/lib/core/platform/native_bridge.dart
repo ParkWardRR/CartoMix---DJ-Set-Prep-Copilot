@@ -285,6 +285,18 @@ class NativeBridge {
     return result ?? '';
   }
 
+  /// Export to CSV format
+  Future<String> exportCSV({
+    required List<int> trackIds,
+    required String outputPath,
+  }) async {
+    final result = await _exporterChannel.invokeMethod<String>(
+      'exportCSV',
+      {'trackIds': trackIds, 'path': outputPath},
+    );
+    return result ?? '';
+  }
+
   // MARK: - File Picker
 
   /// Open native folder picker

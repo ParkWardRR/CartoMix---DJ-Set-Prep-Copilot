@@ -15,3 +15,6 @@ export 'set_builder/transition_indicator.dart';
 
 // Graph widgets
 export 'graph/force_directed_graph.dart';
+
+// Export widgets
+export 'export/export_dialog.dart';

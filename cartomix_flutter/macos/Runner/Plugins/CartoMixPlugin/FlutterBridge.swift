@@ -417,6 +417,312 @@ public class FlutterBridge {
             ]
         }
     }
+
+    // MARK: - Export Methods
+
+    public func fetchTracksForExport(ids: [Int64]) throws -> [[String: Any]] {
+        guard let db = dbQueue else { return [] }
+
+        return try db.read { db in
+            let placeholders = ids.map { _ in "?" }.joined(separator: ", ")
+            let sql = """
+                SELECT t.*, a.id as analysis_id, a.status, a.duration_seconds, a.bpm,
+                       a.key_value, a.energy_global, a.has_openl3_embedding,
+                       a.sound_context
+                FROM tracks t
+                LEFT JOIN analyses a ON t.id = a.track_id
+                WHERE t.id IN (\(placeholders))
+            """
+            let rows = try Row.fetchAll(db, sql: sql, arguments: StatementArguments(ids))
+
+            return rows.map { row in
+                var track: [String: Any] = [
+                    "id": row["id"] as Int64,
+                    "contentHash": row["content_hash"] as String,
+                    "path": row["path"] as String,
+                    "title": row["title"] as String,
+                    "artist": row["artist"] as String,
+                    "fileSize": row["file_size"] as Int64,
+                ]
+
+                if let album = row["album"] as? String {
+                    track["album"] = album
+                }
+
+                if row["analysis_id"] != nil {
+                    var analysis: [String: Any] = [
+                        "status": row["status"] as? String ?? "pending",
+                    ]
+                    if let duration = row["duration_seconds"] as? Double {
+                        analysis["durationSeconds"] = duration
+                    }
+                    if let bpm = row["bpm"] as? Double {
+                        analysis["bpm"] = bpm
+                    }
+                    if let key = row["key_value"] as? String {
+                        analysis["keyValue"] = key
+                    }
+                    if let energy = row["energy_global"] as? Int {
+                        analysis["energyGlobal"] = energy
+                    }
+                    track["analysis"] = analysis
+                }
+
+                return track
+            }
+        }
+    }
+
+    /// Export tracks to Rekordbox XML format
+    public func exportRekordbox(trackIds: [Int64], playlistName: String, outputPath: String) throws -> String {
+        let tracks = try fetchTracksForExport(ids: trackIds)
+        let url = URL(fileURLWithPath: outputPath)
+
+        var xml = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <DJ_PLAYLISTS Version="1.0.0">
+          <PRODUCT Name="CartoMix" Version="0.10.0" Company="CartoMix"/>
+          <COLLECTION Entries="\(tracks.count)">
+
+        """
+
+        for track in tracks {
+            let title = escapeXML(track["title"] as? String ?? "Unknown")
+            let artist = escapeXML(track["artist"] as? String ?? "Unknown")
+            let path = track["path"] as? String ?? ""
+            let analysis = track["analysis"] as? [String: Any]
+            let bpm = analysis?["bpm"] as? Double ?? 0
+            let key = analysis?["keyValue"] as? String ?? ""
+            let duration = analysis?["durationSeconds"] as? Double ?? 0
+
+            xml += """
+                <TRACK TrackID="\(track["id"] ?? 0)" Name="\(title)" Artist="\(artist)"
+                       AverageBpm="\(String(format: "%.2f", bpm))" Tonality="\(key)"
+                       TotalTime="\(Int(duration))"
+                       Location="file://localhost\(path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? path)"/>
+
+            """
+        }
+
+        xml += """
+          </COLLECTION>
+          <PLAYLISTS>
+            <NODE Type="0" Name="ROOT" Count="1">
+              <NODE Name="\(escapeXML(playlistName))" Type="1" KeyType="0" Entries="\(tracks.count)">
+
+        """
+
+        for track in tracks {
+            xml += """
+                    <TRACK Key="\(track["id"] ?? 0)"/>
+
+            """
+        }
+
+        xml += """
+              </NODE>
+            </NODE>
+          </PLAYLISTS>
+        </DJ_PLAYLISTS>
+        """
+
+        try xml.write(to: url, atomically: true, encoding: .utf8)
+        return url.path
+    }
+
+    /// Export tracks to Serato crate format
+    public func exportSerato(trackIds: [Int64], playlistName: String, outputPath: String) throws -> String {
+        let tracks = try fetchTracksForExport(ids: trackIds)
+        let url = URL(fileURLWithPath: outputPath)
+
+        var data = Data()
+
+        // Serato crate header
+        let version = "vrsn".data(using: .ascii)!
+        data.append(version)
+        data.append(contentsOf: [0x00, 0x00, 0x00, 0x38]) // Version length
+
+        let versionString = "1.0/Serato ScratchLive Crate".data(using: .utf16BigEndian)!
+        data.append(versionString)
+
+        // Track entries
+        for track in tracks {
+            let path = track["path"] as? String ?? ""
+
+            // otrk tag
+            let otrkTag = "otrk".data(using: .ascii)!
+            data.append(otrkTag)
+
+            // ptrk tag with path
+            let ptrkTag = "ptrk".data(using: .ascii)!
+            let pathData = path.data(using: .utf16BigEndian)!
+
+            var ptrkLength = UInt32(pathData.count).bigEndian
+            var otrkLength = UInt32(4 + 4 + pathData.count).bigEndian
+
+            data.append(Data(bytes: &otrkLength, count: 4))
+            data.append(ptrkTag)
+            data.append(Data(bytes: &ptrkLength, count: 4))
+            data.append(pathData)
+        }
+
+        try data.write(to: url)
+        return url.path
+    }
+
+    /// Export tracks to Traktor NML format
+    public func exportTraktor(trackIds: [Int64], playlistName: String, outputPath: String) throws -> String {
+        let tracks = try fetchTracksForExport(ids: trackIds)
+        let url = URL(fileURLWithPath: outputPath)
+
+        var xml = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <NML VERSION="19">
+          <HEAD COMPANY="CartoMix" PROGRAM="CartoMix 0.10.0"/>
+          <COLLECTION ENTRIES="\(tracks.count)">
+
+        """
+
+        for track in tracks {
+            let title = escapeXML(track["title"] as? String ?? "Unknown")
+            let artist = escapeXML(track["artist"] as? String ?? "Unknown")
+            let path = track["path"] as? String ?? ""
+            let analysis = track["analysis"] as? [String: Any]
+            let bpm = analysis?["bpm"] as? Double ?? 0
+            let key = analysis?["keyValue"] as? String ?? ""
+            let duration = analysis?["durationSeconds"] as? Double ?? 0
+
+            // Convert path to Traktor format (/:)
+            let traktorPath = path.replacingOccurrences(of: "/", with: "/:")
+
+            xml += """
+                <ENTRY>
+                  <LOCATION DIR="\(escapeXML(traktorPath))" FILE="" VOLUME=""/>
+                  <ALBUM TITLE="\(escapeXML(track["album"] as? String ?? ""))"/>
+                  <INFO PLAYTIME="\(Int(duration))" KEY="\(key)"/>
+                  <TEMPO BPM="\(String(format: "%.6f", bpm))" BPM_QUALITY="100"/>
+                </ENTRY>
+
+            """
+        }
+
+        xml += """
+          </COLLECTION>
+          <PLAYLISTS>
+            <NODE TYPE="FOLDER" NAME="$ROOT">
+              <SUBNODES COUNT="1">
+                <NODE TYPE="PLAYLIST" NAME="\(escapeXML(playlistName))">
+                  <PLAYLIST ENTRIES="\(tracks.count)" TYPE="LIST">
+
+        """
+
+        for track in tracks {
+            let path = track["path"] as? String ?? ""
+            let traktorPath = path.replacingOccurrences(of: "/", with: "/:")
+
+            xml += """
+                        <ENTRY>
+                          <PRIMARYKEY TYPE="TRACK" KEY="\(escapeXML(traktorPath))"/>
+                        </ENTRY>
+
+            """
+        }
+
+        xml += """
+                  </PLAYLIST>
+                </NODE>
+              </SUBNODES>
+            </NODE>
+          </PLAYLISTS>
+        </NML>
+        """
+
+        try xml.write(to: url, atomically: true, encoding: .utf8)
+        return url.path
+    }
+
+    /// Export tracks to JSON format
+    public func exportJSON(trackIds: [Int64], outputPath: String) throws -> String {
+        let tracks = try fetchTracksForExport(ids: trackIds)
+        let url = URL(fileURLWithPath: outputPath)
+
+        let exportData: [String: Any] = [
+            "exportedAt": ISO8601DateFormatter().string(from: Date()),
+            "version": "0.10.0",
+            "trackCount": tracks.count,
+            "tracks": tracks
+        ]
+
+        let jsonData = try JSONSerialization.data(withJSONObject: exportData, options: [.prettyPrinted, .sortedKeys])
+        try jsonData.write(to: url)
+        return url.path
+    }
+
+    /// Export tracks to M3U8 playlist format
+    public func exportM3U(trackIds: [Int64], outputPath: String) throws -> String {
+        let tracks = try fetchTracksForExport(ids: trackIds)
+        let url = URL(fileURLWithPath: outputPath)
+
+        var m3u = "#EXTM3U\n"
+        m3u += "#PLAYLIST:CartoMix Export\n\n"
+
+        for track in tracks {
+            let title = track["title"] as? String ?? "Unknown"
+            let artist = track["artist"] as? String ?? "Unknown"
+            let path = track["path"] as? String ?? ""
+            let analysis = track["analysis"] as? [String: Any]
+            let duration = Int(analysis?["durationSeconds"] as? Double ?? 0)
+
+            m3u += "#EXTINF:\(duration),\(artist) - \(title)\n"
+            m3u += "\(path)\n"
+        }
+
+        try m3u.write(to: url, atomically: true, encoding: .utf8)
+        return url.path
+    }
+
+    /// Export tracks to CSV format
+    public func exportCSV(trackIds: [Int64], outputPath: String) throws -> String {
+        let tracks = try fetchTracksForExport(ids: trackIds)
+        let url = URL(fileURLWithPath: outputPath)
+
+        var csv = "Title,Artist,Album,BPM,Key,Energy,Duration,Path\n"
+
+        for track in tracks {
+            let title = escapeCSV(track["title"] as? String ?? "")
+            let artist = escapeCSV(track["artist"] as? String ?? "")
+            let album = escapeCSV(track["album"] as? String ?? "")
+            let path = escapeCSV(track["path"] as? String ?? "")
+            let analysis = track["analysis"] as? [String: Any]
+
+            csv += "\"\(title)\","
+            csv += "\"\(artist)\","
+            csv += "\"\(album)\","
+            csv += "\(String(format: "%.2f", analysis?["bpm"] as? Double ?? 0)),"
+            csv += "\(analysis?["keyValue"] as? String ?? ""),"
+            csv += "\(analysis?["energyGlobal"] as? Int ?? 0),"
+            csv += "\(String(format: "%.1f", analysis?["durationSeconds"] as? Double ?? 0)),"
+            csv += "\"\(path)\"\n"
+        }
+
+        try csv.write(to: url, atomically: true, encoding: .utf8)
+        return url.path
+    }
+
+    // MARK: - Export Helpers
+
+    private func escapeXML(_ string: String) -> String {
+        string
+            .replacingOccurrences(of: "&", with: "&amp;")
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
+            .replacingOccurrences(of: "\"", with: "&quot;")
+            .replacingOccurrences(of: "'", with: "&apos;")
+    }
+
+    private func escapeCSV(_ string: String) -> String {
+        string.replacingOccurrences(of: "\"", with: "\"\"")
+    }
 }
 
 // MARK: - Errors

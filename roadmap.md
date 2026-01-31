@@ -179,6 +179,27 @@ Professional-grade UI refinements and comprehensive testing.
 
 ## Current Release
 
+### v0.10.0 — Export & Import (January 2026)
+
+**Status:** Released
+
+**Codename: Export**
+
+Full export support for all major DJ software platforms.
+
+| Feature | Status |
+|---------|--------|
+| Rekordbox XML export | ✅ Complete |
+| Serato crate export | ✅ Complete |
+| Traktor NML export | ✅ Complete |
+| JSON export with embeddings | ✅ Complete |
+| M3U8 playlist export | ✅ Complete |
+| CSV metadata export | ✅ Complete |
+| Export dialog UI | ✅ Complete |
+| 67 total tests (28 Flutter + 39 Swift) | ✅ Complete |
+
+---
+
 ### v0.9.0 — Graph Visualization (January 2026)
 
 **Status:** Released
@@ -305,23 +326,7 @@ The first public beta establishes the hybrid Flutter + Swift architecture and de
 
 ## Upcoming Releases
 
-### v0.10.0 — Export & Import (Q2 2026)
-
-Full export support for all major DJ software platforms.
-
-| Feature | Status |
-|---------|--------|
-| Rekordbox XML export | ⏳ Planned |
-| Serato crate export | ⏳ Planned |
-| Traktor NML export | ⏳ Planned |
-| JSON export with embeddings | ⏳ Planned |
-| M3U8 playlist export | ⏳ Planned |
-| CSV metadata export | ⏳ Planned |
-| SHA-256 checksum verification | ⏳ Planned |
-
----
-
-## v1.0.0 — Stable Release (Q4 2026)
+### v1.0.0 — Stable Release (Q2 2026)
 
 The first stable release with full feature parity and production polish.
 
@@ -396,7 +401,7 @@ These features are on our radar but not yet scheduled:
 | v0.7.x | **Cairo** | Audio playback & UX polish |
 | v0.8.x | **Tokyo** | Set building & energy optimization |
 | v0.9.x | **Graph** | Force-directed graph visualization |
-| v0.10.x+ | TBD | Export & Import |
+| v0.10.x | **Export** | Export & Import for DJ software |
 
 ---
 
@@ -430,6 +435,7 @@ See [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copil
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.10.0 | Jan 31, 2026 | Full export support (Rekordbox, Serato, Traktor, JSON, M3U8, CSV), export dialog UI |
 | v0.9.0 | Jan 30, 2026 | Force-directed graph visualization, similarity edges, node selection |
 | v0.8.0 | Jan 30, 2026 | Drag-and-drop set building, energy journey, transition suggestions |
 | v0.7.0 | Jan 30, 2026 | Native audio playback, waveform enhancements, UX polish |
