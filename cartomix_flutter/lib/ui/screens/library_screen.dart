@@ -2,262 +2,64 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/theme.dart';
+import '../../core/providers/app_state.dart';
 import '../../models/models.dart';
 import '../widgets/common/colored_badge.dart';
 import '../widgets/library/track_card.dart';
 import '../widgets/library/track_list_item.dart';
 import '../widgets/waveform/waveform_view.dart';
 
-/// View mode for track display
-enum LibraryViewMode { list, grid }
-
 /// Library screen showing all tracks with search and filtering
-class LibraryScreen extends ConsumerStatefulWidget {
+class LibraryScreen extends ConsumerWidget {
   const LibraryScreen({super.key});
 
   @override
-  ConsumerState<LibraryScreen> createState() => _LibraryScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedTrack = ref.watch(selectedTrackProvider);
 
-class _LibraryScreenState extends ConsumerState<LibraryScreen> {
-  String _searchQuery = '';
-  String _sortBy = 'title';
-  bool _showAnalyzedOnly = false;
-  bool _showHighEnergyOnly = false;
-  Track? _selectedTrack;
-  LibraryViewMode _viewMode = LibraryViewMode.list; // Default to list like web UI
-
-  // Generate realistic waveform data
-  Float32List _generateWaveform(int seed, int length) {
-    final waveform = Float32List(length);
-    final random = seed * 1.618033988749895; // Golden ratio for variation
-    for (var i = 0; i < length; i++) {
-      final t = i / length;
-      // Create a complex waveform pattern
-      final base = 0.3 + 0.2 * _sin(t * 3.14159 * 4 + random);
-      final detail = 0.15 * _sin(t * 3.14159 * 16 + random * 2);
-      final peak = t > 0.3 && t < 0.7 ? 0.3 : 0.0; // Build section
-      final intro = t < 0.15 ? t * 4 : 1.0; // Intro fade in
-      final outro = t > 0.9 ? (1 - t) * 10 : 1.0; // Outro fade out
-      waveform[i] = ((base + detail + peak) * intro * outro).clamp(0.1, 1.0);
-    }
-    return waveform;
-  }
-
-  double _sin(double x) => (x - x * x * x / 6 + x * x * x * x * x / 120).clamp(-1.0, 1.0);
-
-  // Demo tracks for UI development
-  late final List<Track> _demoTracks = List.generate(12, (i) {
-    final waveform = _generateWaveform(i, 200);
-    final duration = 180.0 + (i * 30);
-    return Track(
-      id: i + 1,
-      contentHash: 'hash$i',
-      path: '/Music/track_${i + 1}.mp3',
-      title: [
-        'Midnight Shadows',
-        'Neon Dreams',
-        'Electric Pulse',
-        'Cosmic Journey',
-        'Bass Cathedral',
-        'Sunset Boulevard',
-        'Night Protocol',
-        'Digital Rain',
-        'Underground Empire',
-        'Peak Frequency',
-        'Afterglow',
-        'First Light'
-      ][i],
-      artist: [
-        'KLØVER',
-        'Midnight Protocol',
-        'Circuit Breaker',
-        'Astral Drift',
-        'Subsonic',
-        'Solar Winds',
-        'NightShift',
-        'DataStream',
-        'Deep Current',
-        'Zenith',
-        'Twilight Collective',
-        'Dawn Patrol'
-      ][i],
-      album: ['Echoes', 'Signals', 'Transmission', 'Horizons'][i % 4],
-      fileSize: 10000000 + (i * 500000),
-      fileModifiedAt: DateTime.now().subtract(Duration(days: i * 7)),
-      createdAt: DateTime.now().subtract(Duration(days: i * 7)),
-      updatedAt: DateTime.now(),
-      analysis: i % 4 != 3
-          ? TrackAnalysis(
-              id: i + 1,
-              trackId: i + 1,
-              version: 1,
-              status: AnalysisStatus.complete,
-              durationSeconds: duration,
-              bpm: [124, 126, 128, 130, 122, 125, 127, 132, 120, 128, 126, 124][i].toDouble(),
-              bpmConfidence: 0.95,
-              keyValue: ['8A', '9B', '10A', '11B', '12A', '1B', '2A', '3B', '4A', '5B', '6A', '7B'][i],
-              keyFormat: 'camelot',
-              keyConfidence: 0.9,
-              energyGlobal: [5, 7, 9, 6, 8, 4, 7, 10, 6, 9, 5, 3][i],
-              integratedLUFS: -14.0 + (i % 3),
-              truePeakDB: -0.5,
-              loudnessRange: 8.0,
-              waveformPreview: waveform,
-              sections: [
-                TrackSection(
-                  id: '${i}_intro',
-                  type: SectionType.intro,
-                  startTime: 0,
-                  endTime: duration * 0.12,
-                ),
-                TrackSection(
-                  id: '${i}_build1',
-                  type: SectionType.build,
-                  startTime: duration * 0.12,
-                  endTime: duration * 0.25,
-                ),
-                TrackSection(
-                  id: '${i}_drop1',
-                  type: SectionType.drop,
-                  startTime: duration * 0.25,
-                  endTime: duration * 0.45,
-                ),
-                TrackSection(
-                  id: '${i}_breakdown',
-                  type: SectionType.breakdown,
-                  startTime: duration * 0.45,
-                  endTime: duration * 0.60,
-                ),
-                TrackSection(
-                  id: '${i}_build2',
-                  type: SectionType.build,
-                  startTime: duration * 0.60,
-                  endTime: duration * 0.70,
-                ),
-                TrackSection(
-                  id: '${i}_drop2',
-                  type: SectionType.drop,
-                  startTime: duration * 0.70,
-                  endTime: duration * 0.88,
-                ),
-                TrackSection(
-                  id: '${i}_outro',
-                  type: SectionType.outro,
-                  startTime: duration * 0.88,
-                  endTime: duration,
-                ),
-              ],
-              cuePoints: [
-                CuePoint(
-                  index: 1,
-                  type: CueType.intro,
-                  timeSeconds: duration * 0.12,
-                  label: 'Load',
-                ),
-                CuePoint(
-                  index: 2,
-                  type: CueType.drop,
-                  timeSeconds: duration * 0.25,
-                  label: 'Drop 1',
-                ),
-                CuePoint(
-                  index: 3,
-                  type: CueType.breakdown,
-                  timeSeconds: duration * 0.45,
-                  label: 'Break',
-                ),
-                CuePoint(
-                  index: 4,
-                  type: CueType.drop,
-                  timeSeconds: duration * 0.70,
-                  label: 'Drop 2',
-                ),
-              ],
-              qaFlags: [],
-              hasOpenL3Embedding: true,
-              trainingLabels: [],
-              createdAt: DateTime.now(),
-              updatedAt: DateTime.now(),
-            )
-          : null,
-    );
-  });
-
-  List<Track> get _filteredTracks {
-    var tracks = _demoTracks.where((track) {
-      // Search filter
-      if (_searchQuery.isNotEmpty) {
-        final query = _searchQuery.toLowerCase();
-        if (!track.title.toLowerCase().contains(query) &&
-            !track.artist.toLowerCase().contains(query)) {
-          return false;
-        }
-      }
-      // Analyzed filter
-      if (_showAnalyzedOnly && !track.isAnalyzed) {
-        return false;
-      }
-      // High energy filter
-      if (_showHighEnergyOnly && (track.energy ?? 0) < 7) {
-        return false;
-      }
-      return true;
-    }).toList();
-
-    // Sort
-    switch (_sortBy) {
-      case 'title':
-        tracks.sort((a, b) => a.title.compareTo(b.title));
-        break;
-      case 'artist':
-        tracks.sort((a, b) => a.artist.compareTo(b.artist));
-        break;
-      case 'bpm_asc':
-        tracks.sort((a, b) => (a.bpm ?? 0).compareTo(b.bpm ?? 0));
-        break;
-      case 'bpm_desc':
-        tracks.sort((a, b) => (b.bpm ?? 0).compareTo(a.bpm ?? 0));
-        break;
-      case 'energy_desc':
-        tracks.sort((a, b) => (b.energy ?? 0).compareTo(a.energy ?? 0));
-        break;
-    }
-
-    return tracks;
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Row(
+      key: const Key('library.screen'),
       children: [
         // Main library panel
         Expanded(
           flex: 2,
           child: Column(
             children: [
-              _buildToolbar(),
+              const _LibraryToolbar(),
               const Divider(height: 1),
-              Expanded(
-                child: _buildTrackDisplay(),
+              const Expanded(
+                child: _TrackDisplay(),
               ),
             ],
           ),
         ),
         // Detail panel
-        if (_selectedTrack != null) ...[
+        if (selectedTrack != null) ...[
           const VerticalDivider(width: 1),
           SizedBox(
             width: 400,
-            child: _buildDetailPanel(),
+            child: _DetailPanel(track: selectedTrack),
           ),
         ],
       ],
     );
   }
+}
 
-  Widget _buildToolbar() {
+/// Toolbar with search, filters, and view mode toggle
+class _LibraryToolbar extends ConsumerWidget {
+  const _LibraryToolbar();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sortBy = ref.watch(sortModeProvider);
+    final showAnalyzedOnly = ref.watch(showAnalyzedOnlyProvider);
+    final showHighEnergyOnly = ref.watch(showHighEnergyOnlyProvider);
+    final tracks = ref.watch(filteredTracksProvider);
+    final tracksAsync = ref.watch(tracksProvider);
+
     return Container(
+      key: const Key('library.toolbar'),
       padding: const EdgeInsets.all(CartoMixSpacing.md),
       color: CartoMixColors.bgSecondary,
       child: Row(
@@ -273,30 +75,38 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 SizedBox(
                   width: 200,
                   child: TextField(
+                    key: const Key('library.search'),
                     decoration: const InputDecoration(
                       hintText: 'Search tracks...',
                       prefixIcon: Icon(Icons.search, size: 18),
                       isDense: true,
                     ),
                     style: CartoMixTypography.bodySmall,
-                    onChanged: (value) => setState(() => _searchQuery = value),
+                    onChanged: (value) {
+                      ref.read(searchQueryProvider.notifier).state = value;
+                    },
                   ),
                 ),
                 // Track count
                 ColoredBadge(
-                  label: '${_filteredTracks.length} tracks',
+                  label: '${tracks.length} tracks',
                   color: CartoMixColors.primary,
                 ),
                 // Filters
-                _buildCheckbox('Analyzed', _showAnalyzedOnly, (v) {
-                  setState(() => _showAnalyzedOnly = v ?? false);
-                }),
-                _buildCheckbox('High Energy', _showHighEnergyOnly, (v) {
-                  setState(() => _showHighEnergyOnly = v ?? false);
-                }),
+                _buildCheckbox(
+                  'Analyzed',
+                  showAnalyzedOnly,
+                  (v) => ref.read(showAnalyzedOnlyProvider.notifier).state = v ?? false,
+                ),
+                _buildCheckbox(
+                  'High Energy',
+                  showHighEnergyOnly,
+                  (v) => ref.read(showHighEnergyOnlyProvider.notifier).state = v ?? false,
+                ),
                 // Sort dropdown
                 DropdownButton<String>(
-                  value: _sortBy,
+                  key: const Key('library.sort'),
+                  value: sortBy,
                   underline: const SizedBox(),
                   isDense: true,
                   style: CartoMixTypography.caption,
@@ -308,7 +118,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                     DropdownMenuItem(value: 'energy_desc', child: Text('Energy ↓')),
                   ],
                   onChanged: (value) {
-                    if (value != null) setState(() => _sortBy = value);
+                    if (value != null) {
+                      ref.read(sortModeProvider.notifier).state = value;
+                    }
                   },
                 ),
                 // View mode toggle
@@ -320,12 +132,12 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildViewModeButton(
+                      _ViewModeButton(
                         icon: Icons.view_list,
                         mode: LibraryViewMode.list,
                         tooltip: 'List View',
                       ),
-                      _buildViewModeButton(
+                      _ViewModeButton(
                         icon: Icons.grid_view,
                         mode: LibraryViewMode.grid,
                         tooltip: 'Grid View',
@@ -339,7 +151,12 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
           const SizedBox(width: CartoMixSpacing.md),
           // Analyze all button (right side)
           ElevatedButton.icon(
-            onPressed: () {},
+            key: const Key('library.analyzeAll'),
+            onPressed: tracksAsync.hasValue && tracksAsync.value!.isNotEmpty
+                ? () {
+                    // TODO: Implement analyze all
+                  }
+                : null,
             icon: const Icon(Icons.analytics, size: 16),
             label: const Text('Analyze All'),
           ),
@@ -365,17 +182,29 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       ],
     );
   }
+}
 
-  Widget _buildViewModeButton({
-    required IconData icon,
-    required LibraryViewMode mode,
-    required String tooltip,
-  }) {
-    final isActive = _viewMode == mode;
+/// View mode toggle button
+class _ViewModeButton extends ConsumerWidget {
+  final IconData icon;
+  final LibraryViewMode mode;
+  final String tooltip;
+
+  const _ViewModeButton({
+    required this.icon,
+    required this.mode,
+    required this.tooltip,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentMode = ref.watch(libraryViewModeProvider);
+    final isActive = currentMode == mode;
+
     return Tooltip(
       message: tooltip,
       child: InkWell(
-        onTap: () => setState(() => _viewMode = mode),
+        onTap: () => ref.read(libraryViewModeProvider.notifier).state = mode,
         borderRadius: BorderRadius.circular(CartoMixSpacing.radiusSm),
         child: Container(
           padding: const EdgeInsets.all(CartoMixSpacing.xs),
@@ -392,93 +221,227 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       ),
     );
   }
+}
 
-  Widget _buildTrackDisplay() {
-    final tracks = _filteredTracks;
+/// Track display area (list or grid)
+class _TrackDisplay extends ConsumerWidget {
+  const _TrackDisplay();
 
-    if (tracks.isEmpty) {
-      return Center(
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tracksAsync = ref.watch(tracksProvider);
+    final filteredTracks = ref.watch(filteredTracksProvider);
+    final viewMode = ref.watch(libraryViewModeProvider);
+    final libraryPaths = ref.watch(libraryPathsProvider);
+
+    return tracksAsync.when(
+      loading: () => const Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: CartoMixSpacing.md),
+            Text('Scanning library...'),
+          ],
+        ),
+      ),
+      error: (error, _) => Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              Icons.library_music_outlined,
+              Icons.error_outline,
               size: 64,
-              color: CartoMixColors.textMuted,
+              color: CartoMixColors.error,
             ),
             const SizedBox(height: CartoMixSpacing.md),
             Text(
-              'No tracks found',
+              'Error loading library',
               style: CartoMixTypography.headline.copyWith(
                 color: CartoMixColors.textSecondary,
               ),
             ),
             const SizedBox(height: CartoMixSpacing.sm),
             Text(
-              'Add music folders to get started',
+              error.toString(),
               style: CartoMixTypography.body.copyWith(
                 color: CartoMixColors.textMuted,
               ),
             ),
           ],
         ),
-      );
-    }
-
-    // List view (default, matches web UI)
-    if (_viewMode == LibraryViewMode.list) {
-      return Column(
-        children: [
-          // Column headers
-          _buildListHeader(),
-          const Divider(height: 1),
-          // Track list
-          Expanded(
-            child: ListView.builder(
-              itemCount: tracks.length,
-              itemBuilder: (context, index) {
-                final track = tracks[index];
-                return TrackListItem(
-                  track: track,
-                  isSelected: _selectedTrack?.id == track.id,
-                  onTap: () => setState(() => _selectedTrack = track),
-                  onDoubleTap: () {
-                    // Add to set
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      );
-    }
-
-    // Grid view
-    return GridView.builder(
-      padding: const EdgeInsets.all(CartoMixSpacing.md),
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 320,
-        childAspectRatio: 2.2,
-        crossAxisSpacing: CartoMixSpacing.md,
-        mainAxisSpacing: CartoMixSpacing.md,
       ),
-      itemCount: tracks.length,
-      itemBuilder: (context, index) {
-        final track = tracks[index];
-        return TrackCard(
-          track: track,
-          isSelected: _selectedTrack?.id == track.id,
-          onTap: () => setState(() => _selectedTrack = track),
-          onDoubleTap: () {
-            // Add to set
+      data: (allTracks) {
+        // Empty state - no library paths configured
+        if (libraryPaths.isEmpty) {
+          return _buildEmptyState(
+            context,
+            ref,
+            icon: Icons.folder_open_outlined,
+            title: 'No Music Folders Added',
+            subtitle: 'Add your music folders in Settings to get started',
+            action: ElevatedButton.icon(
+              key: const Key('library.openSettings'),
+              onPressed: () {
+                // Navigate to settings
+                // This will be handled by the parent
+              },
+              icon: const Icon(Icons.settings, size: 16),
+              label: const Text('Open Settings'),
+            ),
+          );
+        }
+
+        // Empty state - no tracks found
+        if (allTracks.isEmpty) {
+          return _buildEmptyState(
+            context,
+            ref,
+            icon: Icons.music_off_outlined,
+            title: 'No Tracks Found',
+            subtitle: 'No audio files were found in your library folders',
+            action: ElevatedButton.icon(
+              key: const Key('library.rescan'),
+              onPressed: () {
+                ref.read(tracksProvider.notifier).rescan();
+              },
+              icon: const Icon(Icons.refresh, size: 16),
+              label: const Text('Rescan Library'),
+            ),
+          );
+        }
+
+        // Empty state - no tracks match filters
+        if (filteredTracks.isEmpty) {
+          return _buildEmptyState(
+            context,
+            ref,
+            icon: Icons.search_off_outlined,
+            title: 'No Matching Tracks',
+            subtitle: 'Try adjusting your search or filters',
+            action: TextButton(
+              onPressed: () {
+                ref.read(searchQueryProvider.notifier).state = '';
+                ref.read(showAnalyzedOnlyProvider.notifier).state = false;
+                ref.read(showHighEnergyOnlyProvider.notifier).state = false;
+              },
+              child: const Text('Clear Filters'),
+            ),
+          );
+        }
+
+        // List view (default)
+        if (viewMode == LibraryViewMode.list) {
+          return Column(
+            children: [
+              const _ListHeader(),
+              const Divider(height: 1),
+              Expanded(
+                child: ListView.builder(
+                  key: const Key('library.trackList'),
+                  itemCount: filteredTracks.length,
+                  itemBuilder: (context, index) {
+                    final track = filteredTracks[index];
+                    return TrackListItem(
+                      key: Key('library.track.${track.id}'),
+                      track: track,
+                      isSelected: ref.watch(selectedTrackProvider)?.id == track.id,
+                      onTap: () {
+                        ref.read(selectedTrackProvider.notifier).state = track;
+                      },
+                      onDoubleTap: () {
+                        // TODO: Add to set
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        }
+
+        // Grid view
+        return GridView.builder(
+          key: const Key('library.trackGrid'),
+          padding: const EdgeInsets.all(CartoMixSpacing.md),
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 320,
+            childAspectRatio: 2.2,
+            crossAxisSpacing: CartoMixSpacing.md,
+            mainAxisSpacing: CartoMixSpacing.md,
+          ),
+          itemCount: filteredTracks.length,
+          itemBuilder: (context, index) {
+            final track = filteredTracks[index];
+            return TrackCard(
+              key: Key('library.card.${track.id}'),
+              track: track,
+              isSelected: ref.watch(selectedTrackProvider)?.id == track.id,
+              onTap: () {
+                ref.read(selectedTrackProvider.notifier).state = track;
+              },
+              onDoubleTap: () {
+                // TODO: Add to set
+              },
+            );
           },
         );
       },
     );
   }
 
-  Widget _buildListHeader() {
+  Widget _buildEmptyState(
+    BuildContext context,
+    WidgetRef ref, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    Widget? action,
+  }) {
+    return Center(
+      key: const Key('library.emptyState'),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 80,
+            color: CartoMixColors.textMuted,
+          ),
+          const SizedBox(height: CartoMixSpacing.lg),
+          Text(
+            title,
+            style: CartoMixTypography.headline.copyWith(
+              color: CartoMixColors.textSecondary,
+              fontSize: 20,
+            ),
+          ),
+          const SizedBox(height: CartoMixSpacing.sm),
+          Text(
+            subtitle,
+            style: CartoMixTypography.body.copyWith(
+              color: CartoMixColors.textMuted,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          if (action != null) ...[
+            const SizedBox(height: CartoMixSpacing.lg),
+            action,
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// List view header with column labels
+class _ListHeader extends StatelessWidget {
+  const _ListHeader();
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
+      key: const Key('library.listHeader'),
       padding: const EdgeInsets.symmetric(
         horizontal: CartoMixSpacing.md,
         vertical: CartoMixSpacing.sm,
@@ -550,11 +513,18 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       ),
     );
   }
+}
 
-  Widget _buildDetailPanel() {
-    final track = _selectedTrack!;
+/// Detail panel showing selected track info
+class _DetailPanel extends StatelessWidget {
+  final Track track;
 
+  const _DetailPanel({required this.track});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
+      key: const Key('library.detailPanel'),
       color: CartoMixColors.bgSecondary,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -562,36 +532,41 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
           // Header
           Padding(
             padding: const EdgeInsets.all(CartoMixSpacing.md),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        track.title,
-                        style: CartoMixTypography.headline,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: CartoMixSpacing.xxs),
-                      Text(
-                        track.artist,
-                        style: CartoMixTypography.body.copyWith(
-                          color: CartoMixColors.textSecondary,
+            child: Consumer(
+              builder: (context, ref, _) => Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          track.title,
+                          style: CartoMixTypography.headline,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                        const SizedBox(height: CartoMixSpacing.xxs),
+                        Text(
+                          track.artist,
+                          style: CartoMixTypography.body.copyWith(
+                            color: CartoMixColors.textSecondary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  iconSize: 18,
-                  onPressed: () => setState(() => _selectedTrack = null),
-                ),
-              ],
+                  IconButton(
+                    key: const Key('library.closeDetail'),
+                    icon: const Icon(Icons.close),
+                    iconSize: 18,
+                    onPressed: () {
+                      ref.read(selectedTrackProvider.notifier).state = null;
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
           const Divider(height: 1),
@@ -605,11 +580,12 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             ),
             clipBehavior: Clip.antiAlias,
             child: WaveformView(
+              key: const Key('library.waveform'),
               waveform: track.analysis?.waveformPreview ?? Float32List(0),
               sections: track.analysis?.sections ?? [],
               cuePoints: track.analysis?.cuePoints ?? [],
               durationSeconds: track.analysis?.durationSeconds ?? 0,
-              currentTime: 0, // Will be connected to player state
+              currentTime: 0,
               bpm: track.bpm,
               showBeatGrid: true,
               showSections: true,
@@ -628,7 +604,10 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             Padding(
               padding: const EdgeInsets.all(CartoMixSpacing.md),
               child: ElevatedButton.icon(
-                onPressed: () {},
+                key: const Key('library.analyzeTrack'),
+                onPressed: () {
+                  // TODO: Implement analyze single track
+                },
                 icon: const Icon(Icons.analytics, size: 16),
                 label: const Text('Analyze Track'),
               ),
@@ -642,7 +621,10 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: () {},
+                    key: const Key('library.addToSet'),
+                    onPressed: () {
+                      // TODO: Add to set
+                    },
                     icon: const Icon(Icons.add, size: 16),
                     label: const Text('Add to Set'),
                   ),
