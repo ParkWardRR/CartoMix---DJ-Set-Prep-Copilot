@@ -17,7 +17,7 @@
 [![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#performance)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#architecture)
 [![Swift 6](https://img.shields.io/badge/Swift_6-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![v0.4.0-beta](https://img.shields.io/badge/v0.4.0--beta-22C55E?style=for-the-badge)](#changelog)
+[![v0.5.0-beta2](https://img.shields.io/badge/v0.5.0--beta2-22C55E?style=for-the-badge)](#changelog)
 
 <br/>
 
@@ -42,9 +42,17 @@
 
 <br/>
 
-## v0.4.0-beta — First Public Beta!
+## v0.5.0-beta2 — ML Out of the Box!
 
-We're excited to announce the **first public beta** of CartoMix! This release marks a major milestone in our journey to build the ultimate DJ set preparation tool.
+We're excited to announce **beta 2** with bundled ML models for instant AI-powered analysis. No downloads, no configuration — just install and go.
+
+### What's New in Beta 2
+
+- **Bundled OpenL3 Model** — 512-dimensional audio embeddings included in the app (18MB)
+- **Apple SoundAnalysis** — Automatic audio context detection (music/speech/noise)
+- **QA Flags** — Automatic flagging of tracks needing review
+- **Custom ML Training** — Train your own section classifier (intro/build/drop/outro)
+- **Explainable Transitions** — Human-readable explanations for every mix suggestion
 
 ### What's Included
 
@@ -76,9 +84,9 @@ Neural Engine
 </td>
 <td width="25%" align="center">
 <h3>Smart</h3>
-OpenL3 embeddings<br/>
-Section similarity<br/>
-Energy matching
+Bundled OpenL3 model<br/>
+SoundAnalysis QA<br/>
+Explainable transitions
 </td>
 <td width="25%" align="center">
 <h3>Private</h3>
@@ -455,21 +463,23 @@ make help           # Show all targets
 
 ## Roadmap
 
-**v0.4.0-beta (Current)**
+**v0.5.0-beta2 (Current)**
 - [x] Flutter UI with native Swift backend
 - [x] Hybrid architecture via Platform Channels
 - [x] Dark theme matching web UI
 - [x] First-launch onboarding wizard
 - [x] Pro-level UI polish and animations
-- [x] Comprehensive test suite (23 tests)
+- [x] Comprehensive test suite (23 Flutter + 39 Swift tests)
 - [x] macOS notarization and code signing
-- [ ] Full Platform Channel integration
+- [x] Bundled OpenL3 Core ML model
+- [x] Apple SoundAnalysis integration
+- [x] Custom ML training support
+- [x] Explainable transitions
 
-**v0.5.0 (Next)**
+**v0.6.0 (Next)**
+- [ ] Full Platform Channel integration
 - [ ] Real-time audio playback
 - [ ] Drag-and-drop set building
-- [ ] Beatgrid editing
-- [ ] Loop region markers
 
 **v1.0.0 (Stable)**
 - [ ] Sparkle auto-updates
@@ -527,6 +537,6 @@ flutter run -d macos
 
 <br/>
 
-*Codename: Shanghai*
+*Codename: Algiers*
 
 </div>

@@ -179,6 +179,23 @@ Professional-grade UI refinements and comprehensive testing.
 
 ## Current Release
 
+### v0.5.0-beta2 — ML Out of the Box (January 2026)
+
+**Status:** Released
+
+Beta 2 bundles ML models directly into the app, enabling AI-powered analysis without any configuration.
+
+| Feature | Status |
+|---------|--------|
+| Bundled OpenL3 Core ML model (18MB) | ✅ Complete |
+| Apple SoundAnalysis integration | ✅ Complete |
+| QA flag generation (music/speech/noise) | ✅ Complete |
+| Custom ML training support | ✅ Complete |
+| Explainable transitions | ✅ Complete |
+| 62 total tests (23 Flutter + 39 Swift) | ✅ Complete |
+
+---
+
 ### v0.4.0-beta — First Public Beta (January 2026)
 
 **Status:** Released
@@ -202,7 +219,7 @@ The first public beta establishes the hybrid Flutter + Swift architecture and de
 
 ## Upcoming Releases
 
-### v0.5.0 — Native Integration (Q1 2026)
+### v0.6.0 — Native Integration (Q1 2026)
 
 Connect the Flutter UI to the native Swift backend via Platform Channels.
 
@@ -217,7 +234,7 @@ Connect the Flutter UI to the native Swift backend via Platform Channels.
 | Player channel integration | ⏳ Planned |
 | Real-time waveform playhead | ⏳ Planned |
 
-### v0.6.0 — Audio Playback (Q2 2026)
+### v0.7.0 — Audio Playback (Q2 2026)
 
 Full audio playback with waveform visualization and section markers.
 
@@ -231,7 +248,7 @@ Full audio playback with waveform visualization and section markers.
 | Beat grid display | ⏳ Planned |
 | Playhead with glow effect | ⏳ Planned |
 
-### v0.7.0 — Set Building (Q2 2026)
+### v0.8.0 — Set Building (Q2 2026)
 
 Interactive set building with drag-and-drop and energy optimization.
 
@@ -244,7 +261,7 @@ Interactive set building with drag-and-drop and energy optimization.
 | Key compatibility warnings | ⏳ Planned |
 | Transition suggestions | ⏳ Planned |
 
-### v0.8.0 — Graph Visualization (Q3 2026)
+### v0.9.0 — Graph Visualization (Q3 2026)
 
 Force-directed graph showing track relationships and similarity scores.
 
@@ -257,7 +274,7 @@ Force-directed graph showing track relationships and similarity scores.
 | Filter by similarity threshold | ⏳ Planned |
 | Set-only view mode | ⏳ Planned |
 
-### v0.9.0 — Export & Import (Q3 2026)
+### v0.10.0 — Export & Import (Q3 2026)
 
 Full export support for all major DJ software platforms.
 
@@ -343,7 +360,8 @@ These features are on our radar but not yet scheduled:
 |---------|----------|-------|
 | v0.1.x - v0.3.x | **Dardania** | Native Swift foundation |
 | v0.4.x | **Shanghai** | Flutter migration & hybrid architecture |
-| v0.5.x+ | TBD | Platform channel integration |
+| v0.5.x | **Algiers** | Bundled ML models & AI features |
+| v0.6.x+ | TBD | Platform channel integration |
 
 ---
 
@@ -377,6 +395,7 @@ See [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copil
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.5.0-beta2 | Jan 30, 2026 | Bundled OpenL3, SoundAnalysis, ML training |
 | v0.4.0-beta | Jan 31, 2026 | First public beta, notarized |
 | v0.4.0-alpha.3 | Jan 31, 2026 | 23 widget tests, pro UI polish |
 | v0.4.0-alpha.2 | Jan 31, 2026 | Onboarding flow |
