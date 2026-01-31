@@ -179,6 +179,26 @@ Professional-grade UI refinements and comprehensive testing.
 
 ## Current Release
 
+### v0.9.0 — Graph Visualization (January 2026)
+
+**Status:** Released
+
+**Codename: Graph**
+
+Force-directed graph showing track relationships and similarity scores.
+
+| Feature | Status |
+|---------|--------|
+| Force-directed graph layout | ✅ Complete |
+| Similarity edge rendering | ✅ Complete |
+| Node selection and details | ✅ Complete |
+| Zoom and pan controls | ✅ Complete |
+| Filter by similarity threshold | ✅ Complete |
+| Set-only view mode | ✅ Complete |
+| 67 total tests (28 Flutter + 39 Swift) | ✅ Complete |
+
+---
+
 ### v0.8.0 — Set Building (January 2026)
 
 **Status:** Released
@@ -285,20 +305,7 @@ The first public beta establishes the hybrid Flutter + Swift architecture and de
 
 ## Upcoming Releases
 
-### v0.9.0 — Graph Visualization (Q2 2026)
-
-Force-directed graph showing track relationships and similarity scores.
-
-| Feature | Status |
-|---------|--------|
-| Force-directed graph layout | ⏳ Planned |
-| Similarity edge rendering | ⏳ Planned |
-| Node selection and details | ⏳ Planned |
-| Zoom and pan controls | ⏳ Planned |
-| Filter by similarity threshold | ⏳ Planned |
-| Set-only view mode | ⏳ Planned |
-
-### v0.10.0 — Export & Import (Q3 2026)
+### v0.10.0 — Export & Import (Q2 2026)
 
 Full export support for all major DJ software platforms.
 
@@ -388,7 +395,8 @@ These features are on our radar but not yet scheduled:
 | v0.6.x | **Bordeaux** | Native platform channel integration |
 | v0.7.x | **Cairo** | Audio playback & UX polish |
 | v0.8.x | **Tokyo** | Set building & energy optimization |
-| v0.9.x+ | TBD | Graph visualization |
+| v0.9.x | **Graph** | Force-directed graph visualization |
+| v0.10.x+ | TBD | Export & Import |
 
 ---
 
@@ -422,6 +430,7 @@ See [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copil
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.9.0 | Jan 30, 2026 | Force-directed graph visualization, similarity edges, node selection |
 | v0.8.0 | Jan 30, 2026 | Drag-and-drop set building, energy journey, transition suggestions |
 | v0.7.0 | Jan 30, 2026 | Native audio playback, waveform enhancements, UX polish |
 | v0.6.0 | Jan 30, 2026 | Native platform integration, GRDB backend, FlutterBridge |

@@ -317,7 +317,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('v0.8.0'), findsOneWidget);
+      expect(find.text('v0.9.0'), findsOneWidget);
       expect(find.text('Native Backend Connected'), findsOneWidget);
     });
 
@@ -454,6 +454,122 @@ void main() {
 
       final MaterialApp app = tester.widget(find.byType(MaterialApp));
       expect(app.title, 'CartoMix');
+    });
+  });
+
+  group('Graph Screen Tests', () {
+    late SharedPreferences prefs;
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({
+        'onboarding_complete': true,
+      });
+      prefs = await SharedPreferences.getInstance();
+    });
+
+    testWidgets('Graph screen shows empty state when no tracks', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+          ],
+          child: const CartoMixApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Navigate to Graph
+      await tester.tap(find.text('Graph'));
+      await tester.pumpAndSettle();
+
+      // Should show empty state
+      expect(find.byType(GraphScreen), findsOneWidget);
+      expect(find.text('No Tracks to Visualize'), findsOneWidget);
+    });
+
+    testWidgets('Graph screen has toolbar with controls', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+          ],
+          child: const CartoMixApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Navigate to Graph
+      await tester.tap(find.text('Graph'));
+      await tester.pumpAndSettle();
+
+      // Should show toolbar elements
+      expect(find.text('Min Score:'), findsOneWidget);
+      expect(find.text('Set Only'), findsOneWidget);
+      expect(find.byType(Slider), findsOneWidget);
+      expect(find.byType(Checkbox), findsOneWidget);
+    });
+
+    testWidgets('Graph screen has sidebar with stats and legend', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+          ],
+          child: const CartoMixApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Navigate to Graph
+      await tester.tap(find.text('Graph'));
+      await tester.pumpAndSettle();
+
+      // Should show sidebar elements
+      expect(find.text('Graph Stats'), findsOneWidget);
+      expect(find.text('Legend'), findsOneWidget);
+      expect(find.text('Nodes'), findsOneWidget);
+      expect(find.text('Visible Edges'), findsOneWidget);
+    });
+
+    testWidgets('Graph screen shows instruction when no node selected', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+          ],
+          child: const CartoMixApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Navigate to Graph
+      await tester.tap(find.text('Graph'));
+      await tester.pumpAndSettle();
+
+      // Should show instruction text
+      expect(find.text('Click a node to view details'), findsOneWidget);
+    });
+
+    testWidgets('Graph screen has zoom controls', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+          ],
+          child: const CartoMixApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Navigate to Graph
+      await tester.tap(find.text('Graph'));
+      await tester.pumpAndSettle();
+
+      // Should show zoom controls
+      expect(find.byIcon(Icons.zoom_in), findsOneWidget);
+      expect(find.byIcon(Icons.zoom_out), findsOneWidget);
+      expect(find.byIcon(Icons.center_focus_strong), findsOneWidget);
+      expect(find.text('100%'), findsOneWidget);
     });
   });
 
