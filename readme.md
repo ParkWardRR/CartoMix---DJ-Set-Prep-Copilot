@@ -18,7 +18,7 @@
 [![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#performance)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#architecture)
 [![Swift 6](https://img.shields.io/badge/Swift_6-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![v0.12.0](https://img.shields.io/badge/v0.12.0-22C55E?style=for-the-badge)](#changelog)
+[![v0.13.0](https://img.shields.io/badge/v0.13.0-22C55E?style=for-the-badge)](#changelog)
 
 <br/>
 
@@ -64,22 +64,35 @@
 
 <br/>
 
-## v0.12.0 — UX/UI Overhaul! 🎨
+## v0.13.0 — Keyboard Shortcuts! ⌨️
 
-We're excited to announce **v0.12.0** with a comprehensive UX/UI overhaul featuring animated empty states and polished visual feedback!
+We're excited to announce **v0.13.0** with full keyboard navigation for power users!
 
-### What's New in v0.12.0
+### What's New in v0.13.0
 
-- **Animated Empty States** — Elastic spring animations on icon containers with glow effects
-- **Staggered Text Animations** — Smooth fade-in transitions for titles and subtitles
-- **Standardized Components** — Reusable `EmptyState` and `CompactEmptyState` widgets
-- **Enhanced Visual Polish** — Consistent animations across Library, Set Builder, and Graph screens
-- **Professional Feedback** — Subtle box shadows and glow effects for better visual hierarchy
+- **Keyboard Navigation** — ⌘1-4 to switch between Library, Set Builder, Graph, and Settings
+- **Tab Cycling** — Tab/⇧Tab to cycle through screens
+- **Shortcuts Overlay** — Press ⌘/ to see all available shortcuts
+- **Shortcut Hints** — Navigation tooltips now show keyboard shortcuts
+- **Footer Quick Access** — Click the ⌨️ icon to view shortcuts
+
+### Keyboard Shortcuts Reference
+
+| Shortcut | Action |
+|----------|--------|
+| ⌘1 | Go to Library |
+| ⌘2 | Go to Set Builder |
+| ⌘3 | Go to Graph |
+| ⌘4 | Go to Settings |
+| Tab | Next screen |
+| ⇧Tab | Previous screen |
+| ⌘/ | Show shortcuts |
+| Esc | Close dialogs |
 
 ### What's Included
 
 - **Hybrid Flutter + Native Swift Architecture** — Beautiful UI meets native performance
-- **12 Releases** — Continuous improvement from alpha to polished UX
+- **13 Releases** — Continuous improvement from alpha to power-user features
 - **10 Import/Export Formats** — Full round-trip support for all major DJ software
 - **Force-Directed Graph Visualization** — Explore track relationships visually
 - **Drag-and-Drop Set Builder** — Build sets with visual feedback and reordering
@@ -624,13 +637,18 @@ make help           # Show all targets
 
 ## Roadmap
 
-**v0.12.0 (Current) — Codename: Polish**
+**v0.13.0 (Current) — Codename: Shortcuts**
+- [x] Keyboard shortcuts (⌘1-4 navigation)
+- [x] Tab/⇧Tab screen cycling
+- [x] Shortcuts overlay (⌘/)
+- [x] Tooltip hints with shortcuts
+- [x] Footer keyboard icon
+
+**v0.12.0 — Codename: Polish**
 - [x] Standardized EmptyState widget with animations
-- [x] Elastic spring icon animations (Curves.elasticOut)
+- [x] Elastic spring icon animations
 - [x] Staggered text fade animations
 - [x] Glow effects on empty state icons
-- [x] CompactEmptyState for inline use
-- [x] Library, Set Builder, Graph screens updated
 
 **v0.11.0 — Codename: Import**
 - [x] Rekordbox XML import
@@ -714,6 +732,6 @@ flutter run -d macos
 
 <br/>
 
-*Codename: Polish*
+*Codename: Shortcuts*
 
 </div>
