@@ -18,7 +18,7 @@
 [![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#performance)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#architecture)
 [![Swift 6](https://img.shields.io/badge/Swift_6-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![v0.11.0](https://img.shields.io/badge/v0.11.0-22C55E?style=for-the-badge)](#changelog)
+[![v0.12.0](https://img.shields.io/badge/v0.12.0-22C55E?style=for-the-badge)](#changelog)
 
 <br/>
 
@@ -29,6 +29,8 @@
 [![Riverpod](https://img.shields.io/badge/Riverpod-0553B1?style=flat-square)](#architecture)
 [![OpenL3](https://img.shields.io/badge/OpenL3-FF4081?style=flat-square)](#ai-powered-analysis)
 [![AVAudioEngine](https://img.shields.io/badge/AVAudioEngine-8E44AD?style=flat-square&logo=apple&logoColor=white)](#audio-playback)
+[![TweenAnimationBuilder](https://img.shields.io/badge/TweenAnimation-02569B?style=flat-square)](#ux-components)
+[![CustomPainter](https://img.shields.io/badge/CustomPainter-02569B?style=flat-square)](#architecture)
 
 <br/>
 
@@ -62,22 +64,22 @@
 
 <br/>
 
-## v0.11.0 — Import from DJ Software!
+## v0.12.0 — UX/UI Overhaul! 🎨
 
-We're excited to announce **v0.11.0** with full import support to complement the export features!
+We're excited to announce **v0.12.0** with a comprehensive UX/UI overhaul featuring animated empty states and polished visual feedback!
 
-### What's New in v0.11.0
+### What's New in v0.12.0
 
-- **Rekordbox Import** — Import from Rekordbox XML library exports with BPM, key, and metadata
-- **Serato Import** — Parse Serato .crate files to import your Serato library
-- **Traktor Import** — Import from Native Instruments Traktor NML collections
-- **M3U/M3U8 Import** — Import standard playlist files from any media player
-- **Import Dialog UI** — Beautiful format selection with file scanning and progress
-- **Add to Library** — Imported tracks are added to your CartoMix database
+- **Animated Empty States** — Elastic spring animations on icon containers with glow effects
+- **Staggered Text Animations** — Smooth fade-in transitions for titles and subtitles
+- **Standardized Components** — Reusable `EmptyState` and `CompactEmptyState` widgets
+- **Enhanced Visual Polish** — Consistent animations across Library, Set Builder, and Graph screens
+- **Professional Feedback** — Subtle box shadows and glow effects for better visual hierarchy
 
 ### What's Included
 
 - **Hybrid Flutter + Native Swift Architecture** — Beautiful UI meets native performance
+- **12 Releases** — Continuous improvement from alpha to polished UX
 - **10 Import/Export Formats** — Full round-trip support for all major DJ software
 - **Force-Directed Graph Visualization** — Explore track relationships visually
 - **Drag-and-Drop Set Builder** — Build sets with visual feedback and reordering
@@ -190,6 +192,27 @@ New to CartoMix? The onboarding wizard guides you through:
 </td>
 </tr>
 </table>
+
+<br/>
+
+### UX Components (v0.12.0)
+
+CartoMix v0.12.0 introduces standardized UI components with delightful animations:
+
+| Component | Animation | Description |
+|-----------|-----------|-------------|
+| `EmptyState` | Elastic spring (600ms) | Full-page empty state with animated icon, staggered text |
+| `CompactEmptyState` | None | Inline empty state for smaller spaces |
+| Icon Container | `Curves.elasticOut` | Spring bounce effect with glow shadow |
+| Title | Fade + slide (400ms) | Text fades in while sliding up 10px |
+| Subtitle | Fade (500ms) | Smooth opacity transition |
+| Action Button | Fade + slide (600ms) | Button slides up 20px while fading in |
+
+**Technical Details:**
+- Uses `TweenAnimationBuilder` for declarative animations
+- Glow effects via `BoxShadow` with 20px blur radius
+- Consistent timing across all screens (Library, Set Builder, Graph)
+- Zero-dependency — built entirely with Flutter primitives
 
 <br/>
 
@@ -601,35 +624,38 @@ make help           # Show all targets
 
 ## Roadmap
 
-**v0.11.0 (Current)**
+**v0.12.0 (Current) — Codename: Polish**
+- [x] Standardized EmptyState widget with animations
+- [x] Elastic spring icon animations (Curves.elasticOut)
+- [x] Staggered text fade animations
+- [x] Glow effects on empty state icons
+- [x] CompactEmptyState for inline use
+- [x] Library, Set Builder, Graph screens updated
+
+**v0.11.0 — Codename: Import**
 - [x] Rekordbox XML import
 - [x] Serato .crate import
 - [x] Traktor NML import
 - [x] M3U/M3U8 playlist import
 - [x] Import dialog UI with file scanning
 
-**v0.10.0**
+**v0.10.0 — Codename: Export**
 - [x] Rekordbox XML export with cue points and metadata
 - [x] Serato .crate binary export
 - [x] Traktor NML export with CUE_V2
 - [x] JSON export with full analysis data
 - [x] M3U8 playlist export
 - [x] CSV spreadsheet export
-- [x] Export dialog UI with format selection
 
-**v0.9.0**
+**v0.9.0 — Codename: Graph**
 - [x] Force-directed graph visualization
 - [x] Similarity edge rendering with color coding
-- [x] Node selection and track details
 - [x] Interactive zoom and pan controls
-- [x] Similarity threshold filter
-- [x] Set-only view mode
 
-**v0.8.0**
-- [x] Drag-and-drop set building with ReorderableListView
-- [x] Energy journey visualization with interactive arc
-- [x] Transition suggestions between tracks
-- [x] Set optimization for warm-up/peak/open formats
+**v0.8.0 — Codename: Tokyo**
+- [x] Drag-and-drop set building
+- [x] Energy journey visualization
+- [x] Transition suggestions
 
 **v1.0.0 (Stable)**
 - [ ] Sparkle auto-updates
@@ -688,6 +714,6 @@ flutter run -d macos
 
 <br/>
 
-*Codename: Import*
+*Codename: Polish*
 
 </div>
