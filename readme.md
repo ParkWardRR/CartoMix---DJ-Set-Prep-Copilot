@@ -629,6 +629,37 @@ make test           # Run all tests
 make help           # Show all targets
 ```
 
+### Release Build (Signing & Notarization)
+
+The `scripts/build-release.sh` script automates the complete macOS release pipeline:
+
+```bash
+# Build and publish a release
+./scripts/build-release.sh 0.13.0
+
+# Or use version from pubspec.yaml
+./scripts/build-release.sh
+```
+
+**What it does:**
+
+| Step | Action | Command |
+|------|--------|---------|
+| 1 | Run tests | `flutter test` |
+| 2 | Build release | `flutter build macos --release` |
+| 3 | Sign app | `codesign --deep --force --options runtime` |
+| 4 | Create DMG | `hdiutil create -format UDBZ` |
+| 5 | Sign DMG | `codesign --sign "Developer ID"` |
+| 6 | Notarize | `xcrun notarytool submit --wait` |
+| 7 | Staple | `xcrun stapler staple` |
+| 8 | Verify | `spctl -a -vvv -t install` |
+
+**Prerequisites:**
+- Developer ID Application certificate installed
+- Notarization credentials stored: `xcrun notarytool store-credentials "notary-api"`
+
+The final DMG is fully signed, notarized, and stapled — it opens without any Gatekeeper warnings.
+
 <br/>
 
 ---

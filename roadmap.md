@@ -196,6 +196,8 @@ Full keyboard navigation for power users with customizable shortcuts and visual 
 | Footer keyboard icon | ✅ Complete |
 | Focus management | ✅ Complete |
 | Animated overlay appearance | ✅ Complete |
+| Automated build-release.sh script | ✅ Complete |
+| One-command signing & notarization | ✅ Complete |
 | 28 Flutter widget tests passing | ✅ Complete |
 
 ---
