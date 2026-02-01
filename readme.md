@@ -18,7 +18,7 @@
 [![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#performance)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#architecture)
 [![Swift 6](https://img.shields.io/badge/Swift_6-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![v0.13.0](https://img.shields.io/badge/v0.13.0-22C55E?style=for-the-badge)](#changelog)
+[![v0.14.0](https://img.shields.io/badge/v0.14.0-22C55E?style=for-the-badge)](#changelog)
 
 <br/>
 
@@ -64,22 +64,25 @@
 
 <br/>
 
-## v0.13.0 — Keyboard Shortcuts! ⌨️
+## v0.14.0 — Mini Player!
 
-We're excited to announce **v0.13.0** with full keyboard navigation for power users!
+We're excited to announce **v0.14.0** with a persistent mini player bar for seamless audio playback!
 
-### What's New in v0.13.0
+### What's New in v0.14.0
 
-- **Keyboard Navigation** — ⌘1-4 to switch between Library, Set Builder, Graph, and Settings
-- **Tab Cycling** — Tab/⇧Tab to cycle through screens
-- **Shortcuts Overlay** — Press ⌘/ to see all available shortcuts
-- **Shortcut Hints** — Navigation tooltips now show keyboard shortcuts
-- **Footer Quick Access** — Click the ⌨️ icon to view shortcuts
+- **Mini Player Bar** — Persistent playback controls at the bottom of the screen
+- **Now Playing Info** — Track title, artist, BPM, and key at a glance
+- **Waveform Preview** — Compact waveform with playhead scrubbing
+- **Transport Controls** — Play/Pause, skip forward/back 10s, volume slider
+- **Animated Indicators** — Bouncing bars when playing, animated play/pause button
+- **Space to Play** — Press Space anywhere to play/pause the current track
+- **Library Integration** — Play button in track detail panel loads the mini player
 
 ### Keyboard Shortcuts Reference
 
 | Shortcut | Action |
 |----------|--------|
+| Space | Play / Pause |
 | ⌘1 | Go to Library |
 | ⌘2 | Go to Set Builder |
 | ⌘3 | Go to Graph |
@@ -92,7 +95,8 @@ We're excited to announce **v0.13.0** with full keyboard navigation for power us
 ### What's Included
 
 - **Hybrid Flutter + Native Swift Architecture** — Beautiful UI meets native performance
-- **13 Releases** — Continuous improvement from alpha to power-user features
+- **14 Releases** — Continuous improvement from alpha to power-user features
+- **Persistent Mini Player** — Never lose your playback position
 - **10 Import/Export Formats** — Full round-trip support for all major DJ software
 - **Force-Directed Graph Visualization** — Explore track relationships visually
 - **Drag-and-Drop Set Builder** — Build sets with visual feedback and reordering
@@ -629,6 +633,37 @@ make test           # Run all tests
 make help           # Show all targets
 ```
 
+### Release Build (Signing & Notarization)
+
+The `scripts/build-release.sh` script automates the complete macOS release pipeline:
+
+```bash
+# Build and publish a release
+./scripts/build-release.sh 0.13.0
+
+# Or use version from pubspec.yaml
+./scripts/build-release.sh
+```
+
+**What it does:**
+
+| Step | Action | Command |
+|------|--------|---------|
+| 1 | Run tests | `flutter test` |
+| 2 | Build release | `flutter build macos --release` |
+| 3 | Sign app | `codesign --deep --force --options runtime` |
+| 4 | Create DMG | `hdiutil create -format UDBZ` |
+| 5 | Sign DMG | `codesign --sign "Developer ID"` |
+| 6 | Notarize | `xcrun notarytool submit --wait` |
+| 7 | Staple | `xcrun stapler staple` |
+| 8 | Verify | `spctl -a -vvv -t install` |
+
+**Prerequisites:**
+- Developer ID Application certificate installed
+- Notarization credentials stored: `xcrun notarytool store-credentials "notary-api"`
+
+The final DMG is fully signed, notarized, and stapled — it opens without any Gatekeeper warnings.
+
 <br/>
 
 ---
@@ -637,7 +672,15 @@ make help           # Show all targets
 
 ## Roadmap
 
-**v0.13.0 (Current) — Codename: Shortcuts**
+**v0.14.0 (Current) — Codename: Groove**
+- [x] Mini player bar with persistent playback
+- [x] Now playing track info (title, artist, BPM, key)
+- [x] Compact waveform with playhead
+- [x] Play/Pause, skip controls, volume slider
+- [x] Space key for play/pause
+- [x] Library play button integration
+
+**v0.13.0 — Codename: Shortcuts**
 - [x] Keyboard shortcuts (⌘1-4 navigation)
 - [x] Tab/⇧Tab screen cycling
 - [x] Shortcuts overlay (⌘/)
@@ -732,6 +775,6 @@ flutter run -d macos
 
 <br/>
 
-*Codename: Shortcuts*
+*Codename: Groove*
 
 </div>

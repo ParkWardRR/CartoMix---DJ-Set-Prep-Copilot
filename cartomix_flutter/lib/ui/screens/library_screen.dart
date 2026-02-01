@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/theme.dart';
 import '../../core/providers/app_state.dart';
+import '../../core/providers/player_state.dart';
 import '../../models/models.dart';
 import '../widgets/common/colored_badge.dart';
 import '../widgets/library/track_card.dart';
@@ -701,8 +702,23 @@ class _DetailPanel extends ConsumerWidget {
             padding: const EdgeInsets.all(CartoMixSpacing.md),
             child: Row(
               children: [
+                // Play button
+                ElevatedButton.icon(
+                  key: const Key('library.playTrack'),
+                  onPressed: () {
+                    ref.read(playerStateProvider.notifier).loadTrack(track);
+                    ref.read(playerStateProvider.notifier).play();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CartoMixColors.primary,
+                    foregroundColor: Colors.white,
+                  ),
+                  icon: const Icon(Icons.play_arrow, size: 16),
+                  label: const Text('Play'),
+                ),
+                const SizedBox(width: CartoMixSpacing.sm),
                 Expanded(
-                  child: ElevatedButton.icon(
+                  child: OutlinedButton.icon(
                     key: const Key('library.addToSet'),
                     onPressed: () {
                       ref.read(setTracksProvider.notifier).addTrack(track);
