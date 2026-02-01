@@ -1,14 +1,67 @@
 #!/bin/bash
-# CartoMix Release Build Script
-# Builds, signs, notarizes, and staples the macOS DMG
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                     CartoMix Release Build Script                             ║
+# ║                                                                               ║
+# ║  Automates the complete macOS release pipeline:                               ║
+# ║  Test → Build → Sign App → Create DMG → Sign DMG → Notarize → Staple → Verify ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
 #
-# Usage: ./scripts/build-release.sh [version]
-# Example: ./scripts/build-release.sh 0.13.0
+# WHAT THIS SCRIPT DOES:
+# ----------------------
+# 1. Runs Flutter tests to ensure code quality
+# 2. Builds a release version of the macOS app
+# 3. Signs the .app bundle with Developer ID (enables Gatekeeper trust)
+# 4. Creates a compressed DMG disk image (UDBZ format)
+# 5. Signs the DMG itself (required for notarization)
+# 6. Submits to Apple's notarization service (malware scan)
+# 7. Staples the notarization ticket (offline verification)
+# 8. Verifies the final DMG passes Gatekeeper
 #
-# Prerequisites:
-# - Developer ID Application certificate installed
-# - Notarization credentials stored: xcrun notarytool store-credentials "notary-api"
-# - Flutter SDK installed
+# The result is a DMG that opens without ANY macOS security warnings.
+#
+# USAGE:
+# ------
+#   ./scripts/build-release.sh [version]    Build with specific version
+#   ./scripts/build-release.sh              Use version from pubspec.yaml
+#   ./scripts/build-release.sh --help       Show this help message
+#
+# EXAMPLES:
+# ---------
+#   ./scripts/build-release.sh 0.14.0       Build v0.14.0 release
+#   ./scripts/build-release.sh              Build using pubspec.yaml version
+#
+# PREREQUISITES:
+# --------------
+# 1. Developer ID Application certificate installed in Keychain
+#    - Get one from https://developer.apple.com/account/resources/certificates
+#    - Must be "Developer ID Application" (not Mac App Store)
+#
+# 2. Notarization credentials stored in Keychain:
+#    xcrun notarytool store-credentials "notary-api" \
+#      --apple-id "your@email.com" \
+#      --team-id "TEAM_ID" \
+#      --password "app-specific-password"
+#
+# 3. Flutter SDK installed and in PATH
+#
+# 4. Xcode Command Line Tools installed
+#
+# OUTPUT:
+# -------
+# Creates: CartoMix-v{VERSION}.dmg in the project root
+# - Signed with Developer ID
+# - Notarized by Apple
+# - Stapled for offline verification
+# - Verified to pass Gatekeeper
+#
+# TROUBLESHOOTING:
+# ----------------
+# - "No signing identity found": Install Developer ID cert in Keychain Access
+# - "Notarization failed": Run notarytool log for details (shown in error)
+# - "Stapling failed": DMG may already be stapled, or notarization incomplete
+# - Tests failing: Fix tests before release, or use --skip-tests (not recommended)
+#
+# For more info: https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution
 
 set -e
 
@@ -17,7 +70,40 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
 NC='\033[0m' # No Color
+
+# Show help
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    echo -e "${CYAN}CartoMix Release Build Script${NC}"
+    echo ""
+    echo "Automates the complete macOS release pipeline with code signing and notarization."
+    echo ""
+    echo -e "${YELLOW}Usage:${NC}"
+    echo "  ./scripts/build-release.sh [version]    Build with specific version"
+    echo "  ./scripts/build-release.sh              Use version from pubspec.yaml"
+    echo "  ./scripts/build-release.sh --help       Show this help"
+    echo ""
+    echo -e "${YELLOW}Pipeline Steps:${NC}"
+    echo "  1. Run Flutter tests"
+    echo "  2. Build macOS release (flutter build macos --release)"
+    echo "  3. Sign app bundle (codesign --deep --force --options runtime)"
+    echo "  4. Create DMG (hdiutil create -format UDBZ)"
+    echo "  5. Sign DMG (codesign --sign)"
+    echo "  6. Notarize (xcrun notarytool submit --wait)"
+    echo "  7. Staple ticket (xcrun stapler staple)"
+    echo "  8. Verify Gatekeeper (spctl -a -vvv -t install)"
+    echo ""
+    echo -e "${YELLOW}Prerequisites:${NC}"
+    echo "  - Developer ID Application certificate in Keychain"
+    echo "  - Notarization credentials: xcrun notarytool store-credentials \"notary-api\""
+    echo "  - Flutter SDK installed"
+    echo ""
+    echo -e "${YELLOW}Output:${NC}"
+    echo "  CartoMix-v{VERSION}.dmg - Signed, notarized, and ready for distribution"
+    echo ""
+    exit 0
+fi
 
 # Configuration
 SIGNING_IDENTITY="Developer ID Application: Twesh Deshetty (6U62M4232W)"
