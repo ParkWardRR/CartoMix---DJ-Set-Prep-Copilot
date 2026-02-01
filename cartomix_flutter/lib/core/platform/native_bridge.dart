@@ -16,6 +16,7 @@ class NativeBridge {
   static const _plannerChannel = MethodChannel('com.cartomix.planner');
   static const _exporterChannel = MethodChannel('com.cartomix.exporter');
   static const _filePickerChannel = MethodChannel('com.cartomix.filepicker');
+  static const _updaterChannel = MethodChannel('com.cartomix.updater');
 
   // Event channels for streaming data
   static const _analyzerProgressChannel =
@@ -78,8 +79,7 @@ class NativeBridge {
 
   /// Get storage statistics
   Future<Map<String, dynamic>> getStorageStats() async {
-    final result =
-        await _databaseChannel.invokeMethod<Map>('getStorageStats');
+    final result = await _databaseChannel.invokeMethod<Map>('getStorageStats');
     return Map<String, dynamic>.from(result ?? {});
   }
 
@@ -181,7 +181,8 @@ class NativeBridge {
     );
     if (result == null) return [];
     return result
-        .map((e) => SimilarityResult.fromMap(Map<String, dynamic>.from(e as Map)))
+        .map((e) =>
+            SimilarityResult.fromMap(Map<String, dynamic>.from(e as Map)))
         .toList();
   }
 
@@ -348,9 +349,23 @@ class NativeBridge {
 
   /// Open native folder picker
   Future<List<String>> pickFolders() async {
-    final result =
-        await _filePickerChannel.invokeMethod<List>('pickFolders');
+    final result = await _filePickerChannel.invokeMethod<List>('pickFolders');
     return result?.cast<String>() ?? [];
+  }
+
+  // MARK: - Updates
+
+  /// Trigger Sparkle to check for updates (shows native UI)
+  Future<void> checkForUpdates() async {
+    await _updaterChannel.invokeMethod('checkForUpdates');
+  }
+
+  /// Last manual/automatic update check time from native (epoch seconds)
+  Future<DateTime?> lastUpdateCheck() async {
+    final result = await _updaterChannel.invokeMethod<num>('lastCheck');
+    if (result == null) return null;
+    final millis = (result * 1000).toInt();
+    return DateTime.fromMillisecondsSinceEpoch(millis, isUtc: false);
   }
 }
 
@@ -477,7 +492,8 @@ class SetPlanResult {
 
   factory SetPlanResult.fromMap(Map<String, dynamic> map) {
     final transitions = (map['transitions'] as List?)
-            ?.map((e) => TransitionPlan.fromMap(Map<String, dynamic>.from(e as Map)))
+            ?.map((e) =>
+                TransitionPlan.fromMap(Map<String, dynamic>.from(e as Map)))
             .toList() ??
         [];
 

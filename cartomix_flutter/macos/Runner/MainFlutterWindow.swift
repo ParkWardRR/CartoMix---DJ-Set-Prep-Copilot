@@ -9,6 +9,7 @@ class MainFlutterWindow: NSWindow {
     self.setFrame(windowFrame, display: true)
 
     RegisterGeneratedPlugins(registry: flutterViewController)
+    CartoMixPlugin.register(with: flutterViewController.registrar(forPlugin: "CartoMixPlugin"))
 
     super.awakeFromNib()
   }

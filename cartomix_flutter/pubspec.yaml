@@ -1,7 +1,7 @@
 name: cartomix_flutter
 description: CartoMix DJ Set Prep Copilot - Flutter UI with native Swift backend
 publish_to: 'none'
-version: 0.14.0+1
+version: 0.15.0+1
 
 environment:
   sdk: ^3.6.0

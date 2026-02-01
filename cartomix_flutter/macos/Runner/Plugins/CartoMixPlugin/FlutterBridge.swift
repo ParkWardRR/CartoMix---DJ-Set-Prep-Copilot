@@ -896,9 +896,13 @@ public class FlutterBridge {
                 if parts.count > 1 {
                     let titlePart = String(parts[1])
                     if titlePart.contains(" - ") {
-                        let artistTitle = titlePart.split(separator: " - ", maxSplits: 1)
-                        currentArtist = String(artistTitle[0])
-                        currentTitle = artistTitle.count > 1 ? String(artistTitle[1]) : ""
+                        let artistTitle = titlePart.components(separatedBy: " - ")
+                        currentArtist = artistTitle.first?.trimmingCharacters(in: .whitespaces) ?? ""
+                        if artistTitle.count > 1 {
+                            currentTitle = artistTitle.dropFirst().joined(separator: " - ").trimmingCharacters(in: .whitespaces)
+                        } else {
+                            currentTitle = titlePart.trimmingCharacters(in: .whitespaces)
+                        }
                     } else {
                         currentTitle = titlePart
                     }

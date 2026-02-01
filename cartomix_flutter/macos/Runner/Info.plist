@@ -28,5 +28,13 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>SUAllowsAutomaticUpdates</key>
+	<true/>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/main/dist/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>SASZGNuwA+SufDIhoqp7jl/9lTyhQT2XlRxnOF1Z01w=</string>
 </dict>
 </plist>

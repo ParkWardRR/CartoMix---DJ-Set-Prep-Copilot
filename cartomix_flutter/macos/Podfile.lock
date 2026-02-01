@@ -8,6 +8,7 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - Sparkle (2.8.1)
   - window_manager (0.2.0):
     - FlutterMacOS
 
@@ -16,11 +17,13 @@ DEPENDENCIES:
   - GRDB.swift (~> 6.24)
   - screen_retriever_macos (from `Flutter/ephemeral/.symlinks/plugins/screen_retriever_macos/macos`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - Sparkle (~> 2.6)
   - window_manager (from `Flutter/ephemeral/.symlinks/plugins/window_manager/macos`)
 
 SPEC REPOS:
   trunk:
     - GRDB.swift
+    - Sparkle
 
 EXTERNAL SOURCES:
   FlutterMacOS:
@@ -37,8 +40,9 @@ SPEC CHECKSUMS:
   GRDB.swift: 136dcb5d8dddca50aae3ba7d77475f79e7232cd8
   screen_retriever_macos: 452e51764a9e1cdb74b3c541238795849f21557f
   shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
+  Sparkle: a346a4341537c625955751ed3ae4b340b68551fa
   window_manager: 1d01fa7ac65a6e6f83b965471b1a7fdd3f06166c
 
-PODFILE CHECKSUM: 4f04f4ea121630da8b6cb5593428642262212088
+PODFILE CHECKSUM: 2f9279562884a88e80f4cada145815ffe55ba1de
 
 COCOAPODS: 1.16.2

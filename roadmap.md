@@ -179,6 +179,26 @@ Professional-grade UI refinements and comprehensive testing.
 
 ## Current Release
 
+### v0.15.0 — Sparkle Auto-Updates (February 2026)
+
+**Status:** Released
+
+**Codename: Spark**
+
+Signed Sparkle feed with in-app Update Center and macOS menu integration.
+
+| Feature | Status |
+|---------|--------|
+| Sparkle auto-updater (Ed25519) | ✅ Complete |
+| Update Center in Settings | ✅ Complete |
+| macOS menu item “Check for Updates…” | ✅ Complete |
+| Signed appcast + release notes | ✅ Complete |
+| Daily background checks enabled | ✅ Complete |
+| Version badges + About updated | ✅ Complete |
+| 28 Flutter widget tests passing | ✅ Complete |
+
+---
+
 ### v0.14.0 — Mini Player (January 2026)
 
 **Status:** Released
@@ -424,7 +444,7 @@ The first stable release with full feature parity and production polish.
 | All platform channels integrated | ⏳ Planned |
 | Full audio analysis pipeline | ⏳ Planned |
 | Complete export support | ⏳ Planned |
-| Sparkle auto-updates | ⏳ Planned |
+| Sparkle auto-updates | ✅ Complete |
 | Homebrew distribution | ⏳ Planned |
 | Performance optimization | ⏳ Planned |
 | Memory profiling & cleanup | ⏳ Planned |
@@ -495,6 +515,7 @@ These features are on our radar but not yet scheduled:
 | v0.12.x | **Polish** | UX/UI overhaul & animations |
 | v0.13.x | **Shortcuts** | Keyboard navigation for power users |
 | v0.14.x | **Groove** | Mini player & persistent playback |
+| v0.15.x | **Spark** | Sparkle auto-updates & release pipeline |
 
 ---
 
@@ -528,6 +549,7 @@ See [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copil
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.15.0 | Feb 1, 2026 | Sparkle auto-updates, Update Center, signed appcast |
 | v0.14.0 | Jan 31, 2026 | Mini player bar, persistent playback, waveform preview, Space play/pause |
 | v0.13.0 | Jan 31, 2026 | Keyboard shortcuts, ⌘1-4 navigation, shortcuts overlay |
 | v0.12.0 | Jan 31, 2026 | UX/UI overhaul, animated empty states, standardized components |
@@ -551,4 +573,4 @@ See [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copil
 
 ---
 
-*Last updated: January 2026*
+*Last updated: February 2026*

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/constants/app_info.dart';
 import '../../core/theme/theme.dart';
 import '../../core/providers/player_state.dart';
 import '../widgets/player/mini_player.dart';
@@ -257,39 +258,40 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         ),
         const SizedBox(height: CartoMixSpacing.sm),
         ...shortcuts.map((s) => Padding(
-          padding: const EdgeInsets.only(bottom: CartoMixSpacing.xs),
-          child: Row(
-            children: [
-              Container(
-                width: 50,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: CartoMixSpacing.sm,
-                  vertical: CartoMixSpacing.xxs,
-                ),
-                decoration: BoxDecoration(
-                  color: CartoMixColors.bgTertiary,
-                  borderRadius: BorderRadius.circular(CartoMixSpacing.radiusSm),
-                  border: Border.all(color: CartoMixColors.border),
-                ),
-                child: Text(
-                  s.$1,
-                  style: CartoMixTypography.badge.copyWith(
-                    color: CartoMixColors.textPrimary,
-                    fontFamily: 'SF Mono',
+              padding: const EdgeInsets.only(bottom: CartoMixSpacing.xs),
+              child: Row(
+                children: [
+                  Container(
+                    width: 50,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: CartoMixSpacing.sm,
+                      vertical: CartoMixSpacing.xxs,
+                    ),
+                    decoration: BoxDecoration(
+                      color: CartoMixColors.bgTertiary,
+                      borderRadius:
+                          BorderRadius.circular(CartoMixSpacing.radiusSm),
+                      border: Border.all(color: CartoMixColors.border),
+                    ),
+                    child: Text(
+                      s.$1,
+                      style: CartoMixTypography.badge.copyWith(
+                        color: CartoMixColors.textPrimary,
+                        fontFamily: 'SF Mono',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                  textAlign: TextAlign.center,
-                ),
+                  const SizedBox(width: CartoMixSpacing.md),
+                  Text(
+                    s.$2,
+                    style: CartoMixTypography.body.copyWith(
+                      color: CartoMixColors.textSecondary,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: CartoMixSpacing.md),
-              Text(
-                s.$2,
-                style: CartoMixTypography.body.copyWith(
-                  color: CartoMixColors.textSecondary,
-                ),
-              ),
-            ],
-          ),
-        )),
+            )),
       ],
     );
   }
@@ -469,10 +471,38 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               borderRadius: BorderRadius.circular(CartoMixSpacing.radiusSm),
             ),
             child: Text(
-              'v0.14.0',
+              'v${AppInfo.version}',
               style: CartoMixTypography.badgeSmall.copyWith(
                 color: CartoMixColors.textMuted,
               ),
+            ),
+          ),
+          const SizedBox(width: CartoMixSpacing.sm),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: CartoMixSpacing.sm,
+              vertical: 2,
+            ),
+            decoration: BoxDecoration(
+              color: CartoMixColors.bgTertiary,
+              borderRadius: BorderRadius.circular(CartoMixSpacing.radiusSm),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.system_update_alt,
+                  size: 12,
+                  color: CartoMixColors.textMuted,
+                ),
+                const SizedBox(width: CartoMixSpacing.xxs),
+                Text(
+                  'Auto-update',
+                  style: CartoMixTypography.badgeSmall.copyWith(
+                    color: CartoMixColors.textMuted,
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(width: CartoMixSpacing.md),

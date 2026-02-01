@@ -31,6 +31,8 @@ target 'Runner' do
 
   # GRDB for SQLite database access
   pod 'GRDB.swift', '~> 6.24'
+  # Sparkle for signed auto-updates
+  pod 'Sparkle', '~> 2.6'
 
   flutter_install_all_macos_pods File.dirname(File.realpath(__FILE__))
   target 'RunnerTests' do

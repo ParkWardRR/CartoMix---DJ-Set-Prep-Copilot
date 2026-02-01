@@ -10,6 +10,7 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
     private let registrar: FlutterPluginRegistrar
     private let bridge = FlutterBridge.shared
     private let audioPlayer = AudioPlayer.shared
+    private let updater = Updater.shared
 
     // Method channels
     private var databaseChannel: FlutterMethodChannel?
@@ -19,6 +20,7 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
     private var plannerChannel: FlutterMethodChannel?
     private var exporterChannel: FlutterMethodChannel?
     private var filePickerChannel: FlutterMethodChannel?
+    private var updaterChannel: FlutterMethodChannel?
 
     // Event channels
     private var analyzerProgressChannel: FlutterEventChannel?
@@ -97,6 +99,13 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
         )
         filePickerChannel?.setMethodCallHandler(handleFilePickerCall)
 
+        // Updater channel (Sparkle)
+        updaterChannel = FlutterMethodChannel(
+            name: "com.cartomix.updater",
+            binaryMessenger: registrar.messenger
+        )
+        updaterChannel?.setMethodCallHandler(handleUpdaterCall)
+
         // Analyzer progress event channel
         analyzerProgressChannel = FlutterEventChannel(
             name: "com.cartomix.analyzer.progress",
@@ -173,11 +182,11 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
         case "removeMusicLocation":
             guard let args = call.arguments as? [String: Any],
                   let id = args["id"] as? Int64 else {
-                result(FlutterError(code: "INVALID_ARGS", message: "Missing location ID", details: nil))
-                return
-            }
-            do {
-                try bridge.removeMusicLocation(id: id)
+            result(FlutterError(code: "INVALID_ARGS", message: "Missing location ID", details: nil))
+            return
+        }
+        do {
+            try bridge.removeMusicLocation(id: id)
                 result(nil)
             } catch {
                 result(FlutterError(code: "DB_ERROR", message: error.localizedDescription, details: nil))
@@ -189,6 +198,26 @@ public class CartoMixPlugin: NSObject, FlutterPlugin {
                 result(stats)
             } catch {
                 result(FlutterError(code: "DB_ERROR", message: error.localizedDescription, details: nil))
+            }
+
+        default:
+            result(FlutterMethodNotImplemented)
+        }
+    }
+
+    // MARK: - Updater Handler
+
+    private func handleUpdaterCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        switch call.method {
+        case "checkForUpdates":
+            updater.checkForUpdates()
+            result(nil)
+
+        case "lastCheck":
+            if let timestamp = updater.lastCheckTimestamp() {
+                result(timestamp)
+            } else {
+                result(nil)
             }
 
         default:

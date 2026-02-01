@@ -27,7 +27,7 @@
 #
 # EXAMPLES:
 # ---------
-#   ./scripts/build-release.sh 0.14.0       Build v0.14.0 release
+#   ./scripts/build-release.sh 0.15.0       Build v0.15.0 release
 #   ./scripts/build-release.sh              Build using pubspec.yaml version
 #
 # PREREQUISITES:

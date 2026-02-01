@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>CartoMix Updates</title>
+    <link>https://raw.githubusercontent.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/main/dist/appcast.xml</link>
+    <description>Signed Sparkle feed for CartoMix</description>
+    <language>en</language>
+    <item>
+      <title>Version 0.15.0</title>
+      <sparkle:version>0.15.0</sparkle:version>
+      <sparkle:shortVersionString>0.15.0</sparkle:shortVersionString>
+      <pubDate>Sun, 01 Feb 2026 00:00:00 +0000</pubDate>
+      <sparkle:releaseNotesLink>https://raw.githubusercontent.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/main/dist/release-notes-0.15.0.html</sparkle:releaseNotesLink>
+      <enclosure
+        url="https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/releases/download/v0.15.0/CartoMix-v0.15.0.dmg"
+        sparkle:edSignature="qqhX1ui6Ljem4LSAsXzQ+zFaGspwUGyl0FEHFPU4T5A1ZdbIgTZFmy+47AIIRWEIIz4LSySGbF2cjedaJ6OsDQ=="
+        length="21690759"
+        type="application/octet-stream" />
+    </item>
+  </channel>
+</rss>

@@ -18,7 +18,7 @@
 [![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)](#performance)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#architecture)
 [![Swift 6](https://img.shields.io/badge/Swift_6-F05138?style=for-the-badge&logo=swift&logoColor=white)](#architecture)
-[![v0.14.0](https://img.shields.io/badge/v0.14.0-22C55E?style=for-the-badge)](#changelog)
+[![v0.15.0](https://img.shields.io/badge/v0.15.0-22C55E?style=for-the-badge)](#changelog)
 
 <br/>
 
@@ -64,19 +64,17 @@
 
 <br/>
 
-## v0.14.0 — Mini Player!
+## v0.15.0 — Sparkle Auto-Updates!
 
-We're excited to announce **v0.14.0** with a persistent mini player bar for seamless audio playback!
+Keeping CartoMix fresh is now one click away. v0.15.0 adds signed Sparkle auto-updates with a dedicated Update Center.
 
-### What's New in v0.14.0
+### What's New in v0.15.0
 
-- **Mini Player Bar** — Persistent playback controls at the bottom of the screen
-- **Now Playing Info** — Track title, artist, BPM, and key at a glance
-- **Waveform Preview** — Compact waveform with playhead scrubbing
-- **Transport Controls** — Play/Pause, skip forward/back 10s, volume slider
-- **Animated Indicators** — Bouncing bars when playing, animated play/pause button
-- **Space to Play** — Press Space anywhere to play/pause the current track
-- **Library Integration** — Play button in track detail panel loads the mini player
+- **Sparkle Integration** — SPUStandardUpdaterController with Ed25519 public key baked into Info.plist.
+- **Update Center** — Settings pane shows auto-update status, last check time, and a manual “Check for Updates” action.
+- **Native Menu Item** — macOS-standard “Check for Updates…” added to the app menu for muscle-memory workflows.
+- **Signed Appcast** — GitHub-hosted `dist/appcast.xml` with notarized DMG signature + release notes (v0.15.0).
+- **Consistent Versioning** — Footer, About panel, and badges now reflect v0.15.0 (Codename: Spark).
 
 ### Keyboard Shortcuts Reference
 
@@ -95,7 +93,8 @@ We're excited to announce **v0.14.0** with a persistent mini player bar for seam
 ### What's Included
 
 - **Hybrid Flutter + Native Swift Architecture** — Beautiful UI meets native performance
-- **14 Releases** — Continuous improvement from alpha to power-user features
+- **15 Releases** — Continuous improvement from alpha to power-user features
+- **Sparkle Auto-Updates** — Signed feed + in-app updater for frictionless upgrades
 - **Persistent Mini Player** — Never lose your playback position
 - **10 Import/Export Formats** — Full round-trip support for all major DJ software
 - **Force-Directed Graph Visualization** — Explore track relationships visually
@@ -108,7 +107,7 @@ We're excited to announce **v0.14.0** with a persistent mini player bar for seam
 
 ### Download Now
 
-Download the DMG from [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/releases/latest), drag to Applications, and launch. The onboarding wizard will guide you through adding your music folders.
+Download the DMG from [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copilot/releases/latest), drag to Applications, and launch. Auto-update checks run in the background and you can trigger a manual check from Settings or the macOS app menu.
 
 <br/>
 
@@ -672,7 +671,13 @@ The final DMG is fully signed, notarized, and stapled — it opens without any G
 
 ## Roadmap
 
-**v0.14.0 (Current) — Codename: Groove**
+**v0.15.0 (Current) — Codename: Spark**
+- [x] Sparkle auto-updates with Ed25519 signature
+- [x] Update Center in Settings (status + manual check)
+- [x] macOS menu item: “Check for Updates…”
+- [x] Signed appcast + release notes for v0.15.0
+
+**v0.14.0 — Codename: Groove**
 - [x] Mini player bar with persistent playback
 - [x] Now playing track info (title, artist, BPM, key)
 - [x] Compact waveform with playhead

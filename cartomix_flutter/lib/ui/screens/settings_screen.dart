@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/constants/app_info.dart';
+import '../../core/providers/update_state.dart';
 import '../../core/theme/theme.dart';
 
 /// Settings screen for app configuration
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(CartoMixSpacing.xl),
       child: Center(
@@ -45,6 +48,15 @@ class SettingsScreen extends StatelessWidget {
                 'Export',
                 'Default export settings',
                 _buildExportSettings(),
+              ),
+
+              const SizedBox(height: CartoMixSpacing.xxl),
+
+              // Updates
+              _buildSection(
+                'Updates',
+                'Signed Sparkle auto-updates with background checks',
+                _buildUpdateSection(context, ref),
               ),
 
               const SizedBox(height: CartoMixSpacing.xxl),
@@ -211,7 +223,8 @@ class SettingsScreen extends StatelessWidget {
   Widget _buildStorageInfo() {
     return Column(
       children: [
-        _buildInfoRow('Database location', '~/Library/Application Support/CartoMix/'),
+        _buildInfoRow(
+            'Database location', '~/Library/Application Support/CartoMix/'),
         const Divider(height: CartoMixSpacing.lg),
         _buildInfoRow('Database size', '-- MB'),
         const Divider(height: CartoMixSpacing.lg),
@@ -227,6 +240,110 @@ class SettingsScreen extends StatelessWidget {
               label: const Text('Clear Cache'),
             ),
           ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUpdateSection(BuildContext context, WidgetRef ref) {
+    final update = ref.watch(updateProvider);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(CartoMixSpacing.sm),
+              decoration: BoxDecoration(
+                color: CartoMixColors.primary.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(CartoMixSpacing.radiusMd),
+              ),
+              child: const Icon(Icons.system_update_alt,
+                  color: CartoMixColors.primary),
+            ),
+            const SizedBox(width: CartoMixSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Sparkle auto-updates',
+                    style: CartoMixTypography.body,
+                  ),
+                  const SizedBox(height: CartoMixSpacing.xxs),
+                  Text(
+                    update.formattedLastCheck(),
+                    style: CartoMixTypography.caption.copyWith(
+                      color: CartoMixColors.textMuted,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: CartoMixSpacing.sm,
+                vertical: CartoMixSpacing.xs,
+              ),
+              decoration: BoxDecoration(
+                color: update.isChecking
+                    ? CartoMixColors.warning.withValues(alpha: 0.18)
+                    : CartoMixColors.success.withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(CartoMixSpacing.radiusSm),
+                border: Border.all(
+                  color: update.isChecking
+                      ? CartoMixColors.warning
+                      : CartoMixColors.success,
+                ),
+              ),
+              child: Text(
+                update.isChecking ? 'Checking…' : 'Auto',
+                style: CartoMixTypography.caption.copyWith(
+                  color: update.isChecking
+                      ? CartoMixColors.warning
+                      : CartoMixColors.success,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: CartoMixSpacing.md),
+        Row(
+          children: [
+            ElevatedButton.icon(
+              onPressed: update.isChecking
+                  ? null
+                  : () async {
+                      await ref.read(updateProvider.notifier).checkForUpdates();
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Checking for updates… Sparkle will show a window if an update is available.',
+                            ),
+                          ),
+                        );
+                      }
+                    },
+              icon: const Icon(Icons.refresh),
+              label: const Text('Check for Updates'),
+            ),
+            const SizedBox(width: CartoMixSpacing.sm),
+            OutlinedButton.icon(
+              onPressed: update.isChecking
+                  ? null
+                  : () => ref.read(updateProvider.notifier).refreshLastCheck(),
+              icon: const Icon(Icons.history),
+              label: const Text('Refresh status'),
+            ),
+          ],
+        ),
+        const SizedBox(height: CartoMixSpacing.sm),
+        Text(
+          update.statusMessage,
+          style: CartoMixTypography.caption.copyWith(
+            color: CartoMixColors.textMuted,
+          ),
         ),
       ],
     );
@@ -260,7 +377,7 @@ class SettingsScreen extends StatelessWidget {
                   style: CartoMixTypography.headline,
                 ),
                 Text(
-                  'Version 0.8.0 (Codename: Tokyo)',
+                  'Version ${AppInfo.version} (Codename: ${AppInfo.codename})',
                   style: CartoMixTypography.caption.copyWith(
                     color: CartoMixColors.textMuted,
                   ),
