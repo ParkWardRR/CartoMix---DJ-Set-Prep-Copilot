@@ -179,6 +179,30 @@ Professional-grade UI refinements and comprehensive testing.
 
 ## Current Release
 
+### v0.14.0 — Mini Player (January 2026)
+
+**Status:** Released
+
+**Codename: Groove**
+
+Persistent audio playback bar with waveform preview and transport controls.
+
+| Feature | Status |
+|---------|--------|
+| Mini player bar widget | ✅ Complete |
+| Now playing track info | ✅ Complete |
+| Compact waveform with playhead | ✅ Complete |
+| Play/Pause with animated icon | ✅ Complete |
+| Skip forward/backward (10s) | ✅ Complete |
+| Seek scrubbing on waveform | ✅ Complete |
+| Volume slider control | ✅ Complete |
+| Animated playing indicator | ✅ Complete |
+| Space key for play/pause | ✅ Complete |
+| Library play button integration | ✅ Complete |
+| 28 Flutter widget tests passing | ✅ Complete |
+
+---
+
 ### v0.13.0 — Keyboard Shortcuts (January 2026)
 
 **Status:** Released
@@ -470,6 +494,7 @@ These features are on our radar but not yet scheduled:
 | v0.11.x | **Import** | Import from DJ software |
 | v0.12.x | **Polish** | UX/UI overhaul & animations |
 | v0.13.x | **Shortcuts** | Keyboard navigation for power users |
+| v0.14.x | **Groove** | Mini player & persistent playback |
 
 ---
 
@@ -503,6 +528,7 @@ See [GitHub Releases](https://github.com/ParkWardRR/CartoMix---DJ-Set-Prep-Copil
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.14.0 | Jan 31, 2026 | Mini player bar, persistent playback, waveform preview, Space play/pause |
 | v0.13.0 | Jan 31, 2026 | Keyboard shortcuts, ⌘1-4 navigation, shortcuts overlay |
 | v0.12.0 | Jan 31, 2026 | UX/UI overhaul, animated empty states, standardized components |
 | v0.11.0 | Jan 31, 2026 | Full import support (Rekordbox, Serato, Traktor, M3U8), import dialog UI |

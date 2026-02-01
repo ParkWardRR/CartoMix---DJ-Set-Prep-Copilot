@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/theme.dart';
+import '../../core/providers/player_state.dart';
+import '../widgets/player/mini_player.dart';
 import 'library_screen.dart';
 import 'set_builder_screen.dart';
 import 'graph_screen.dart';
 import 'settings_screen.dart';
 
 /// Main application screen with navigation
-/// Pro-level DJ software UI with custom navigation rail
-class MainScreen extends StatefulWidget {
+/// Pro-level DJ software UI with custom navigation rail and mini player
+class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   int _selectedIndex = 0;
   final FocusNode _focusNode = FocusNode();
   bool _showShortcutsOverlay = false;
@@ -80,6 +83,12 @@ class _MainScreenState extends State<MainScreen> {
       return KeyEventResult.handled;
     }
 
+    // Space: Play/Pause
+    if (event.logicalKey == LogicalKeyboardKey.space && !isCmd && !isShift) {
+      ref.read(playerStateProvider.notifier).togglePlayPause();
+      return KeyEventResult.handled;
+    }
+
     return KeyEventResult.ignored;
   }
 
@@ -138,6 +147,8 @@ class _MainScreenState extends State<MainScreen> {
                     ],
                   ),
                 ),
+                // Mini player (above footer)
+                const MiniPlayer(),
                 // Footer
                 _buildFooter(),
               ],
@@ -206,6 +217,10 @@ class _MainScreenState extends State<MainScreen> {
                     ('⌘4', 'Settings'),
                     ('Tab', 'Next screen'),
                     ('⇧Tab', 'Previous screen'),
+                  ]),
+                  const SizedBox(height: CartoMixSpacing.md),
+                  _buildShortcutSection('Playback', [
+                    ('Space', 'Play / Pause'),
                   ]),
                   const SizedBox(height: CartoMixSpacing.md),
                   _buildShortcutSection('General', [
@@ -454,7 +469,7 @@ class _MainScreenState extends State<MainScreen> {
               borderRadius: BorderRadius.circular(CartoMixSpacing.radiusSm),
             ),
             child: Text(
-              'v0.13.0',
+              'v0.14.0',
               style: CartoMixTypography.badgeSmall.copyWith(
                 color: CartoMixColors.textMuted,
               ),
